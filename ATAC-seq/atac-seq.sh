@@ -43,11 +43,14 @@ samtools view -bS - > $(echo "${samples[ID]}").bam
 samtools view -f 0x02 -q 20 -b $(echo "${samples[ID]}").bam > $(echo "${samples[ID]}").filtered.bam
  
 samtools sort $(echo "${samples[ID]}").filtered.bam -o $(echo "${samples[ID]}").filtered.sorted.bam
- 
-java -jar /vsc-hard-mounts/leuven-data/350/vsc35085/programs/picard.jar MarkDuplicates \
-I=$(echo "${samples[ID]}").filtered.sorted.bam \
-O=$(echo "${samples[ID]}").filtered.sorted.nd.bam \
-Remove_Duplicates=true  M=$(echo "${samples[ID]}")_dup_metrics.txt ASSUME_SORTED=true
+
+module load picard/2.18.23-Java-1.8.0_171
+
+java -jar $EBROOTPICARD/picard.jar MarkDuplicates \
+INPUT=$(echo "${samples[ID]}").filtered.sorted.bam \
+OUTPUT=$(echo "${samples[ID]}").filtered.sorted.nd.bam \
+METRICS_FILE=$(echo "${samples[ID]}")_dup_metrics.txt \
+ASSUME_SORTED=TRUE REMOVE_DUPLICATES=TRUE
  
 ##
  
