@@ -25,7 +25,7 @@ $(echo "${samples[ID]}")_R1_trimmed.fastq.gz $(echo "${samples[ID]}")_R1_unpaire
 $(echo "${samples[ID]}")_R2_trimmed.fastq.gz $(echo "${samples[ID]}")_R2_unpaired.fastq.gz \
 ILLUMINACLIP:/scratch/leuven/357/vsc35707/Pogonus_ATACseq/TruSeq3-PE.fa:2:30:10 LEADING:30 TRAILING:30 MINLEN:50 HEADCROP:10
  
-cd /lustre1/scratch/350/vsc35085/ATAC_030924
+cd /scratch/leuven/357/vsc35707/Pogonus_ATACseq
  
 REF=/scratch/leuven/357/vsc35707/Pogonus_ATACseq/sorted_prim_dud.fasta
  
