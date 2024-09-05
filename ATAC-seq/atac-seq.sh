@@ -23,7 +23,7 @@ java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.39.jar PE \
 $(echo "${samples[ID]}")_R1.fastq.gz $(echo "${samples[ID]}")_R2.fastq.gz \
 $(echo "${samples[ID]}")_R1_trimmed.fastq.gz $(echo "${samples[ID]}")_R1_unpaired.fastq.gz \
 $(echo "${samples[ID]}")_R2_trimmed.fastq.gz $(echo "${samples[ID]}")_R2_unpaired.fastq.gz \
-ILLUMINACLIP:/vsc-hard-mounts/leuven-data/350/vsc35085/scripts/TruSeq3-PE.fa:2:30:10 LEADING:30 TRAILING:30 MINLEN:50 HEADCROP:10
+ILLUMINACLIP:/scratch/leuven/357/vsc35707/Pogonus_ATACseq/TruSeq3-PE.fa:2:30:10 LEADING:30 TRAILING:30 MINLEN:50 HEADCROP:10
  
 cd /lustre1/scratch/350/vsc35085/ATAC_030924
  
