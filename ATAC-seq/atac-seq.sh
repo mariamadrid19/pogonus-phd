@@ -7,9 +7,9 @@
 #SBATCH -A lp_svbelleghem
  
 module load Bowtie2/2.3.4.3-foss-2018a
-module load SAMtools/1.9-foss-2018a
-module load Java
-module load BEDTools
+module load SAMtools/1.16.1-GCC-11.3.0
+module load Java/11.0.20
+module load BEDTools/2.27.1-GCCcore-6.4.0
  
 ID=$((SLURM_ARRAY_TASK_ID -1))
  
