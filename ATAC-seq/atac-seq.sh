@@ -61,7 +61,7 @@ bedtools genomecov \
 LC_COLLATE=C sort -k1,1 -k2,2n $(echo "${samples[ID]}").filtered.sorted.nd.bdg \
 > $(echo "${samples[ID]}").filtered.sorted.nd.collate.bdg
  
-conda activate bedgraphtobigwig2
+conda activate bigwig
  
 bedGraphToBigWig \
 $(echo "${samples[ID]}").filtered.sorted.nd.collate.bdg \
