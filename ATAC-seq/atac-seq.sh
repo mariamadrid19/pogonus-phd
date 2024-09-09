@@ -11,6 +11,7 @@ module load SAMtools/1.16.1-GCC-11.3.0
 module load Java/11.0.20
 module load BEDTools/2.27.1-GCCcore-6.4.0
 module load Trimmomatic/0.39-Java-1.8.0_192
+module load picard/2.18.23-Java-1.8.0_171
  
 cd /scratch/leuven/357/vsc35707/Pogonus_ATACseq 
 
@@ -19,9 +20,7 @@ GC154460_R1.fastq.gz GC154460_R2.fastq.gz \
 GC154460_R1_trimmed.fastq.gz GC154460_R1_unpaired.fastq.gz \
 GC154460_R2_trimmed.fastq.gz GC154460_R2_unpaired.fastq.gz \
 ILLUMINACLIP:/scratch/leuven/357/vsc35707/Pogonus_ATACseq/TruSeq3-PE.fa:2:30:10 LEADING:30 TRAILING:30 MINLEN:50 HEADCROP:10
- 
-cd /scratch/leuven/357/vsc35707/Pogonus_ATACseq
- 
+  
 REF=/scratch/leuven/357/vsc35707/Pogonus_ATACseq/sorted_prim_dud.fasta
  
 samtools faidx sorted_prim_dud.fasta; cut -f1,2 sorted_prim_dud.fasta.fai > sorted_prim_dud.fasta.sizes
@@ -35,8 +34,6 @@ bowtie2 -t -k 2 -p 8 --local -x sorted_prim_dud.fasta -1 GC154460_R1_trimmed.fas
 samtools view -f 0x02 -q 20 -b GC154460.bam > GC154460.filtered.bam
  
 samtools sort GC154460.filtered.bam -o GC154460.filtered.sorted.bam
-
-module load picard/2.18.23-Java-1.8.0_171
 
 java -jar $EBROOTPICARD/picard.jar MarkDuplicates \
 INPUT=GC154460.filtered.sorted.bam \
