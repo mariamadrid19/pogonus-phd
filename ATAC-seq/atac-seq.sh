@@ -2,7 +2,7 @@
 #SBATCH --cluster=genius 
 #SBATCH --job-name ATAC_test 
 #SBATCH --nodes=1 
-#SBATCH --ntasks-per-node=8 
+#SBATCH --ntasks-per-node=12
 #SBATCH --time=24:10:00 
 #SBATCH -A lp_svbelleghem
  
