@@ -37,7 +37,7 @@ bowtie2-build /scratch/leuven/357/vsc35707/Pogonus_ATACseq/sorted_prim_dud.fasta
  
 bowtie2 -t -k 2 -p 8 --local -x $REF \
 -1 /scratch/leuven/357/vsc35707/Pogonus_ATACseq/$(echo "${samples[ID]}")_R1_trimmed.fastq.gz \
--2 /scratch/leuven/357/vsc35707/Pogonus_ATACseq/$(echo "${samples[ID]}")_R2_trimmed.fastq.gz |\
+-2 /scratch/leuven/357/vsc35707/Pogonus_ATACseq/$(echo "${samples[ID]}")_R2_trimmed.fastq.gz \
 samtools view -bS - > $(echo "${samples[ID]}").bam
  
 samtools view -f 0x02 -q 20 -b $(echo "${samples[ID]}").bam > $(echo "${samples[ID]}").filtered.bam
