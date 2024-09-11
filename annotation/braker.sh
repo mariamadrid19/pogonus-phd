@@ -4,7 +4,7 @@ mamba create -n braker anaconda::perl anaconda::biopython bioconda::perl-app-cpa
 
 mamba activate braker
 
-#GeneMark-ETP (Home directory)
+#GeneMark-ETP (Data directory)
 #AUGUSTUS
 module load AUGUSTUS/3.5.0-foss-2022a
 
