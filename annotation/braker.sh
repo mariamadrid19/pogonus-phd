@@ -16,7 +16,10 @@ module load BamTools/2.5.2-GCC-11.3.0
 #DIAMOND
 module load DIAMOND/0.9.24-foss-2018a
 
-#STRINGTIE2 (Data directory=
+#STRINGTIE2 (Data directory)
 
 #BEDTools
-#GffRead
+module load BEDTools/2.27.1-GCCcore-6.4.0 
+
+#GffRead (Data directory)
+
