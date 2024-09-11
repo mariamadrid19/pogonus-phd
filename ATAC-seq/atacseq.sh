@@ -27,7 +27,7 @@ samtools faidx sorted_prim_dud.fasta; cut -f1,2 sorted_prim_dud.fasta.fai > sort
  
 SIZES=/scratch/leuven/357/vsc35707/Pogonus_ATACseq/sorted_prim_dud.fasta.sizes
  
-bowtie2-build sorted_prim_dud.fasta sorted_prim_dud
+bowtie2-build sorted_prim_dud.fasta sorted_prim_dud --large-index
  
 bowtie2 -t -k 2 -p 8 --local -x sorted_prim_dud.fasta -1 GC154460_R1_trimmed.fastq.gz -2 GC154460_R2_trimmed.fastq.gz | samtools view -bS - > GC154460.bam
  
