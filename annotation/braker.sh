@@ -5,6 +5,7 @@ mamba create -n braker anaconda::perl anaconda::biopython bioconda::perl-app-cpa
 mamba activate braker
 
 #GeneMark-ETP (Data directory)
+
 #AUGUSTUS
 module load AUGUSTUS/3.5.0-foss-2022a
 
@@ -15,6 +16,7 @@ module load BamTools/2.5.2-GCC-11.3.0
 #DIAMOND
 module load DIAMOND/0.9.24-foss-2018a
 
-#STRINGTIE2
+#STRINGTIE2 (Data directory=
+
 #BEDTools
 #GffRead
