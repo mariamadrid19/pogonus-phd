@@ -11,4 +11,6 @@ cd /scratch/leuven/357/vsc35707/psmc
 module load SAMtools/1.16.1-GCC-11.3.0
 module load BCFtools/1.15.1-GCC-11.3.0
 
-bcftools mpileup -C50 -f sorted_prim_dud.fasta GC136107.dudPrim.filtered.sorted.nd.bam | bcftools view -c - | vcfutils.pl vcf2fq -d 10 -D 100 | gzip > GC136107_prim_dud.fq.gz
+bcftools mpileup -C50 -f sorted_prim_dud.fasta GC136107.dudPrim.filtered.sorted.nd.bam | bcftools call -c - | \
+vcfutils.pl vcf2fq -d 10 -D 100 | \
+gzip > GC136107_prim_dud.fq.gz
