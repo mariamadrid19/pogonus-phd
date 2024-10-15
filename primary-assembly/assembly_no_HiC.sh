@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH --cluster=genius
-#SBATCH --job-name POG_hifiasm
+#SBATCH --job-name nieu_no_hic
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
 #SBATCH --time=72:00:00
