@@ -12,8 +12,8 @@ module load BCFtools/1.15.1-GCC-11.3.0
 
 bcftools mpileup -C50 -f sorted_prim_dud.fasta GC136107.dudPrim.filtered.sorted.nd.bam | bcftools call -c | vcfutils.pl vcf2fq -d 10 -D 100 | gzip > GC136107_prim_dud.fq.gz
 
-gunzip GC136107_prim_dud.fq.gz
-
+gunzip GC136107_prim_dud.fq.gz 
+ 
 fq2psmcfa -q 20 -g 100 -s 10 GC136107_prim_dud.fq > GC136107_prim_dud.psmcfa
 
 psmc -N25 -t12 -r5 -p "4+25*2+4+6" -o GC136107_prim_dud.psmc GC136107_prim_dud.psmcfa
