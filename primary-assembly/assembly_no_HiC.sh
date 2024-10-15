@@ -3,7 +3,7 @@
 #SBATCH --job-name POG_hifiasm
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
-#SBATCH --time=36:00:00
+#SBATCH --time=72:00:00
 #SBATCH -o assembly.%j.out
 #SBATCH -A lp_svbelleghem
 
