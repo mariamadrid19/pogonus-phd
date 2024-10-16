@@ -13,19 +13,19 @@ cd /scratch/leuven/357/vsc35707/nieuwpoort_pogonus/
 hifiasm -o prim_nieu_no_hic.asm --n-hap 2 --hom-cov 30 -t 32 POG_Nieuwpoort_HiFi_reads.fasta
 
 #gfa to fasta
-awk '/^S/{print ">"$2;print $3}' prim_nieu_no_hic.asm.hic.p_ctg.gfa > prim_nieu_no_hic.asm.hic.p_ctg.fa
+awk '/^S/{print ">"$2;print $3}' prim_nieu_no_hic.asm.bp.p_ctg.gfa > prim_nieu_no_hic.asm.bp.p_ctg.fa
 
 module load SAMtools/1.13-GCC-10.3.0
 module load BWA/0.7.17-GCC-10.3.0
 
 #indexing
-samtools faidx prim_nieu_no_hic.asm.hic.p_ctg.fa && cut -f1,2 prim_nieu_no_hic.asm.hic.p_ctg.fa.fai > prim_nieu_no_hic.asm.hic.p_ctg.fa.genome && bwa index prim_nieu_no_hic.asm.hic.p_ctg.fa
+samtools faidx prim_nieu_no_hic.asm.bp.p_ctg.fa && cut -f1,2 prim_nieu_no_hic.asm.bp.p_ctg.fa.fai > prim_nieu_no_hic.asm.bp.p_ctg.fa.genome && bwa index prim_nieu_no_hic.asm.bp.p_ctg.fa
 
 #variables for the HiC mapping pipeline
 SRA='GC143248_ACTCTCGA-TGGTACAG_S65'
 LABEL='Pogonus_chalceus'
 IN_DIR='/scratch/leuven/357/vsc35707/nieuwpoort_pogonus'
-REF='/scratch/leuven/357/vsc35707/nieuwpoort_pogonus/prim_nieu_no_hic.asm.hic.p_ctg.fa'
+REF='/scratch/leuven/357/vsc35707/nieuwpoort_pogonus/prim_nieu_no_hic.asm.bp.p_ctg.fa'
 FAIDX='$REF.fai'
 PREFIX='Pogonus_hifiasm.asm.hic.p_ctg'
 RAW_DIR='/scratch/leuven/357/vsc35707/nieuwpoort_pogonus/map_contigs/bams'
@@ -89,4 +89,4 @@ echo "Finished Mapping Pipeline through Duplicate Removal"
 cd /scratch/leuven/357/vsc35707/nieuwpoort_pogonus/
 
 #scaffold the contigs using the primary assembly and the bam files (HiC reads mapped to the contigs)
-yahs prim_nieu_no_hic.asm.hic.p_ctg.fa /map_contigs/deduplicated_files/Pogonus_chalceus_r.bam -q 100000 -l 30 -r 50000 -o nieu_scaffolds
+yahs prim_nieu_no_hic.asm.bp.p_ctg.fa /map_contigs/deduplicated_files/Pogonus_chalceus_r.bam -q 100000 -l 30 -r 50000 -o nieu_scaffolds
