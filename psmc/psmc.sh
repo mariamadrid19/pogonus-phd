@@ -18,4 +18,8 @@ fq2psmcfa -q 20 -g 100 -s 10 GC136107_prim_dud.fq > GC136107_prim_dud.psmcfa
 
 psmc -N25 -t12 -r5 -p "4+25*2+4+6" -o GC136107_prim_dud.psmc GC136107_prim_dud.psmcfa
 
-psmc_plot.pl GC136107_prim_dud GC136107_prim_dud.psmc
+
+#after installing gnuplot in a local machine (e.g. brew install gnuplot on a Mac), download the perl script from the Github and the psmc files
+#run the following command, on a local machine!
+#this will produce an .eps file (can be opened with Illustrator or other image editing software)
+perl psmc_plot.pl GC136107_prim_dud GC136107_prim_dud.psmc
