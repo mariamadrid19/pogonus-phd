@@ -9,7 +9,7 @@
 
 cd /scratch/leuven/357/vsc35707/nieuwpoort_pogonus/
 
-#assemble the contigs using hifiasm, without any HiC data
+#assemble the contigs using hifiasm, without any HiC data (for the contiging, the HiC will be used later in the scaffolding with YaHS)
 hifiasm -o prim_nieu_no_hic.asm --n-hap 2 --hom-cov 30 -t 32 POG_Nieuwpoort_HiFi_reads.fasta
 
 #gfa to fasta
@@ -83,8 +83,6 @@ samtools index $REP_DIR/$REP_LABEL.bam
 perl $STATS $REP_DIR/$REP_LABEL.bam > $REP_DIR/$REP_LABEL.bam.stats
 
 echo "Finished Mapping Pipeline through Duplicate Removal"
-
-
 
 cd /scratch/leuven/357/vsc35707/nieuwpoort_pogonus/
 
