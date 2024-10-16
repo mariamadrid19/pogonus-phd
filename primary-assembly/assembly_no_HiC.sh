@@ -22,7 +22,7 @@ module load BWA/0.7.17-GCC-10.3.0
 samtools faidx prim_nieu_no_hic.asm.bp.p_ctg.fa && cut -f1,2 prim_nieu_no_hic.asm.bp.p_ctg.fa.fai > prim_nieu_no_hic.asm.bp.p_ctg.fa.genome && bwa index prim_nieu_no_hic.asm.bp.p_ctg.fa
 
 #variables for the HiC mapping pipeline
-SRA='GC143248_ACTCTCGA-TGGTACAG_S65'
+SRA='GC144661_TGAGCTAG-AACCGTTC' 
 LABEL='Pogonus_chalceus'
 IN_DIR='/scratch/leuven/357/vsc35707/nieuwpoort_pogonus'
 REF='/scratch/leuven/357/vsc35707/nieuwpoort_pogonus/prim_nieu_no_hic.asm.bp.p_ctg.fa'
