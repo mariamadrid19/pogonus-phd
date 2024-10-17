@@ -9,7 +9,7 @@
  
 module load BCFtools/1.15.1-GCC-11.3.0
 module load SAMtools/1.16.1-GCC-11.3.0
-conda activate msmc2
+mamba activate msmc2
 
 indID=$((SLURM_ARRAY_TASK_ID -1))
  
