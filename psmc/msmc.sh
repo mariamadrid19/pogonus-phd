@@ -3,7 +3,7 @@
 #SBATCH --job-name msmc2
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=12
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH --output=msmc2.%j.out
 #SBATCH --error=msmc2.%j.out
 #SBATCH -A lp_svbelleghem
@@ -18,15 +18,17 @@ conda activate msmc2
 indID=$((SLURM_ARRAY_TASK_ID -1))
  
 REF=sorted_prim_dud.fasta
-IN=/scratch/leuven/357/vsc35707/psmc/
-OUT=/scratch/leuven/357/vsc35707/psmc/msmc/
-OUT2=/scratch/leuven/357/vsc35707/psmc/msmc-final/
+IN=/scratch/leuven/357/vsc35707/psmc
+OUT=/scratch/leuven/357/vsc35707/psmc/msmc
+OUT2=/scratch/leuven/357/vsc35707/psmc/msmc-final
 
 # Sample IDs
 SAMPLE=(\
-GC129388 GC129394 \
-GC129401 GC129406 \
-GC136107 GC136109)
+GC129388 GC129395 \ #belgium T/S
+GC129400 GC129406 \ #france
+GC129413 GC129417 \ #portugal
+GC136116 GC136110 \ #spain
+GC136117 GC136123) #heist (2000/2018)
 
 #bam files need to be indexed before starting
 samtools index $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam.bai
@@ -56,7 +58,7 @@ for FINAL in GC129388 GC129394 GC129401 GC129406 GC136107 GC136109
 
 do
 
-python MSMC_plotInput.py -I $OUT2/$FINAL.final.txt -u 2.1e-09 -g 1 > OUT2/$FINAL.final.Rin.txt
+python MSMC_plotInput.py -I $OUT2/$FINAL.final.txt -u 2.1e-09 -g 1 > $OUT2/$FINAL.final.Rin.txt
 
 done
 
