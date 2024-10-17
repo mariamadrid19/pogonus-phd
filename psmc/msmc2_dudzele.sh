@@ -12,6 +12,7 @@ source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
  
 module load BCFtools/1.15.1-GCC-11.3.0
 module load SAMtools/1.16.1-GCC-11.3.0
+module load SciPy-bundle/2023.07-gfbf-2023a
 conda activate msmc2
 
 #submit with sbatch -a 1-10 (or however many samples in the array)
