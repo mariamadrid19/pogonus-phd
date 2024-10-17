@@ -87,4 +87,4 @@ echo "Finished Mapping Pipeline through Duplicate Removal"
 cd /scratch/leuven/357/vsc35707/nieuwpoort_pogonus/
 
 #scaffold the contigs using the primary assembly and the bam files (HiC reads mapped to the contigs)
-yahs prim_nieu_no_hic.asm.bp.p_ctg.fa /map_contigs/deduplicated_files/Pogonus_chalceus_r.bam -q 100000 -l 30 -r 50000 -o nieu_scaffolds
+yahs prim_nieu_no_hic.asm.bp.p_ctg.fa /scratch/leuven/357/vsc35707/nieuwpoort_pogonus/map_contigs/deduplicated_files/Pogonus_chalceus_r.bam -q 100000 -l 30 -r 50000 -o nieu_scaffolds
