@@ -14,6 +14,7 @@ module load BCFtools/1.15.1-GCC-11.3.0
 module load SAMtools/1.16.1-GCC-11.3.0
 conda activate msmc2
 
+#submit with sbatch -a 1-10 (or however many samples in the array)
 indID=$((SLURM_ARRAY_TASK_ID -1))
  
 REF=sorted_prim_dud.fasta
