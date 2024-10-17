@@ -41,19 +41,23 @@ generate_multihetsep.py --mask=$OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz
  
 done
  
-#for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag NEEE01001129.1_RagTag NEEE01001415.1_RagTag NEEE01001504.1_RagTag NEEE01001635.1_RagTag NEEE01003680.1_RagTag NEEE01003955.1_RagTag
-#do
+for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag NEEE01001129.1_RagTag NEEE01001415.1_RagTag NEEE01001504.1_RagTag NEEE01001635.1_RagTag NEEE01003680.1_RagTag NEEE01003955.1_RagTag
+
+do
  
-#COMMAND="$COMMAND $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt"
+COMMAND="$COMMAND $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt"
  
-#done
+done
  
-#msmc -t 8 -o $OUT2/$(echo "${SAMPLE[indID]}") $COMMAND
+msmc -t 12 -o $OUT2/$(echo "${SAMPLE[indID]}") $COMMAND
  
  
-#for FINAL in GC129388 GC129394 GC129401 GC129406 GC136107 GC136109
-#do
-#python MSMC_plotInput.py -I $OUT2/$FINAL.final.txt -u 2.1e-09 -g 1 > OUT2/$FINAL.final.Rin.txt
-#done
+for FINAL in GC129388 GC129394 GC129401 GC129406 GC136107 GC136109
+
+do
+
+python MSMC_plotInput.py -I $OUT2/$FINAL.final.txt -u 2.1e-09 -g 1 > OUT2/$FINAL.final.Rin.txt
+
+done
 
 #script modified from S. Van Belleghem 2024
