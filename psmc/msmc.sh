@@ -28,7 +28,7 @@ for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_Rag
 do
 
 
-bcftools mpileup -q 20 -Q 20 -C 50 -u -r $SCAF -f $REF $IN/$(echo "${SAMPLE[indID]}").RG.MarkDupl.sorted.bam  | bcftools call -cgI - | bamCaller.py 30 $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz | gzip -c > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz
+bcftools mpileup -q 20 -Q 20 -C 50 -u -r $SCAF -f $REF $IN/$(echo "${SAMPLE[indID]}").filtered.sorted.nd.bam  | bcftools call -cgI - | bamCaller.py 30 $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz | gzip -c > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz
 generate_multihetsep.py --mask=$OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt
  
 done
