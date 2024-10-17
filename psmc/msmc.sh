@@ -1,34 +1,36 @@
-#!/bin/bash
-#SBATCH --job-name=psmc
-#SBATCH --error=psmc
-#SBATCH --output=psmc
+#!/bin/bash -l 
+#SBATCH --cluster=genius 
+#SBATCH --job-name msmc2
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=12
-#SBATCH --time=48:00:00 
+#SBATCH --time=48:00:00
+#SBATCH --output=msmc2.%j.out
+#SBATCH --error=msmc2.%j.out
 #SBATCH -A lp_svbelleghem
+
+source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
  
 module load BCFtools/1.15.1-GCC-11.3.0
 module load SAMtools/1.16.1-GCC-11.3.0
-mamba activate msmc2
+conda activate msmc2
 
 indID=$((SLURM_ARRAY_TASK_ID -1))
  
 REF=sorted_prim_dud.fasta
-IN=/scratch/leuven/357/vsc35707/psmc
-OUT=/scratch/leuven/357/vsc35707/psmc/msmc
-OUT2=/scratch/leuven/357/vsc35707/psmc/msmc-final
+IN=/scratch/leuven/357/vsc35707/psmc/
+OUT=/scratch/leuven/357/vsc35707/psmc/msmc/
+OUT2=/scratch/leuven/357/vsc35707/psmc/msmc-final/
 
 # Sample IDs
-SAMPLE= (GC129388 GC129394 GC129401 GC129406)
- 
-#COMMAND=""
+SAMPLE=(\
+GC129388 GC129394 \
+GC129401 GC129406)
 
 for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag NEEE01001129.1_RagTag NEEE01001415.1_RagTag NEEE01001504.1_RagTag NEEE01001635.1_RagTag NEEE01003680.1_RagTag NEEE01003955.1_RagTag
 
 do
 
-
-bcftools mpileup -q 20 -Q 20 -C 50 -u -r $SCAF -f $REF $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam | bcftools call -cgI - | bamCaller.py 30 $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz | gzip -c > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz
+bcftools mpileup -q 20 -Q 20 -C 50 -r $SCAF -f $REF $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam | bcftools call -cgI - | bamCaller.py 30 $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz | gzip -c > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz
 generate_multihetsep.py --mask=$OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt
  
 done
