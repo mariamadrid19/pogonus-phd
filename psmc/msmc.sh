@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --mem-per-cpu=12gb
-#SBATCH --time=48:00:00
 #SBATCH --job-name=psmc
 #SBATCH --error=psmc
 #SBATCH --output=psmc
-#SBATCH --ntasks=1
-#SBATCH --partition=mpi
+#SBATCH --nodes=1 
+#SBATCH --ntasks-per-node=12
+#SBATCH --time=48:00:00 
+#SBATCH -A lp_svbelleghem
  
 module load BCFtools/1.15.1-GCC-11.3.0
 module load SAMtools/1.16.1-GCC-11.3.0
