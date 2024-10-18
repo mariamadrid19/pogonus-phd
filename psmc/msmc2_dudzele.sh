@@ -24,11 +24,7 @@ OUT2=/scratch/leu/scratch/leuven/357/vsc35707/psmc
 
 # Sample IDs
 SAMPLE=(GC129388 GC129395 GC129400 GC129406 GC129413 GC129417 GC136116 GC136110 GC136117 GC136123)
-#belgium SW/LW 
-#france
-#portugal 
-#spain
-#heist (2000/2018)
+#belgium SW/LW, france, portugal, spain, heist (2000/2018)
 
 #bam files need to be indexed before starting
 samtools index -M $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam.bai
