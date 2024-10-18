@@ -20,7 +20,7 @@ indID=$((SLURM_ARRAY_TASK_ID -1))
 REF=sorted_prim_dud.fasta
 IN=/scratch/leuven/357/vsc35707/psmc
 OUT=/scratch/leuven/357/vsc35707/psmc/msmc
-OUT2=/scratch/leu/scratch/leuven/357/vsc35707/psmc
+OUT2=/scratch/leuven/357/vsc35707/psmc/msmc-final
 
 # Sample IDs
 SAMPLE=(GC129388 GC129395 GC129400 GC129406 GC129413 GC129417 GC136116 GC136110 GC136117 GC136123)
