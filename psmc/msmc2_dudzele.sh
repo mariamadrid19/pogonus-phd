@@ -51,4 +51,6 @@ do
 python MSMC_plotInput.py -I $OUT2/$FINAL.final.txt -u 2.1e-09 -g 1 > $OUT2/$FINAL.final.Rin.txt
 done
 
+cp $OUT2/$FINAL.final.Rin.txt $VSC_DATA
+
 #script modified from S. Van Belleghem 2024
