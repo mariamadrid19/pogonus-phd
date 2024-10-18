@@ -45,7 +45,8 @@ done
 for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag NEEE01001129.1_RagTag NEEE01001415.1_RagTag NEEE01001504.1_RagTag NEEE01001635.1_RagTag NEEE01003680.1_RagTag NEEE01003955.1_RagTag
 COMMAND="$COMMAND $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt"
 done
- 
+
+#this script was written for version 2.1.4 of msmc2
 msmc2_Linux -t 12 -o $OUT2/$(echo "${SAMPLE[indID]}") $COMMAND
 
 #add sample names here
