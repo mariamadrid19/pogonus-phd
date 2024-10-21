@@ -30,7 +30,7 @@ SAMPLE=(GC129388 GC129395 GC129400 GC129406 GC129413 GC129417 GC136116 GC136110 
 samtools index -M $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam.bai
 
 #add all scaffold names here
-for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag NEEE01001129.1_RagTag NEEE01001415.1_RagTag NEEE01001504.1_RagTag NEEE01001635.1_RagTag NEEE01003680.1_RagTag NEEE01003955.1_RagTag
+for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag
 
 do
 bcftools mpileup -q 20 -Q 20 -C 50 -r $SCAF -f $REF $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam | bcftools call -c - | bamCaller.py 30 $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz | gzip -c > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz
