@@ -29,7 +29,7 @@ SAMPLE=(GC129388 GC129395 GC129400 GC129406 GC129413 GC129417 GC136116 GC136110 
 #bam files need to be indexed before starting
 samtools index -M $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam.bai
 
-#add all scaffold names here
+#Chromosome names
 for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag
 
 do
@@ -37,15 +37,15 @@ bcftools mpileup -q 20 -Q 20 -C 50 -r $SCAF -f $REF $IN/$(echo "${SAMPLE[indID]}
 generate_multihetsep.py --mask=$OUT/$(echo "${SAMPLE[indID]}")_$SCAF.mask.bed.gz $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.vcf.gz > $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt
 done
 
-#add scaffold names here
 for SCAF in CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag CM008235.1_RagTag CM008236.1_RagTag CM008237.1_RagTag CM008238.1_RagTag CM008239.1_RagTag CM008240.1_RagTag
+do
 COMMAND="$COMMAND $OUT/$(echo "${SAMPLE[indID]}")_$SCAF.txt"
 done
 
-#this script was written for version 2.1.4 of msmc2
+#this script was written for msmc v2.1.4 
 msmc2_Linux -t 12 -o $OUT2/$(echo "${SAMPLE[indID]}") $COMMAND
 
-#add sample names here
+#Sample names
 for FINAL in GC129388 GC129395 GC129400 GC129406 GC129413 GC129417 GC136116 GC136110 GC136117 GC136123
 do
 python MSMC_plotInput.py -I $OUT2/$FINAL.final.txt -u 2.1e-09 -g 1 > $OUT2/$FINAL.final.Rin.txt
