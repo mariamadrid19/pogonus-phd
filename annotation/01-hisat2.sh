@@ -7,19 +7,21 @@
 #SBATCH --output=hisat2.%j.out
 #SBATCH -A lp_svbelleghem
 
+#Cluster IsoSeq reads, map these transcripts to the assembled genome, and collapse these mapped reads
+
 conda activate isoseq
 
 isoseq cluster POG_larveIsoSeq.demux.bam POG_unpolished_reads.demux.bam --verbose
 
-module load SAMtools/1.16.1-GCC-11.3.0
-
-samtools fasta POG_unpolished_reads.demux.hq.bam
+gunzip POG_unpolished_reads.demux.hq.fasta.gz
 
 module load HISAT2/2.1.0-intel-2018a
 
 hisat2-build sorted_prim_dud.fasta sorted_prim_dud
 
 hisat2 -f -x sorted_prim_dud -U POG_unpolished_reads.demux.hq.fasta -S POG_mapped_RNA_dud.sam
+
+module load SAMtools/1.16.1-GCC-11.3.0
 
 samtools view -h -q 30 -b POG_mapped_RNA_dud.sam > POG_mapped_RNA_dud.filtered.bam
 samtools sort POG_mapped_RNA_dud.filtered.bam > POG_mapped_RNA_dud.sorted.filtered.bam
