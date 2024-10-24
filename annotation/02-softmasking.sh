@@ -10,5 +10,5 @@
 conda activate EDTA
  
 BuildDatabase -name dudRM sorted_prim_dud.fasta
-RepeatModeler -database dudRM -threads 24 -LTRStruct >& run.out
+RepeatModeler -ninja_dir /data/leuven/357/vsc35707/NINJA-0.98-cluster_only/NINJA -database dudRM -pa 24 -LTRStruct >& run.out 
 RepeatMasker -lib dudRM-families.fa -xsmall -pa 24 sorted_prim_dud.fasta
