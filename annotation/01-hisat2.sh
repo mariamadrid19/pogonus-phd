@@ -19,7 +19,7 @@ module load HISAT2/2.1.0-intel-2018a
 
 hisat2-build sorted_prim_dud.fasta sorted_prim_dud
 
-hisat2 -f -x sorted_prim_dud -U POG_unpolished_reads.demux.hq.fasta -S POG_mapped_RNA_dud.sam
+hisat2 --dta -f -x sorted_prim_dud -U POG_unpolished_reads.demux.hq.fasta -S POG_mapped_RNA_dud.sam
 
 module load SAMtools/1.16.1-GCC-11.3.0
 
