@@ -9,7 +9,7 @@
 
 conda activate isoseq
 
-isoseq cluster POG_larveIsoSeq.demux.bam --verbose
+isoseq cluster POG_larveIsoSeq.demux.bam POG_unpolished_reads.demux.bam --verbose
 
 module load HISAT2/2.1.0-intel-2018a
 module load SAMtools/1.16.1-GCC-11.3.0
