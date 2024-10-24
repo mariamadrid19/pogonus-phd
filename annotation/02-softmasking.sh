@@ -11,4 +11,4 @@ conda activate EDTA2
  
 BuildDatabase -name dudRM sorted_prim_dud.fasta
 RepeatModeler -database dudRM -threads 24 -LTRStruct >& run.out
-RepeatMasker -lib dudRM-families.fa -xsmall -pa 24 sorted_prim_dud.fasta -gff
+RepeatMasker -lib dudRM-families.fa -xsmall -pa 24 sorted_prim_dud.fasta
