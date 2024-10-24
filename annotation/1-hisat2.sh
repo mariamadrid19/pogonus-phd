@@ -7,8 +7,8 @@
 #SBATCH --output=hisat2.%j.out
 #SBATCH -A lp_svbelleghem
 
-module load HISAT2/2.2.1-gompi-2021b
-module load SAMtools
+module load HISAT2/2.1.0-intel-2018a
+module load SAMtools/1.16.1-GCC-11.3.0
 
 hisat2-build sorted_prim_dud.fasta sorted_prim_dud
 
