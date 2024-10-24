@@ -10,13 +10,10 @@
 module load HISAT2/2.2.1-gompi-2021b
 module load SAMtools
 
-indID=$((SLURM_ARRAY_TASK_ID -1))
+hisat2-build sorted_prim_dud.fasta sorted_prim_dud
 
-ind=( )
+hisat2 -f -x sorted_prim_dud -U POG_IsoSeq_HiFi_demux.fastq -S Dud_mapped_IsoSeq.sam
 
-hisat2 --rna-strandness RF -x sorted_prim_dud -1 /RawData/$(echo "${ind[indID]}")_1.fq.gz -2 /RawData/$(echo "${ind[indID]}")_2.fq.gz -S $(echo "${ind[indID]}").sam
- 
-samtools view -h -q 30 -b $(echo "${ind[indID]}").sam > $(echo "${ind[indID]}")._filtered.bam
-samtools sort $(echo "${ind[indID]}")._filtered.bam > $(echo "${ind[indID]}").filtered.bam
-samtools index $(echo "${ind[indID]}").filtered.bam
- 
+samtools view -h -q 30 -b Dud_mapped_IsoSeq.sam > Dud_mapped_IsoSeq_filtered.bam
+samtools sort Dud_mapped_IsoSeq_filtered.bam > Dud_mapped_IsoSeq.filtered.bam
+samtools index Dud_mapped_IsoSeq.filtered.bam
