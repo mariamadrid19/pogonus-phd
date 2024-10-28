@@ -9,4 +9,4 @@
 
 conda activate braker
 
-braker3.sif braker.pl --cores=24 --species=P_chalceus --genome=sorted_prim_dud.fasta.masked --bam=POG_mapped_RNA_dud.sorted.filtered.bam --softmasking --AUGUSTUS_CONFIG_PATH=/data/leuven/357/vsc35707/Augustus/config/
+braker3.sif braker.pl --threads=24 --species=P_chalceus --genome=sorted_prim_dud.fasta.masked --bam=POG_mapped_RNA_dud.sorted.filtered.bam --softmasking --AUGUSTUS_CONFIG_PATH=/data/leuven/357/vsc35707/Augustus/config/
