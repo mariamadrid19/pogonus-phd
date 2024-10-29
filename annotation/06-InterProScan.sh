@@ -7,6 +7,8 @@
 #SBATCH -o interpro.%j.out
 #SBATCH -A lp_svbelleghem
 
+#documentation: https://interproscan-docs.readthedocs.io/en/latest/UserDocs.html#obtaining-a-copy-of-interproscan
+
 cd /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/my_interproscan
 #wget https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.70-102.0/interproscan-5.70-102.0-64-bit.tar.gz
 #wget https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.70-102.0/interproscan-5.70-102.0-64-bit.tar.gz.md5
