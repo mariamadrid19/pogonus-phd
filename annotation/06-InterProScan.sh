@@ -21,4 +21,6 @@ cd /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/interproscan
 
 #python3 setup.py -f interproscan.properties
 
+module load Java/11.0.20
+
 interproscan.sh -i /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/augustus.hints.fa
