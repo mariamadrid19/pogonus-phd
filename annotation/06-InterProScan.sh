@@ -23,4 +23,5 @@ cd /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/interproscan
 
 module load Java/11.0.20
 
-interproscan.sh -i /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/augustus.hints.aa
+#need to remove the * from the aa file
+interproscan.sh -i /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/augustus.hints.aa --outfile augustus_protein_interpro
