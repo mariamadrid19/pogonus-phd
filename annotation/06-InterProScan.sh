@@ -20,10 +20,6 @@ cd /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/my_interprosca
 
 cd interproscan-5.70-102.0/
 
-python3 setup.py -f interproscan.properties
+#python3 setup.py -f interproscan.properties
 
-f=(0 2000 4000 6000 8000 10000 12000 14000 16000 18000 20000 22000 24000 26000 28000 30000 32000)
- 
-fID=$((PBS_ARRAYID -1))
- 
-interproscan.sh -i augustus.hints.h.$(echo "${f[fID]}").fa
+interproscan.sh -i /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/augustus.hints.fa
