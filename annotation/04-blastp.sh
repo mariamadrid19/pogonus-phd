@@ -15,5 +15,7 @@ wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz.md5
 
 tar -xvzf swissprot.tar.gz
+
+md5sum -c swissprot.tar.gz.md5
   
 blastp -db swissprot -query ../augustus.hints.h.aa -outfmt 5 -max_target_seqs 10 -max_hsps 1 -out blastout.swiss.h.xml
