@@ -8,6 +8,7 @@
 #SBATCH -A lp_svbelleghem
 
 module load Biopython/1.83-foss-2023a
+python3
 from Bio.Blast import NCBIXML
  
 E_VALUE_THRESH = 0.04
