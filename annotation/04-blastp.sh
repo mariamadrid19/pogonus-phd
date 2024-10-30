@@ -18,4 +18,6 @@ tar -xvzf swissprot.tar.gz
 
 md5sum -c swissprot.tar.gz.md5
   
-blastp -db swissprot -query ../augustus.hints.h.aa -outfmt 5 -max_target_seqs 10 -max_hsps 1 -out blastout.swiss.h.xml
+blastp -db swissprot -query augustus.hints.aa -outfmt 5 -max_target_seqs 10 -max_hsps 1 -out augustus.blastout.swiss.xml
+
+blastp -db swissprot -query braker.aa -outfmt 5 -max_target_seqs 10 -max_hsps 1 -out braker.blastout.swiss.xml
