@@ -26,3 +26,5 @@ module load Java/11.0.20
 #need to remove the * from the aa file
 #sed -i 's/\*//g' augustus.hints.aa
 interproscan.sh -i /scratch/leuven/357/vsc35707/genome_annotation/braker/Augustus/augustus.hints.aa --outfile augustus_protein_interpro
+
+interproscan.sh -i /scratch/leuven/357/vsc35707/genome_annotation/braker/braker.fa --outfile braker_protein_interpro
