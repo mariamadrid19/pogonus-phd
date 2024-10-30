@@ -7,7 +7,7 @@
 #SBATCH -o parse_blastP.%j.out
 #SBATCH -A lp_svbelleghem
 
-#module load Biopython/1.75-foss-2019b-Python-2.7.16
+module load Biopython/1.83-foss-2023a
 from Bio.Blast import NCBIXML
  
 E_VALUE_THRESH = 0.04
