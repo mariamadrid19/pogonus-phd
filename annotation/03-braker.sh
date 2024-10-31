@@ -13,4 +13,7 @@
 #Both were sent as jobs, installation requires a lot of memory 
 #AUGUSTUS folder is moved INTO the BRAKER folder (that way BRAKER can access the config file)
 
+#to execute braker3.sif
+export BRAKER_SIF=$PWD/braker3.sif
+
 singularity exec -B ${PWD}:${PWD} $PWD/BRAKER/braker3.sif braker.pl --threads=24 --AUGUSTUS_CONFIG_PATH=$PWD/Augustus/config --species=P_chalceus --genome=sorted_prim_dud.fasta.masked --bam=POG_mapped_RNA_dud.sorted.filtered.bam --softmasking
