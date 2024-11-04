@@ -3,7 +3,7 @@
 #SBATCH --job-name run_docker
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH -o docker.%j.out
 #SBATCH -A lp_svbelleghem
 
