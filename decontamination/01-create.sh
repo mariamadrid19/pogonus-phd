@@ -11,8 +11,15 @@ conda activate btk
 
 module load BLAST+/2.13.0-gompi-2022a
 
-blastn -query sorted_prim_dud.fasta -db /scratch/leuven/357/vsc35707/blobtools/nt -outfmt "6 qseqid staxids bitscore std" -max_target_seqs 1 -max_hsps 1 -num_threads 4 -evalue 1e-25 -out sorted_prim_dud.ncbi.blastn.out.txt
-
+blastn -db nt \
+       -query sorted_prim_dud.fasta \
+       -outfmt "6 qseqid staxids bitscore std" \
+       -max_target_seqs 10 \
+       -max_hsps 1 \
+       -evalue 1e-25 \
+       -num_threads 16 \
+       -out sorted_prim_dud.ncbi.blastn.out.txt"
+       
 blobtools add \
     --hits sorted_prim_dud.ncbi.blastn.out.txt \
     --taxrule bestsumorder \
