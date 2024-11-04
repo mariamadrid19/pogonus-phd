@@ -15,7 +15,7 @@ reads:
     max: 30
   paired: []
   single:
-    - base_count: 25744115650
+    - base_count: 
       file: /scratch/leuven/357/vsc35707/blobtools/POG_Dudzele_HiFi_reads.fasta
       platform: PACBIO_SMRT
       prefix: POG_Dudzele_HiFi_reads
