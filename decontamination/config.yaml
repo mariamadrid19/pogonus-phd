@@ -6,9 +6,10 @@ assembly:
   span: 1044574673
 busco:
   lineages:
-    - insecta_odb10
     - bacteria_odb10
     - archaea_odb10
+    - fungi_odb10
+    - eukaryota_odb10
   lineage_dir: /scratch/leuven/357/vsc35707/blobtools/lineages
 reads:
   coverage:
