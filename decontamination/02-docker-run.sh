@@ -23,5 +23,5 @@ docker run --rm \
     -e TRANSFER=$TRANSFER \
     -v /scratch/leuven/357/vsc35707/blobtools:/blobtoolkit/datasets \
     -v /scratch/leuven/357/vsc35707/blobtools:/blobtoolkit/databases \
-    -v /scratch/leuven/357/vsc35707/blobtools:/blobtoolkit/output \
+    -v /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud:/blobtoolkit/output \
     genomehubs/blobtoolkit:$RELEASE
