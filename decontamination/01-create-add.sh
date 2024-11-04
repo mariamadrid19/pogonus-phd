@@ -9,6 +9,8 @@
 
 conda activate btk
 
+blobtools create --fasta sorted_prim_dud.fasta sorted_prim_dud
+
 module load BLAST+/2.13.0-gompi-2022a
 
 blastn -db nt \
@@ -18,13 +20,20 @@ blastn -db nt \
        -max_hsps 1 \
        -evalue 1e-25 \
        -num_threads 16 \
-       -out sorted_prim_dud.ncbi.blastn.out.txt
-       
+       -out sorted_prim_dud.ncbi.blastn.out
+    
 blobtools add \
-    --hits sorted_prim_dud.ncbi.blastn.out.txt \
+    --hits sorted_prim_dud.ncbi.blastn.out \
     --taxrule bestsumorder \
-    --taxdump /scratch/leuven/357/vsc35707/blobtools/taxdump
+    --taxdump /scratch/leuven/357/vsc35707/blobtools/taxdump \
+    sorted_prim_dud
 
-blobtools add --cov Dud_mapped_IsoSeq.filtered.bam --threads 24 --replace
+blobtools add \
+    --cov Dud_mapped_IsoSeq.filtered.bam \
+    sorted_prim_dud
 
-blobtools create -i sorted_prim_dud.fasta -b mapping_sorted.bam -t sorted_prim_dud.ncbi.blastn.out.txt -o filename
+blobtools add \
+    --busco sorted_prim_dud.busco.bacteria.full_summary.tsv \
+    --busco sorted_prim_dud.busco.archaea.full_summary.tsv \
+    --busco sorted_prim_dud.busco.fungi.full_summary.tsv \
+    sorted_prim_dud
