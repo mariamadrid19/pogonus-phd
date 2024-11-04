@@ -1,0 +1,49 @@
+assembly:
+  level: scaffold
+  scaffold-count: 2177
+  span: 1044574673
+busco:
+  basal_lineages:
+    - eukaryota_odb10
+    - bacteria_odb10
+    - archaea_odb10
+  download_dir: /scratch/leuven/357/vsc35707/blobtools/lineages
+  lineages:
+    - insecta_odb10
+    - bacteria_odb10
+    - archaea_odb10
+reads:
+  coverage:
+    max: 30
+  paired: []
+  single:
+    - base_count: 25744115650
+      file: /scratch/leuven/357/vsc35707/blobtools/POG_Dudzele_HiFi_reads.fasta
+      platform: PACBIO_SMRT
+      prefix: POG_Dudzele_HiFi_reads
+settings:
+  blast_chunk: 100000
+  blast_max_chunks: 10
+  blast_min_length: 1000
+  blast_overlap: 0
+  stats_chunk: 1000
+  stats_windows:
+    - 0.1
+    - 0.01
+    - 100000
+    - 1000000
+  taxdump: /scratch/leuven/357/vsc35707/blobtools/taxdump
+  tmp: /scratch/leuven/357/vsc35707/blobtools/tmp
+similarity:
+  blastn:
+    name: nt
+    path: /scratch/leuven/357/vsc35707/blobtools/nt
+  defaults:
+    evalue: 1.0e-10
+    import_evalue: 1.0e-25
+    max_target_seqs: 10
+    taxrule: buscogenes
+taxon:
+  name: Pogonus chalceus
+  taxid: "235516"
+version: 1
