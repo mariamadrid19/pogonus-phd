@@ -1,3 +1,12 @@
+#!/bin/bash -l
+#SBATCH --cluster=genius
+#SBATCH --job-name run_docker
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --time=48:00:00
+#SBATCH -o docker.%j.out
+#SBATCH -A lp_svbelleghem
+
 # Set name of directory in which config.yaml file can be found
 # The file should be available at /path/to/datasets/$ACCESSION/config.yaml
 ACCESSION=sorted_prim_dud
