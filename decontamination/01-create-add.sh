@@ -7,6 +7,8 @@
 #SBATCH -o download_db.%j.out
 #SBATCH -A lp_svbelleghem
 
+cd /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+
 conda activate btk
 
 blobtools create --fasta sorted_prim_dud.fasta sorted_prim_dud
