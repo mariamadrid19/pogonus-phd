@@ -11,9 +11,13 @@ cd /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 
 conda activate btk
 
-blobtools create --fasta sorted_prim_dud.fasta /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+#blobtools create --fasta sorted_prim_dud.fasta /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 
 module load BLAST+/2.13.0-gompi-2022a
+
+export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
+
+blastdbcmd -db nt -info
 
 blastn -db nt \
        -query sorted_prim_dud.fasta \
