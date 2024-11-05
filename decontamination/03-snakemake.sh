@@ -21,6 +21,8 @@ ASSEMBLY=sorted_prim_dud
 CONDA_DIR=/scratch/leuven/357/vsc35707/blobtools/blobtoolkit/.conda
 # The maximum number of parallel threads to run
 THREADS=64
+TOOL=blobtoolkit
+SNAKE_DIR=/scratch/leuven/357/vsc35707/blobtools/blobtoolkit/insdc-pipeline
 
 snakemake -p \
           --use-conda \
@@ -29,4 +31,5 @@ snakemake -p \
           --configfile $WORKDIR/config.yaml \
           --stats $ASSEMBLY.snakemake.stats \
           -j $THREADS \
+          -s $SNAKE_DIR/$TOOL.smk \
           --resources btk=1
