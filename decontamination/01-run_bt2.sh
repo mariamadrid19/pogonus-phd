@@ -11,8 +11,12 @@ cd /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 
 conda activate btk
 
+ASSEMBLY=sorted_prim_dud
+MAPPED=Dud_mapped_IsoSeq
+WORKING_DIR=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+
 #this will generate 5 JSON files (gc.json, identifiers.json, length.json, meta.json, and ncount.json)
-blobtools create --fasta sorted_prim_dud.fasta /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+blobtools create --fasta $ASSEMBLY.fasta $WORKING_DIR
 
 module load BLAST+/2.13.0-gompi-2022a
 
@@ -22,33 +26,32 @@ export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
 blastdbcmd -db nt -info
 
 blastn -db nt \
-       -query sorted_prim_dud.fasta \
+       -query $ASSEMBLY.fasta \
        -outfmt "6 qseqid staxids bitscore std" \
        -max_target_seqs 10 \
        -max_hsps 1 \
        -evalue 1e-25 \
        -num_threads 16 \
-       -out sorted_prim_dud.ncbi.blastn.out
+       -out $ASSEMBLY.ncbi.blastn.out
     
 blobtools add \
-    --hits sorted_prim_dud.ncbi.blastn.out \
+    --hits $ASSEMBLY.ncbi.blastn.out \
     --taxrule bestsumorder \
     --taxdump /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/taxdump \
-    /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+     $WORKING_DIR
 
 blobtools add \
-    --cov Dud_mapped_IsoSeq.filtered.bam \
-    /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+    --cov $MAPPED.filtered.bam $WORKING_DIR
 
 blobtools add \
-    --busco sorted_prim_dud.busco.bacteria.full_summary.tsv \
-    --busco sorted_prim_dud.busco.archaea.full_summary.tsv \
-    --busco sorted_prim_dud.busco.fungi.full_summary.tsv \
-    /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+    --busco $ASSEMBLY.busco.bacteria.full_summary.tsv \
+    --busco $ASSEMBLY.busco.archaea.full_summary.tsv \
+    --busco $ASSEMBLY.busco.fungi.full_summary.tsv \
+     $WORKING_DIR
 
 blobtools filter \
      --param length--Min=1000 \
      --param bestsumorder_phylum--Keys=no-hit \
-     --fasta sorted_prim_dud.fasta \
+     --fasta $ASSEMBLY.fasta \
      --summary STDOUT \
-     /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+      $WORKING_DIR
