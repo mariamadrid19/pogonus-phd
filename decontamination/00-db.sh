@@ -7,7 +7,9 @@
 #SBATCH -o download_db.%j.out
 #SBATCH -A lp_svbelleghem
 
-cd /scratch/leuven/357/vsc35707/blobtools/nt
+cd /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+mkdir -p nt
+cd nt/
 
 # Download files from nt.000.tar.gz to nt.192.tar.gz along with their .md5 files
 for i in $(seq -w 0 192); do
@@ -35,3 +37,6 @@ done
 for file in *.tar.gz; do
     tar -pxvzf "$file"
 done
+
+
+export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
