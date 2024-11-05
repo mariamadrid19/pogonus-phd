@@ -27,7 +27,7 @@ blastn -db nt \
 blobtools add \
     --hits sorted_prim_dud.ncbi.blastn.out \
     --taxrule bestsumorder \
-    --taxdump /scratch/leuven/357/vsc35707/blobtools/taxdump \
+    --taxdump /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/taxdump \
     /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 
 blobtools add \
@@ -39,3 +39,10 @@ blobtools add \
     --busco sorted_prim_dud.busco.archaea.full_summary.tsv \
     --busco sorted_prim_dud.busco.fungi.full_summary.tsv \
     /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+
+blobtools filter \
+     --param length--Min=1000 \
+     --param bestsumorder_phylum--Keys=no-hit \
+     --fasta sorted_prim_dud.fasta \
+     --summary STDOUT \
+     /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
