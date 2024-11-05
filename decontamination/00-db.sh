@@ -40,3 +40,9 @@ done
 
 
 export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
+
+cd /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
+mkdir -p taxdump;
+cd taxdump;
+curl -L ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz | tar xzf -;
+cd ..;
