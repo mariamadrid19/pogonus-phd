@@ -2,7 +2,7 @@
 #SBATCH --cluster=genius
 #SBATCH --job-name run_smk
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=24
+#SBATCH --ntasks-per-node=32
 #SBATCH --time=72:00:00
 #SBATCH -o smk.%j.out
 #SBATCH -A lp_svbelleghem
@@ -20,7 +20,7 @@ ASSEMBLY=sorted_prim_dud
 # A directory to contain the Conda environments for individual Snakemake rules
 CONDA_DIR=/scratch/leuven/357/vsc35707/blobtools/blobtoolkit/.conda
 # The maximum number of parallel threads to run
-THREADS=64
+THREADS=32
 # The tool being used
 TOOL=blobtoolkit
 # The directory with the snakefiles
