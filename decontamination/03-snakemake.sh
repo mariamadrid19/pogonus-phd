@@ -9,7 +9,7 @@
 
 cd /scratch/leuven/357/vsc35707/blobtools/blobtoolkit/insdc-pipeline/
 
-source /data/354/vsc35429/miniconda3/etc/profile.d/conda.sh
+source /data/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 
 conda activate btk_env
 
