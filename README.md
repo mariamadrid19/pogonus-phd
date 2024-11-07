@@ -1,5 +1,7 @@
 # pogonus-phd
 
+PhD in Eco-Evolutionary Biology @ KU Leuven, Belgium (2024-2029)
+
 Scripts for genome decontamination and annotation, msmc analysis, differential gene expression analysis...
 
 _Pogonus chalceus_ (Marsham, 1802) is a carabid beetle frequently found living in saltmarshes along the Atlantic western coast of Europe. They are wing polymorphic, meaning there are both short- and long-winged ecotypes that occur at habitats with different hydrological regimes. One of these habitats are tidal marshes that are completely flooded regularly for short periods of time, and the other are seasonal marshes that are usually dry but can become flooded for several months per year. These divergent habitats are closely related to several behavioral and genetic adaptations of P. chalceus. The tidal marshes are inhabited by individuals with smaller bodies, short wings, and low dispersal abilities, and the seasonal marshes are inhabited by larger individuals with fully developed wings and a greater dispersal ability.
