@@ -2,7 +2,7 @@
 #SBATCH --cluster=genius
 #SBATCH --job-name blobtools
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=24
+#SBATCH --ntasks-per-node=32
 #SBATCH --time=48:00:00
 #SBATCH -o blobtools.%j.out
 #SBATCH -A lp_svbelleghem
@@ -28,10 +28,10 @@ blastdbcmd -db nt -info
 blastn -db nt \
        -query $ASSEMBLY.fasta \
        -outfmt "6 qseqid staxids bitscore std" \
-       -max_target_seqs 10 \
+       -max_target_seqs 1 \
        -max_hsps 1 \
        -evalue 1e-25 \
-       -num_threads 16 \
+       -num_threads 32 \
        -out $ASSEMBLY.ncbi.blastn.out
     
 blobtools add \
