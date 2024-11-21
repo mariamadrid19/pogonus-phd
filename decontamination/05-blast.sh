@@ -17,6 +17,8 @@ sh get_species_taxids.sh -t 4751 > fungal.ids
 
 sh get_species_taxids.sh -t 2157 > archaeal.ids
 
+export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
+
 blastn -db nt \
        -query sorted_prim_dud.fasta \
        -outfmt "6 qseqid staxids bitscore std" \
