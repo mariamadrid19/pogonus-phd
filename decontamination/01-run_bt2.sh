@@ -3,7 +3,7 @@
 #SBATCH --job-name blobtools
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH -o blobtools.%j.out
 #SBATCH -A lp_svbelleghem
 
@@ -13,6 +13,7 @@ conda activate btk
 
 ASSEMBLY=sorted_prim_dud
 MAPPED=Dud_mapped_IsoSeq
+TAXIDLIST=microbial.ids
 WORKING_DIR=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 
 #this will generate 5 JSON files (gc.json, identifiers.json, length.json, meta.json, and ncount.json)
@@ -30,8 +31,9 @@ blastn -db nt \
        -outfmt "6 qseqid staxids bitscore std" \
        -max_target_seqs 1 \
        -max_hsps 1 \
-       -evalue 1e-25 \
+       -evalue 1e-5 \
        -num_threads 32 \
+       -taxidlist $TAXIDLIST \
        -out $ASSEMBLY.ncbi.blastn.out
     
 blobtools add \
