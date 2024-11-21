@@ -3,7 +3,7 @@
 #SBATCH --job-name BLAST
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=32
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH -o blast.%j.out
 #SBATCH -A lp_svbelleghem
 
