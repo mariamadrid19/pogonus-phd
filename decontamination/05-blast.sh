@@ -24,7 +24,7 @@ blastn -db nt \
        -max_hsps 1 \
        -evalue 1e-5 \
        -num_threads 36 \
-       -taxidlist bacterial.ids, fungal.ids, archaeal.ids \
+       -taxidlist microbial.ids \
        -out sorted_prim_dud.ncbi.blastn.out
 
 
