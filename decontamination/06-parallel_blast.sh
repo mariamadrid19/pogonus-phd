@@ -6,6 +6,7 @@
 #SBATCH --time=72:00:00
 #SBATCH --output=blast_scafs.%j.out
 #SBATCH -A lp_svbelleghem
+#SBATCH --array=1-100
 
 # Input files
 ASSEMBLY="sorted_prim_dud.fasta"
