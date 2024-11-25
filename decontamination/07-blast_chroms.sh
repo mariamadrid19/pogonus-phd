@@ -30,6 +30,7 @@ module load BLAST+/2.13.0-gompi-2022a
 export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
 
 # Run BLAST for this scaffold
+# microbial.ids (human + bacteria + fungi + archaea)
 blastn -db nt \
        -query "${SCAF}.fasta" \
        -outfmt "6 qseqid staxids bitscore std" \
