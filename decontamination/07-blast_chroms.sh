@@ -12,18 +12,22 @@
 ASSEMBLY="sorted_prim_dud.fasta"
 SCAFFOLDS="chrom_names.txt"
 
-module load BLAST+/2.13.0-gompi-2022a
-
-export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
-
+# Extract the specific scaffold name based on SLURM array ID
 SCAF=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$SCAFFOLDS")
+
+echo "Processing scaffold: $SCAF"
+echo "Assembly file: $ASSEMBLY"
 
 # Extract the scaffold sequence into a FASTA file
 awk -v scaffold=">${SCAF}" '
 BEGIN {print_seq=0}
 $0 ~ scaffold {print_seq=1; print $0; next}
 $0 ~ /^>/ {print_seq=0}
-print_seq' "$FASTA" > "${SCAF}.fasta"
+print_seq' "$ASSEMBLY" > "${SCAF}.fasta"
+
+module load BLAST+/2.13.0-gompi-2022a
+
+export BLASTDB=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/nt
 
 # Run BLAST for this scaffold
 blastn -db nt \
