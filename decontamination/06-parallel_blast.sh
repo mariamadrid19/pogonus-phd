@@ -42,3 +42,12 @@ blastn -db nt \
 
 # Clean up scaffold FASTA file
 rm "${SCAF}.fasta"
+
+# Directory containing BLAST output files
+OUTPUT_DIR="/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud"
+FINAL_OUTPUT="sorted_prim_dud.ncbi.blastn.out"
+
+# Combine all *.ncbi.blastn.out files
+cat ${OUTPUT_DIR}/*.ncbi.blastn.out > ${OUTPUT_DIR}/${FINAL_OUTPUT}
+
+echo "All BLAST outputs combined into ${FINAL_OUTPUT}"
