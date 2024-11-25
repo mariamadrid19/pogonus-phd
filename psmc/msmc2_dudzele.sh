@@ -5,6 +5,7 @@
 #SBATCH --ntasks-per-node=12
 #SBATCH --time=72:00:00
 #SBATCH --output=2_msmc2.%j.out
+#SBATCH --array=1-10
 #SBATCH -A lp_svbelleghem
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
@@ -14,7 +15,6 @@ module load SAMtools/1.16.1-GCC-11.3.0
 module load SciPy-bundle/2023.07-gfbf-2023a
 conda activate msmc2
 
-#submit with sbatch -a 1-10 (or however many samples in the array)
 indID=$((SLURM_ARRAY_TASK_ID -1))
 
 REF=sorted_prim_dud.fasta
