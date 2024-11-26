@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=32
 #SBATCH --time=72:00:00
 #SBATCH --output=blast_scafs.%j.out
-#SBATCH --array=1-100
+#SBATCH --array=1-30
 #SBATCH -A lp_svbelleghem
 
 # Input files
