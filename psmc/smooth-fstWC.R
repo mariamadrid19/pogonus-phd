@@ -26,7 +26,7 @@ colfuncR <- colorRampPalette(c("black", "red"))
 filtered_stats_SP$col <- colfuncR(100)[as.integer((filtered_stats_SP$FstWC/0.8)*100)+1]
 
 # Function to find the first and last positions crossing the FstWC threshold for each scaffold
-find_peak_positions <- function(df, threshold = 0.1, span = 0.05) {
+find_peak_positions <- function(df, threshold = 0.05, span = 0.05) {
   # Group by scaffold
   df %>%
     group_by(scaffold) %>%
@@ -59,7 +59,7 @@ peak_positions <- as.data.frame(peak_positions)
 write.csv(peak_positions, "peak_positions.csv", row.names = FALSE)
 
 # Function to plot LOESS fit for a specific scaffold
-plot_loess_fit <- function(df, scaffold, threshold = 0.1, span = 0.05) {
+plot_loess_fit <- function(df, scaffold, threshold = 0.05, span = 0.05) {
   # Filter data for the selected scaffold
   scaffold_data <- df %>% filter(scaffold == !!scaffold)
   
@@ -89,7 +89,7 @@ plot_loess_fit <- function(df, scaffold, threshold = 0.1, span = 0.05) {
 }
 
 # Plot for a single chromosome (CM008230.1_RagTag, chromosome 1)
-plot_loess_fit(filtered_stats_SP, scaffold = "CM008230.1_RagTag", threshold = 0.1, span = 0.05)
+plot_loess_fit(filtered_stats_SP, scaffold = "CM008230.1_RagTag", threshold = 0.05, span = 0.05)
 
 # List of scaffold names
 scaffolds <- c(
@@ -105,11 +105,11 @@ scaffolds <- c(
   "CM008240.1_RagTag"
 )
 
-plot_loess_fit(filtered_stats_SP, scaffold = "CM008240.1_RagTag", threshold = 0.1, span = 0.05)
+plot_loess_fit(filtered_stats_SP, scaffold = "CM008240.1_RagTag", threshold = 0.05, span = 0.05)
 
 # Generate a list of plots for each scaffold
 plots <- lapply(scaffolds, function(scaffold) {
-  plot_loess_fit(filtered_stats_SP, scaffold = scaffold, threshold = 0.1, span = 0.05)
+  plot_loess_fit(filtered_stats_SP, scaffold = scaffold, threshold = 0.05, span = 0.05)
 })
 
 # Arrange the plots in a 3x4 grid (3 rows and 4 columns)
