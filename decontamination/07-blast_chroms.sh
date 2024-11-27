@@ -3,7 +3,7 @@
 #SBATCH --job-name blast_chroms
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=32
-#SBATCH --time=72:00:00
+#SBATCH --time=10:00:00
 #SBATCH --output=blast_chroms.%j.out
 #SBATCH --array=1-16
 #SBATCH -A lp_svbelleghem
