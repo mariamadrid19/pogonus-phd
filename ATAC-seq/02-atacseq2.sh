@@ -24,16 +24,14 @@ $(echo "${samples[ID]}")_R1.fastq.gz $(echo "${samples[ID]}")_R2.fastq.gz \
 $(echo "${samples[ID]}")_R1_trimmed.fastq.gz $(echo "${samples[ID]}")_R1_unpaired.fastq.gz \
 $(echo "${samples[ID]}")_R2_trimmed.fastq.gz $(echo "${samples[ID]}")_R2_unpaired.fastq.gz \
 ILLUMINACLIP:/scratch/leuven/357/vsc35707/Pogonus_ATACseq/TruSeq3-PE.fa:2:30:10 LEADING:30 TRAILING:30 MINLEN:50 HEADCROP:10
- 
-cd /scratch/leuven/357/vsc35707/Pogonus_ATACseq/
- 
+
 REF=sorted_prim_dud
  
-samtools faidx $REF.fasta; cut -f1,2 sorted_prim_dud.fasta.fai > sorted_prim_dud.fa.sizes
+samtools faidx $REF.fasta; cut -f1,2 $REF.fasta.fai > $REF.fa.sizes
  
-SIZES=sorted_prim_dud.fa.sizes
+SIZES=$REF.fa.sizes
  
-bowtie2-build sorted_prim_dud.fasta sorted_prim_dud
+bowtie2-build $REF.fasta $REF
  
 bowtie2 -t -k 2 -p 8 --local -x $REF \
 -1 $(echo "${samples[ID]}")_R1_trimmed.fastq.gz \
