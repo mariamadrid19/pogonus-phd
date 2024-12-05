@@ -15,8 +15,8 @@ module load SAMtools/1.16.1-GCC-11.3.0
 module load SciPy-bundle/2023.07-gfbf-2023a
 conda activate msmc2
 
-# Variables
 indID=$((SLURM_ARRAY_TASK_ID - 1))
+
 REF=sorted_prim_dud.fasta
 IN=/scratch/leuven/357/vsc35707/psmc/bam-files
 NEUTRAL_OUT=/scratch/leuven/357/vsc35707/psmc/neutral-msmc
