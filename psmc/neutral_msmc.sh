@@ -70,46 +70,46 @@ for CHROM in "${!inverted_regions[@]}"; do
     # Neutral region 1: From 1 to (INV_START - 1)
     if (( INV_START > 1 )); then
         REGION="1-$(($INV_START - 1))"
-        bcftools mpileup -q 20 -Q 20 -C 50 -r "${CHROM}:${REGION}" -f $REF $IN/${SAMPLE[indID]}.dudPrim.filtered.sorted.nd.bam | \
+        bcftools mpileup -q 20 -Q 20 -C 50 -r "${CHROM}:${REGION}" -f $REF $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam | \
         bcftools call -c - | \
-        bamCaller.py 30 $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.mask.bed.gz | \
-        gzip -c > $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.vcf.gz
+        bamCaller.py 30 $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz | \
+        gzip -c > $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz
 
-        generate_multihetsep.py --mask=$NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.mask.bed.gz \
-        $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.vcf.gz > $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt
+        generate_multihetsep.py --mask=$NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz \
+        $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz > $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt
 
-        COMMAND="$COMMAND $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt"
+        COMMAND="$COMMAND $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
     fi
 
     # Neutral region 2: From (INV_END + 1) to CHROM_END
     if (( INV_END < CHROM_END )); then
         REGION="$(($INV_END + 1))-$CHROM_END"
-        bcftools mpileup -q 20 -Q 20 -C 50 -r "${CHROM}:${REGION}" -f $REF $IN/${SAMPLE[indID]}.dudPrim.filtered.sorted.nd.bam | \
+        bcftools mpileup -q 20 -Q 20 -C 50 -r "${CHROM}:${REGION}" -f $REF $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam | \
         bcftools call -c - | \
-        bamCaller.py 30 $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.mask.bed.gz | \
-        gzip -c > $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.vcf.gz
+        bamCaller.py 30 $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz | \
+        gzip -c > $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz
 
-        generate_multihetsep.py --mask=$NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.mask.bed.gz \
-        $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.vcf.gz > $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt
+        generate_multihetsep.py --mask=$NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz \
+        $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz > $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt
 
-        COMMAND="$COMMAND $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt"
+        COMMAND="$COMMAND $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
     fi
 done
 
 # Concatenate neutral region files for each chromosome
 for CHROM in "${!inverted_regions[@]}"; do
     # Define the output concatenated file for the chromosome
-    CONCAT_FILE=$NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_neutral_combined.txt
+    CONCAT_FILE=$NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_neutral_combined.txt
 
     # Find all neutral region files for this chromosome and concatenate them
-    cat $NEUTRAL_OUT/${SAMPLE[indID]}_${CHROM}_*.txt > $CONCAT_FILE
+    cat $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_*.txt > $CONCAT_FILE
 
     # Optionally, add the concatenated file to the COMMAND variable
     COMMAND="$COMMAND $CONCAT_FILE"
 done
 
 # Run MSMC2 with the concatenated neutral regions
-msmc2_Linux -t 24 -o $NEUTRAL_OUT2/${SAMPLE[indID]} $COMMAND || { echo "Error in MSMC2"; exit 1; }
+msmc2_Linux -t 24 -o $NEUTRAL_OUT2/$(echo "${SAMPLE[indID]}") $COMMAND || { echo "Error in MSMC2"; exit 1; }
 
 # Generate MSMC plot inputs for each sample
 for FINAL in "${SAMPLE[@]}"; do
