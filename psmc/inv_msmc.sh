@@ -51,6 +51,9 @@ inverted_regions["CM008240.1_RagTag"]="9624908-21575397"
 # Initialize COMMAND
 COMMAND=""
 
+# Initialize COMMAND
+COMMAND=""
+
 # Loop through each chromosome and region (inversions based on Fst peaks)
 for CHROM in "${!inverted_regions[@]}"; do
     REGION="${inverted_regions[$CHROM]}"
@@ -65,12 +68,21 @@ for CHROM in "${!inverted_regions[@]}"; do
     generate_multihetsep.py --mask=$INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz \
     $INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz > $INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt || { echo "Error in generate_multihetsep for $CHROM:$REGION"; exit 1; }
 
-    # Add to COMMAND
-    COMMAND="$COMMAND $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt"
+    # Check if the .txt file is non-empty before adding it to COMMAND
+    if [[ -s $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt ]]; then
+        COMMAND="$COMMAND $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt"
+    else
+        echo "Skipping empty file: $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt"
+    fi
 done
 
-# Run MSMC2
-msmc2_Linux -t 24 -o $INV_OUT2/$(echo "${SAMPLE[indID]}") $COMMAND || { echo "Error in MSMC2"; exit 1; }
+# Run MSMC2 if COMMAND is not empty
+if [[ -n "$COMMAND" ]]; then
+    msmc2_Linux -t 24 -o $INV_OUT2/$(echo "${SAMPLE[indID]}") $COMMAND || { echo "Error in MSMC2"; exit 1; }
+else
+    echo "No valid input files for MSMC2. Skipping sample ${SAMPLE[indID]}."
+    exit 1
+fi
 
 # Generate MSMC plot inputs for each sample
 for FINAL in "${SAMPLE[@]}"; do
