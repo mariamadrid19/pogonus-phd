@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=24
 #SBATCH --time=24:00:00
 #SBATCH --output=neutral_msmc.%j.out
-#SBATCH --array=1-101
+#SBATCH --array=1-104
 #SBATCH -A lp_edu_eeg_2024
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
