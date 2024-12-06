@@ -26,8 +26,8 @@ INV_OUT2=/scratch/leuven/357/vsc35707/psmc/inverted-msmc-final
 mkdir -p $INV_OUT $INV_OUT2
 
 # Check if index files exist and if not, index BAM files 
-if [ ! -f $IN/${SAMPLE[indID]}.dudPrim.filtered.sorted.nd.bam.bai ]; then
-    samtools index -M $IN/${SAMPLE[indID]}.dudPrim.filtered.sorted.nd.bam
+if [ ! -f $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam.bai ]; then
+    samtools index -M $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam
 fi
 
 SAMPLE=(GC129388 GC129389 GC129390 GC129391 GC129392 GC129393 GC129394 GC129395 GC129396 GC129397 GC129398 GC129399 GC129400 GC129401 GC129402 GC129403 GC129404 GC129405 GC129406 GC129407 GC129408 GC129409 GC129410 GC129411 GC129412 GC129413 GC129414 GC129415 GC129416 GC129417 \
@@ -59,21 +59,21 @@ for CHROM in "${!inverted_regions[@]}"; do
     REGION="${inverted_regions[$CHROM]}"
 
     # Run bcftools and subsequent commands for the inverted region of each chromosome
-    bcftools mpileup -q 20 -Q 20 -C 50 -r "${CHROM}:${REGION}" -f $REF $IN/${SAMPLE[indID]}.dudPrim.filtered.sorted.nd.bam | \
+    bcftools mpileup -q 20 -Q 20 -C 50 -r "${CHROM}:${REGION}" -f $REF $IN/$(echo "${SAMPLE[indID]}").dudPrim.filtered.sorted.nd.bam | \
     bcftools call -c - | \
-    bamCaller.py 30 $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.mask.bed.gz | \
-    gzip -c > $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.vcf.gz || { echo "Error in bcftools for $CHROM:$REGION"; exit 1; }
+    bamCaller.py 30 $INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz | \
+    gzip -c > $INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz || { echo "Error in bcftools for $CHROM:$REGION"; exit 1; }
 
     # Generate multihetsep format for the region
-    generate_multihetsep.py --mask=$INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.mask.bed.gz \
-    $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.vcf.gz > $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt || { echo "Error in generate_multihetsep for $CHROM:$REGION"; exit 1; }
+    generate_multihetsep.py --mask=$INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz \
+    $INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz > $INV_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt || { echo "Error in generate_multihetsep for $CHROM:$REGION"; exit 1; }
 
     # Add to COMMAND
     COMMAND="$COMMAND $INV_OUT/${SAMPLE[indID]}_${CHROM}_${REGION}.txt"
 done
 
 # Run MSMC2
-msmc2_Linux -t 24 -o $INV_OUT2/${SAMPLE[indID]} $COMMAND || { echo "Error in MSMC2"; exit 1; }
+msmc2_Linux -t 24 -o $INV_OUT2/$(echo "${SAMPLE[indID]}") $COMMAND || { echo "Error in MSMC2"; exit 1; }
 
 # Generate MSMC plot inputs for each sample
 for FINAL in "${SAMPLE[@]}"; do
