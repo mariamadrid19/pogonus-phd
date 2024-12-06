@@ -78,7 +78,12 @@ for CHROM in "${!inverted_regions[@]}"; do
         generate_multihetsep.py --mask=$NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz \
         $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz > $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt
 
-        COMMAND="$COMMAND $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
+        # Check if the file is not empty before adding it to the command
+        if [[ -s $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt ]]; then
+            COMMAND="$COMMAND $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
+        else
+            echo "Skipping empty file: $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
+        fi
     fi
 
     # Neutral region 2: From (INV_END + 1) to CHROM_END
@@ -92,20 +97,13 @@ for CHROM in "${!inverted_regions[@]}"; do
         generate_multihetsep.py --mask=$NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.mask.bed.gz \
         $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.vcf.gz > $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt
 
-        COMMAND="$COMMAND $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
+        # Check if the file is not empty before adding it to the command
+        if [[ -s $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt ]]; then
+            COMMAND="$COMMAND $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
+        else
+            echo "Skipping empty file: $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_${REGION}.txt"
+        fi
     fi
-done
-
-# Concatenate neutral region files for each chromosome
-for CHROM in "${!inverted_regions[@]}"; do
-    # Define the output concatenated file for the chromosome
-    CONCAT_FILE=$NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_neutral_combined.txt
-
-    # Find all neutral region files for this chromosome and concatenate them
-    cat $NEUTRAL_OUT/$(echo "${SAMPLE[indID]}")_${CHROM}_*.txt > $CONCAT_FILE
-
-    # Optionally, add the concatenated file to the COMMAND variable
-    COMMAND="$COMMAND $CONCAT_FILE"
 done
 
 # Run MSMC2 with the concatenated neutral regions
