@@ -12,10 +12,10 @@
 #run outside of any conda env (won't run)
 
 # Run compleasm
-compleasm_kit/compleasm.py download archaea
-compleasm_kit/compleasm.py download bacteria
-compleasm_kit/compleasm.py download fungi
+compleasm.py download archaea
+compleasm.py download bacteria
+compleasm.py download fungi
 
-compleasm_kit/compleasm.py run -a sorted_prim_dud.fasta -o archaea/ -l archaea -t 24
-compleasm_kit/compleasm.py run -a sorted_prim_dud.fasta -o fungi/ -l fungi -t 24
-compleasm_kit/compleasm.py run -a sorted_prim_dud.fasta -o bacteria/ -l bacteria -t 24
+compleasm.py run -a sorted_prim_dud.fasta -o archaea/ -l archaea -t 24
+compleasm.py run -a sorted_prim_dud.fasta -o fungi/ -l fungi -t 24
+compleasm.py run -a sorted_prim_dud.fasta -o bacteria/ -l bacteria -t 24
