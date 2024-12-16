@@ -19,3 +19,8 @@ compleasm.py download fungi
 compleasm.py run -a sorted_prim_dud.fasta -o archaea/ -l archaea -t 24
 compleasm.py run -a sorted_prim_dud.fasta -o fungi/ -l fungi -t 24
 compleasm.py run -a sorted_prim_dud.fasta -o bacteria/ -l bacteria -t 24
+
+
+busco -i sorted_prim_dud.fasta -m genome -l archaea -c 24
+busco -i sorted_prim_dud.fasta -m genome -l fungi -c 24
+busco -i sorted_prim_dud.fasta -m genome -l bacteria -c 24
