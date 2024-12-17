@@ -10,4 +10,4 @@
 sed '/^>/!y/atcgn/NNNNN/' sorted_prim_dud.fasta.masked > sorted_prim_dud_hardmasked.fasta
 grep -v '^>' sorted_prim_dud.fasta.masked | grep -o '[atcgn]' | wc -l # 807961487
 grep -v '^>' sorted_prim_dud_hardmasked.fasta | grep -o '[atcgn]' | wc -l # 0
-grep -v '^>' sorted_prim_dud_hardmasked.fasta | grep -o 'N' | wc -l # 807961487
+grep -v '^>' sorted_prim_dud_hardmasked.fasta | grep -o 'N' | wc -l # 808021987
