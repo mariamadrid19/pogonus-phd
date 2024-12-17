@@ -12,7 +12,7 @@ cd /scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 conda activate btk
 
 ASSEMBLY=sorted_prim_dud
-MAPPED=Dud_mapped_IsoSeq
+MAPPED=mapped_RNA_dud
 TAXIDLIST=microbial.ids
 WORKING_DIR=/scratch/leuven/357/vsc35707/blobtools/sorted_prim_dud/
 
@@ -43,7 +43,7 @@ blobtools add \
      $WORKING_DIR
 
 blobtools add \
-    --cov $MAPPED.filtered.bam $WORKING_DIR
+    --cov $MAPPED.sorted.filtered.bam $WORKING_DIR
 
 blobtools add \
     --busco $ASSEMBLY.busco.bacteria.full_summary.tsv \
