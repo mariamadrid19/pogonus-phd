@@ -8,7 +8,8 @@
 #SBATCH -A lp_svbelleghem 
 
 DBNAME=pogonus_dud
+ASSEMBLY=sorted_prim_dud
 
 kraken2-build --standard --threads 32 --db $DBNAME
 
-kraken2 --db $DBNAME --threads 32 sorted_prim_dud_hardmasked.fasta
+kraken2 --db $DBNAME --threads 32 ${ASSEMBLY}_hardmasked.fasta
