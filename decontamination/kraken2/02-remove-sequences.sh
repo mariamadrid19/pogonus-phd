@@ -8,10 +8,10 @@
 #SBATCH -A lp_svbelleghem 
 
 #Cut columns: c1,c2,c3
-cut -f1-3 output_kraken2.tsv > filtered_output.tsv
+cut -f1-4 output_kraken2.tsv > filtered_output.tsv
 
 #Filter: Cut on output of Cut with following condition: c1!='U'
-awk -F'\t' '$1 == "C"' filtered_kraken2_output.tsv > final_filtered_output.tsv
+awk -F'\t' '$1 == "C"' filtered_output.tsv > final_filtered_output.tsv
 
 #Cut columns: c2 from the output of Filtering
 cut -f2 final_filtered_output.tsv > column2_filtered_output.tsv
