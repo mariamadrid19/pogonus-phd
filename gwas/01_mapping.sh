@@ -17,6 +17,7 @@ ID=$((SLURM_ARRAY_TASK_ID -1))
 module load BWA/0.7.17-foss-2018a
 module load SAMtools/1.18-GCC-12.3.0
 module load picard/2.18.23-Java-1.8.0_171
+module load minimap2/2.26-GCCcore-12.3.0
 
 echo "================="
 
@@ -41,6 +42,9 @@ FILE2=/scratch/leuven/357/vsc35707/GWAS/fixed/$(echo "${samples[ID]}")_R2.fastq.
 
 # Map reads using bwa mem
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
+
+# Alternative, map with minimap2
+minimap2 -ax sr -t 20 $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
 
 # Filter using samtools
 samtools view -f 0x02 -q 20 -b $BWAout/$(echo "${samples[ID]}").$REFNAME.bam > $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam
