@@ -33,11 +33,11 @@ PcNP_046 Pc_DZ_001 Pc_DZ_002 Pc_DZ_004 Pc_DZ_005 Pc_DZ_007 Pc_DZ_008 Pc_DZ_009 P
 echo "${samples[ID]}"
 
 # Some folder and file paths to use later
-REF=sorted_prim_dud.fasta
+REF=/scratch/leuven/357/vsc35707/GWAS/sorted_prim_dud.fasta
 REFNAME=dudPrim
-BWAout=/bams
-FILE1=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R1.fastq.gz
-FILE2=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R2.fastq.gz
+BWAout=/scratch/leuven/357/vsc35707/GWAS/bams
+FILE1=/scratch/leuven/357/vsc35707/GWAS/fixed/$(echo "${samples[ID]}")_R1.fastq.gz
+FILE2=/scratch/leuven/357/vsc35707/GWAS/fixed/$(echo "${samples[ID]}")_R2.fastq.gz
 
 # Map reads using bwa mem
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
