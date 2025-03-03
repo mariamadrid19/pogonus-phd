@@ -16,11 +16,6 @@ for bam in *.filtered.bam; do
     samtools flagstat "$bam"; 
 done > mapping_stats.txt
 
-for bam in *.filtered.bam; do 
-    echo -n "$(basename "$bam" .bam): "; 
-    samtools depth -a "$bam" | awk '{sum+=$3} END {if (NR>0) print sum/NR; else print "No coverage"}'; 
-done > average_depths.txt
-
 # Output file for errors
 ERROR_LOG="bam_quickcheck_errors.txt"
 
@@ -35,3 +30,8 @@ for bam in *.filtered.sorted.bam; do
 done
 
 echo "Check complete. Files with errors are listed in: $ERROR_LOG"
+
+for bam in *.filtered.sorted.nd.bam; do 
+    echo -n "$(basename "$bam" .bam): "; 
+    samtools depth -a "$bam" | awk '{sum+=$3} END {if (NR>0) print sum/NR; else print "No coverage"}'; 
+done > average_depths.txt
