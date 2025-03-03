@@ -36,9 +36,8 @@ echo "${samples[ID]}"
 REF=sorted_prim_dud.fasta
 REFNAME=dudPrim
 BWAout=/bams
-
-FILE1=$(echo "${samples[ID]}").1.fq.gz
-FILE2=$(echo "${samples[ID]}").2.fq.gz
+FILE1=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R1.fastq.gz
+FILE2=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R2.fastq.gz
 
 # Run BWA mapping
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
