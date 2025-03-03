@@ -6,6 +6,7 @@
 #SBATCH --time=48:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o map_RADTAGS.%j.out
+#SBATCH --array=1-147
 
 cd /scratch/leuven/357/vsc35707/GWAS/
 
