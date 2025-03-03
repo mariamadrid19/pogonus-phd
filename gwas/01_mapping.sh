@@ -39,12 +39,15 @@ REFNAME=dudPrim
 BWAout=/scratch/leuven/357/vsc35707/GWAS/bams
 FILE1=/scratch/leuven/357/vsc35707/GWAS/fixed/$(echo "${samples[ID]}")_R1.fastq.gz
 FILE2=/scratch/leuven/357/vsc35707/GWAS/fixed/$(echo "${samples[ID]}")_R2.fastq.gz
+minimapOUT=/scratch/leuven/357/vsc35707/GWAS/bams-minimap
+file1=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R1.fastq.gz
+file2=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R2.fastq.gz
 
 # Map reads using bwa mem
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
 
 # Alternative, map with minimap2
-minimap2 -ax sr -t 20 $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
+minimap2 -ax sr -t 20 $REF $file1 $file2 | samtools view -bS - > $minimapOUT/$(echo "${samples[ID]}").$REFNAME.bam
 
 # Filter using samtools
 samtools view -f 0x02 -q 20 -b $BWAout/$(echo "${samples[ID]}").$REFNAME.bam > $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam
