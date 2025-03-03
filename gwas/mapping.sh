@@ -14,7 +14,7 @@ cd /scratch/leuven/357/vsc35707/GWAS/
 ID=$((SLURM_ARRAY_TASK_ID -1))
 
 # Load the programs we will use
-module load BWA/0.7.17-GCC-10.3.0
+module load BWA/0.7.17-foss-2018a
 module load SAMtools/1.18-GCC-12.3.0
 module load picard/2.18.23-Java-1.8.0_171
 
@@ -39,7 +39,7 @@ BWAout=/bams
 FILE1=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R1.fastq.gz
 FILE2=/scratch/leuven/357/vsc35707/GWAS/$(echo "${samples[ID]}")_R2.fastq.gz
 
-# Run BWA mapping
+# Map reads using bwa mem
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
 
 # Filter using samtools
