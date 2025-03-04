@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=20
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
-#SBATCH -o map_RADTAGS.%j.out
+#SBATCH -o call_snps.%j.out
 #SBATCH --array=1-125
 
 # This variable will store the job array number minus 1, so we can use it to get a sample from the samples list (index  starts at 0)
