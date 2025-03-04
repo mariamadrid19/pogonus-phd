@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=20 
 #SBATCH --time=48:00:00 
 #SBATCH -A lp_svbelleghem
-#SBATCH -o call_snps.%j.out
+#SBATCH -o map_radtags.%j.out
 #SBATCH --array=1-147
 
 cd /scratch/leuven/357/vsc35707/GWAS/
