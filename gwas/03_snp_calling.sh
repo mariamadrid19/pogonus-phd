@@ -3,14 +3,13 @@
 #SBATCH --job-name snps 
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=20
-#SBATCH --time=48:00:00 
+#SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o map_RADTAGS.%j.out
-#SBATCH --array=1-147
+#SBATCH --array=1-125
 
 # This variable will store the job array number minus 1, so we can use it to get a sample from the samples list (index  starts at 0)
 ID=$((SLURM_ARRAY_TASK_ID -1))
-
 
 # Load the programs we will use
 module load BWA/0.7.17-foss-2018a
@@ -24,7 +23,7 @@ chrom=(CM008230.1_RagTag CM008231.1_RagTag CM008233.1_RagTag CM008234.1_RagTag C
 names=(1 10 2 3 4 5 6 7 8 9)
 
 
-# Sample IDs 
+# Sample IDs (total of 250 samples)
 samples=(\
 GC129388 GC129389 GC129390 GC129391 GC129392 GC129393 GC129394 GC129395 GC129396 GC129397 \
 GC129398 GC129399 GC129400 GC129401 GC129402 GC129403 GC129404 GC129405 GC129406 GC129407 \
