@@ -6,16 +6,15 @@
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o call_snps.%j.out
-#SBATCH --array=1-125
+#SBATCH --array=1-11
 
 # This variable will store the job array number minus 1, so we can use it to get a sample from the samples list (index  starts at 0)
 ID=$((SLURM_ARRAY_TASK_ID -1))
 
 # Load the programs we will use
-module load BWA/0.7.17-foss-2018a
-module load SAMtools/1.18-GCC-12.3.0
-module load BCFtools/1.18-GCC-12.3.0
+#module load BCFtools/1.9-foss-2018a
 module load Python/3.7.0-foss-2018a
+export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
 echo "================="
 
@@ -46,8 +45,7 @@ PcNP_046 Pc_DZ_001 Pc_DZ_002 Pc_DZ_004 Pc_DZ_005 Pc_DZ_007 Pc_DZ_008 Pc_DZ_009 P
 
 # Some folder and file paths to use later
 REF=/scratch/leuven/357/vsc35707/GWAS/sorted_prim_dud.fasta
-REFNAME=dudPrim
-BWAout=/scratch/leuven/357/vsc35707/GWAS/bams
+REFNAME=primDud
 
 cd /scratch/leuven/357/vsc35707/GWAS/bams
 
@@ -59,8 +57,26 @@ ALL_LIST="$ALL_LIST $FILE".$REFNAME.filtered.sorted.nd.bam""
 done
 eval command=\$$(echo ALL_LIST)
 
+echo "Reference: $REF"
+echo "Chromosome: ${chrom[ID]}"
+echo "Command: $command"
+
+# Ensure chromosome ID is not empty
+if [[ -z "${chrom[ID]}" ]]; then
+    echo "Error: chrom[ID] is empty!"
+    exit 1
+fi
+
+# Ensure BAM files exist
+if [[ -z "$command" ]]; then
+    echo "Error: No BAM files specified!"
+    exit 1
+fi
+
 # run mpileup
-bcftools mpileup -O z --threads 20 -f $REF $(echo $command) -r $(echo "${chrom[ID]}") | bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/GWAS/Pogonus_ALL_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
+bcftools mpileup -Oz --threads 20 -f $REF $(echo $command) -r $(echo "${chrom[ID]}") | \
+bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/GWAS/Pogonus_ALL_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
 
 cd /scratch/leuven/357/vsc35707/GWAS/
+
 bcftools concat -O z -o merged_variants.vcf.gz *.vcf.gz
