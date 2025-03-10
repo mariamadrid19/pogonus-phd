@@ -7,7 +7,8 @@
 #SBATCH -A lp_svbelleghem
 #SBATCH -o filter_vcf.%j.out
 
-module load VCFtools/0.1.16-GCC-10.3.0
+source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
+conda activate vcftools
 module load tabix/0.2.6-GCCcore-6.4.0
 
 # filter sites by call rate (missing data)
