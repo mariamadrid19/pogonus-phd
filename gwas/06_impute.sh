@@ -19,7 +19,7 @@ zcat beagle_gwas_filtered.vcf.gz | cut -f1-9,191-200 | gzip > beagle_gwas_filter
 bcftools index -t beagle_gwas_filtered.vcf.gz
 
 echo
-echo "*** Running test analysis with \"gt=\" argument ***"
+echo "*** Imputing missing genotypes with BEAGLE 5.5 ***"
 echo
 java –Xmx20g  -jar beagle.27Feb25.75f.jar gt=beagle_gwas_filtered.vcf.gz out=gwas_imputed
 
