@@ -8,4 +8,4 @@
 #SBATCH -o gwas.%j.out
 
 module load PLINK/1.9
-plink --vcf gwas_filtered.vcf.gz --make-bed --out GWAS_input
+plink --vcf gwas_imputed.vcf.gz --pheno phenotype.txt --make-bed --out gwas_input
