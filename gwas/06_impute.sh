@@ -21,6 +21,10 @@ bcftools index -t beagle_gwas_filtered.vcf.gz
 echo
 echo "*** Imputing missing genotypes with BEAGLE 5.5 ***"
 echo
-java –Xmx20g  -jar beagle.27Feb25.75f.jar gt=beagle_gwas_filtered.vcf.gz out=gwas_imputed
 
+# Java is needed to run BEAGLE (load the appropriate module)
+module load Java/11.0.20
+java –Xmx20g -jar beagle.27Feb25.75f.jar gt=beagle_gwas_filtered.vcf.gz out=gwas_imputed
+
+# Index the imputed vcf file 
 bcftools index -t gwas_imputed.vcf.gz
