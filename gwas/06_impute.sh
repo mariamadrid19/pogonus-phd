@@ -33,3 +33,6 @@ java -Xmx20480m -jar beagle.27Feb25.75f.jar gt=beagle_gwas_filtered.vcf.gz out=g
 
 # Index the imputed vcf file 
 bcftools index -t gwas_imputed.vcf.gz
+
+# Gives a brief summary of stats, imputed genotypes 
+bcftools stats gwas_imputed.vcf.gz | grep -E "SN|TSTV"
