@@ -34,10 +34,6 @@ plink --bfile gwas_input --make-grm-bin --out gwas_input --allow-extra-chr --all
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate gemma
 
-# Perform the GWAS with phenotype file and kinship matrix
-gemma -bfile gwas_input -k gwas_input.grm.bin -lmm 4 -o gwas_results
-
-# Alternative:
 # Generate a kinship matrix
 gemma -bfile gwas_input -gk 1 -outdir kinship_matrix -o gwas_input
 
