@@ -28,7 +28,7 @@ plink --bfile gwas_input --freq --allow-extra-chr --allow-no-sex
 # This generates missing_check.imiss, which tells you if any individuals have missing genotype data
 plink --bfile gwas_input --missing --out missing_check --allow-extra-chr --allow-no-sex
 
-# Generates the genetic relationship matrix (GRM), also known as kinship matrix, which GEMMA requires
+# Generates the genetic relationship matrix (GRM), also known as kinship matrix, which GEMMA requires -> gwas_input.grm.bin
 plink --bfile gwas_input --make-grm-bin --out gwas_input --allow-extra-chr --allow-no-sex
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
@@ -36,3 +36,10 @@ conda activate gemma
 
 # Perform the GWAS with phenotype file and kinship matrix
 gemma -bfile gwas_input -k gwas_input.grm.bin -lmm 4 -o gwas_results
+
+# Alternative:
+# Generate a kinship matrix
+gemma -bfile gwas_input -gk 1 -outdir kinship_matrix -o gwas_input
+
+# Perform the GWAS with phenotype file and kinship matrix
+gemma -bfile gwas_input -k kinship_matrix/gwas_input.cXX.txt -lmm 4 -outdir gemma_results -o gemma_lmm_results
