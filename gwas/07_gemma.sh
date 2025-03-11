@@ -22,7 +22,7 @@ module load PLINK/1.9
 plink --vcf gwas_imputed_clean.vcf.gz --pheno phenotype_modified.txt --allow-extra-chr --double-id --make-bed --out gwas_input
 
 # confirm that PLINK correctly read the phenotype file
-plink --bfile gwas_input --pheno phenotype_modified.txt --assoc --out check_pheno
+plink --bfile gwas_input --pheno phenotype_modified.txt --assoc --allow-extra-chr --out check_pheno
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate gemma
