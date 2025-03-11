@@ -12,8 +12,10 @@ conda activate vcftools
 module load Python/3.7.0-foss-2018a
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
+bcftools norm -m -any -o split_variants.vcf.gz -Oz gwas_filtered.vcf.gz
+
 # Cut only the necessary columns of the vcf file 
-zcat gwas_filtered.vcf.gz | cut -f1-190 | tr '/' '|' | gzip > beagle_gwas_filtered.vcf.gz
+zcat split_variants.vcf.gz | cut -f1-190 | tr '/' '|' | gzip > beagle_gwas_filtered.vcf.gz
 zcat beagle_gwas_filtered.vcf.gz | cut -f1-9,191-200 | gzip > beagle_gwas_filtered.vcf.gz
 
 bcftools index -t beagle_gwas_filtered.vcf.gz
