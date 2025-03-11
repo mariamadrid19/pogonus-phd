@@ -15,6 +15,9 @@ bcftools view --threads 20 --samples-file ^remove_samples.txt gwas_imputed.vcf.g
 
 bcftools index -t gwas_imputed_clean.vcf.gz
 
+bcftools query -l gwas_imputed_clean.vcf.gz | wc -l
+# total of 237 samples (some were removed due to not having a phenotype measurement)
+
 module load PLINK/1.9
 plink --vcf gwas_imputed_clean.vcf.gz --pheno phenotype.txt --make-bed --out gwas_input
 
