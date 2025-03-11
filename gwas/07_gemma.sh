@@ -12,7 +12,8 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
 # Remove the samples that don't have a wing measurement (not found in the phenotype.txt file) 
 bcftools view --threads 20 --samples-file ^remove_samples.txt gwas_imputed.vcf.gz -Oz -o gwas_imputed_clean.vcf.gz
-bcftools index gwas_filtered_clean.vcf.gz
+
+bcftools index -t gwas_imputed_clean.vcf.gz
 
 module load PLINK/1.9
 plink --vcf gwas_imputed_clean.vcf.gz --pheno phenotype.txt --make-bed --out gwas_input
