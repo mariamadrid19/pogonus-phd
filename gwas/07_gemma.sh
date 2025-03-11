@@ -22,14 +22,17 @@ module load PLINK/1.9
 plink --vcf gwas_imputed_clean.vcf.gz --pheno phenotype_final.txt --allow-no-sex --pheno-name wingsize --double-id --make-bed --allow-extra-chr --out gwas_input
 # fixed the phenotype file so that the FID and IID columns are the same, and that it is in the same order as the samples in the vcf file 
 
-# confirm that PLINK correctly read the phenotype file
-plink --bfile gwas_input --pheno phenotype_final.txt --assoc --allow-extra-chr --out check_pheno
+# To confirm that the .bed file is properly formatted
+plink --bfile gwas_input --freq --allow-extra-chr --allow-no-sex
+
+# This generates missing_check.imiss, which tells you if any individuals have missing genotype data
+plink --bfile gwas_input --missing --out missing_check --allow-extra-chr --allow-no-sex
+
+# Generates the genetic relationship matrix (GRM), also known as kinship matrix, which GEMMA requires
+plink --bfile gwas_input --make-grm-bin --out gwas_input --allow-extra-chr --allow-no-sex
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate gemma
 
-# Generate a kinship matrix 
-gemma -bfile gwas_input -gk 1 -o kinship
-
 # Perform the GWAS with phenotype file and kinship matrix
-gemma -bfile gwas_input -k output/kinship.cXX.txt -lmm 4 -o gwas_results
+gemma -bfile gwas_input -k gwas_input.grm.bin -lmm 4 -o gwas_results
