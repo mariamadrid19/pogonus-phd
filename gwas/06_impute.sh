@@ -8,8 +8,10 @@
 #SBATCH -o impute.%j.out
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
-conda activate bgzip_env
+module load tabix/0.2.6-GCCcore-6.4.0
+# tabix is loaded to use bgzip
 module load Python/3.7.0-foss-2018a
+# python is loaded to use bcftools
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
 # Split the multiallelic SNPs into multiple biallelic ones
