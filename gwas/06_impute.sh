@@ -17,19 +17,13 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 # Split the multiallelic SNPs into multiple biallelic ones
 bcftools norm -m -any -o split_variants.vcf.gz -Oz gwas_filtered.vcf.gz
 
-# Cut only the necessary columns of the vcf file 
-zcat split_variants.vcf.gz | cut -f1-190 | tr '/' '|' | bgzip > temp1.vcf.gz
-zcat temp1.vcf.gz | cut -f1-9,191-200 | bgzip > beagle_gwas_filtered.vcf.gz
-
-bcftools index -t beagle_gwas_filtered.vcf.gz
-
 echo
 echo "*** Imputing missing genotypes with BEAGLE 5.5 ***"
 echo
 
 # Java is needed to run BEAGLE (load the appropriate module)
 module load Java/11.0.20
-java -Xmx20480m -jar beagle.27Feb25.75f.jar gt=beagle_gwas_filtered.vcf.gz out=gwas_imputed
+java -Xmx20480m -jar beagle.27Feb25.75f.jar gt=split_variants.vcf.gz out=gwas_imputed
 
 # Index the imputed vcf file 
 bcftools index -t gwas_imputed.vcf.gz
