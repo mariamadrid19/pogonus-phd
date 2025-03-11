@@ -20,7 +20,7 @@ bcftools query -l gwas_imputed_clean.vcf.gz | wc -l
 
 module load PLINK/1.9
 plink --bfile gwas_input --pheno phenotype_final.txt --pheno-name wingsize --allow-no-sex --make-bed --allow-extra-chr --out gwas_input
-# fixed the phenotype file so that the FID and IID columns are the same
+# fixed the phenotype file so that the FID and IID columns are the same, and that it is in the same order as the samples in the vcf file 
 
 # confirm that PLINK correctly read the phenotype file
 plink --bfile gwas_input --pheno phenotype_final.txt --assoc --allow-extra-chr --out check_pheno
