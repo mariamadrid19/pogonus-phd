@@ -14,12 +14,11 @@ module load tabix/0.2.6-GCCcore-6.4.0
 # Check missingness per individual
 vcftools --gzvcf merged_variants.vcf.gz --missing-indv
 
-vcftools --gzvcf merged_variants.vcf.gz \
-    --max-missing 0.9 \        # At least 90% of individuals must have a called genotype
-    --minQ 20 \                # Minimum quality score of 30
-    --maf 0.05 \               # Minor allele frequency (MAF) threshold of 0.05
-    --remove-indels \          # Exclude indels, keeping only SNPs
-    --recode --stdout | bgzip > gwas_filtered.vcf.gz
+vcftools --gzvcf merged_variants.vcf.gz --max-missing 0.9 --minQ 30 --maf 0.05 --remove-indels --recode --stdout | bgzip > gwas_filtered.vcf.gz
+# At least 90% of individuals must have a called genotype
+# Minimum quality score of 30
+# Minor allele frequency (MAF) threshold of 0.05
+# Exclude indels, keeping only SNPs
 
 # Index VCF file
 tabix -p vcf gwas_filtered.vcf.gz
