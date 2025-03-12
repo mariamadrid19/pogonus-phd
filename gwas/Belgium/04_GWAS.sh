@@ -22,7 +22,7 @@ tabix -p vcf gwas_imputed_clean_$POPULATION.vcf.gz
 bcftools query -l gwas_imputed_clean_$POPULATION.vcf.gz | wc -l
 
 module load PLINK/1.9
-plink --vcf gwas_imputed_clean_$POPULATION.vcf.gz --pheno phenotype_final_$POPULATION.txt --allow-no-sex --pheno-name $PHENOTYPE --double-id --make-bed --allow-extra-chr --out gwas_input_$POPULATION
+plink --vcf gwas_imputed_clean_$POPULATION.vcf.gz --pheno phenotype_final_$POPULATION.txt --allow-no-sex --pheno-name $PHENOTYPE --make-bed --allow-extra-chr --out gwas_input_$POPULATION
 # fixed the phenotype file so that the FID and IID columns are the same, and that it is in the same order as the samples in the vcf file 
 
 # To confirm that the .bed file is properly formatted
