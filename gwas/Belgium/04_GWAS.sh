@@ -12,13 +12,13 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 POPULATION=Belgium
 PHENOTYPE=wing_length
 
-# Remove the samples that don't have a wing measurement (not found in the phenotype.txt file) 
-bcftools view --threads 20 --samples-file ^remove_samples_$POPULATION.txt gwas_imputed_$POPULATION.vcf.gz -Oz -o gwas_imputed_clean_$POPULATION.vcf.gz
-
-bcftools index -t gwas_imputed_clean_$POPULATION.vcf.gz
+# Change sample names, avoid underscores in the sample names to avoid problems with GEMMA downstream
+bcftools view gwas_imputed_Belgium.vcf.gz | \
+awk '{if(NR==1 && substr($1,1,1)=="#") {for (i=10; i<=NF; i++) gsub("_", "", $i)} print}' | \
+bgzip > gwas_imputed_clean_$POPULATION.vcf.gz
+tabix -p vcf gwas_imputed_clean_$POPULATION.vcf.gz
 
 bcftools query -l gwas_imputed_clean_$POPULATION.vcf.gz | wc -l
-# total of 237 samples (some were removed due to not having a phenotype measurement)
 
 module load PLINK/1.9
 plink --vcf gwas_imputed_clean_$POPULATION.vcf.gz --pheno phenotype_final_$POPULATION.txt --allow-no-sex --pheno-name $PHENOTYPE --double-id --make-bed --allow-extra-chr --out gwas_input_$POPULATION
