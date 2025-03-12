@@ -23,7 +23,7 @@ echo
 
 # Java is needed to run BEAGLE (load the appropriate module)
 module load Java/11.0.20
-java -Xmx20480m -jar beagle.27Feb25.75f.jar gt=split_variants.vcf.gz out=gwas_imputed
+java -Xmx20480m -jar /data/leuven/357/vsc35707/beagle.27Feb25.75f.jar gt=split_variants.vcf.gz out=gwas_imputed
 
 # Index the imputed vcf file 
 bcftools index -t gwas_imputed.vcf.gz
