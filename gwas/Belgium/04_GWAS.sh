@@ -13,13 +13,10 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 POPULATION=Belgium
 PHENOTYPE=wing_length
 
-# Change sample names, avoid underscores in the sample names to avoid problems with GEMMA downstream
-bcftools view gwas_imputed_Belgium.vcf.gz | \
-awk '{if(NR==1 && substr($1,1,1)=="#") {for (i=10; i<=NF; i++) gsub("_", "", $i)} print}' | \
-bgzip > gwas_imputed_clean_$POPULATION.vcf.gz
+zgrep -v "^#" gwas_imputed_$POPULATION.vcf.gz | sed 's/_//g' > gwas_body.vcf
+zgrep "^#" gwas_imputed_$POPULATION.vcf.gz | sed 's/_//g' > gwas_header.vcf
+cat gwas_header.vcf gwas_body.vcf | bgzip > gwas_imputed_clean_$POPULATION.vcf.gz
 tabix -p vcf gwas_imputed_clean_$POPULATION.vcf.gz
-
-bcftools query -l gwas_imputed_clean_$POPULATION.vcf.gz | wc -l
 
 module load PLINK/1.9
 plink --vcf gwas_imputed_clean_$POPULATION.vcf.gz --pheno phenotype_final_$POPULATION.txt --allow-no-sex --pheno-name $PHENOTYPE --make-bed --allow-extra-chr --out gwas_input_$POPULATION
