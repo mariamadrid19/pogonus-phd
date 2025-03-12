@@ -12,7 +12,6 @@
 ID=$((SLURM_ARRAY_TASK_ID -1))
 
 # Load the programs we will use
-#module load BCFtools/1.9-foss-2018a
 module load Python/3.7.0-foss-2018a
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
