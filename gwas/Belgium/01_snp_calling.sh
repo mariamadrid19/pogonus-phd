@@ -64,4 +64,4 @@ fi
 
 # run mpileup
 bcftools mpileup -Oz --threads 20 -f $REF $(echo $command) -r $(echo "${chrom[ID]}") | \
-bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/GWAS/Pogonus_$POPULATION_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
+bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/GWAS/$POPULATION/Pogonus_$POPULATION.$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
