@@ -8,6 +8,7 @@
 #SBATCH -o gwas.%j.out
 
 module load Python/3.7.0-foss-2018a
+module load tabix/0.2.6-GCCcore-6.4.0
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 POPULATION=Belgium
 PHENOTYPE=wing_length
