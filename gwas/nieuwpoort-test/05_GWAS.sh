@@ -12,7 +12,7 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
 # Check if phentoype file and VCF file have the same samples
 bcftools query -l gwas_imputed_Npt.vcf.gz > vcf_samples_Npt.txt
-cut -f1 phenotype_Npt.txt > phenotype_samples_Npt.txt
+cut -f1 phenotype_final_Npt.txt > phenotype_samples_Npt.txt
 comm -3 <(sort vcf_samples_Npt.txt) <(sort phenotype_samples_Npt.txt)
 
 # Remove the samples that don't have a wing measurement (not found in the phenotype.txt file) 
