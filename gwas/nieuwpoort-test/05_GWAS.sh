@@ -15,16 +15,13 @@ bcftools query -l gwas_imputed_Npt.vcf.gz > vcf_samples_Npt.txt
 cut -f1 phenotype_final_Npt.txt > phenotype_samples_Npt.txt
 comm -3 <(sort vcf_samples_Npt.txt) <(sort phenotype_samples_Npt.txt)
 
-# Remove the samples that don't have a wing measurement (not found in the phenotype.txt file) 
-bcftools view --threads 20 --samples-file ^remove_samples_Npt.txt gwas_imputed_Npt.vcf.gz -Oz -o gwas_imputed_clean_Npt.vcf.gz
+bcftools index -t gwas_imputed_Npt.vcf.gz
 
-bcftools index -t gwas_imputed_clean_Npt.vcf.gz
-
-bcftools query -l gwas_imputed_clean.vcf.gz | wc -l
+bcftools query -l gwas_imputed_Npt.vcf.gz | wc -l
 # total of 237 samples (some were removed due to not having a phenotype measurement)
 
 module load PLINK/1.9
-plink --vcf gwas_imputed_clean_Npt.vcf.gz --pheno phenotype_final_Npt.txt --allow-no-sex --pheno-name wingsize --double-id --make-bed --allow-extra-chr --out gwas_input_Npt
+plink --vcf gwas_imputed_Npt.vcf.gz --pheno phenotype_final_Npt.txt --allow-no-sex --pheno-name wingsize --double-id --make-bed --allow-extra-chr --out gwas_input_Npt
 # fixed the phenotype file so that the FID and IID columns are the same, and that it is in the same order as the samples in the vcf file 
 
 # To confirm that the .bed file is properly formatted
