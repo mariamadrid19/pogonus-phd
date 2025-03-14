@@ -41,7 +41,7 @@ awk 'NR==FNR {phenotype[NR]=$1; next} {print $1, $2, $3, $4, $5, phenotype[FNR]}
 awk 'NR==FNR {fid[NR]=$1; next} {print fid[FNR], $2, $3, $4, $5, $6}' sample_fids.txt Belgium_with_pheno.fam > Belgium_with_pheno_updated.fam
 
 # Add sex if relevant
-awk 'NR==FNR {fid[NR]=$1; next} {print $1, $2, $3, $4, sex[FNR], $6}' sex.txt Belgium_with_pheno_updated.fam > Belgium_final.fam
+awk 'NR==FNR {sex[NR]=$1; next} {print $1, $2, $3, $4, sex[FNR], $6}' sex.txt Belgium_with_pheno_updated.fam > Belgium_final.fam
 
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate gemma
