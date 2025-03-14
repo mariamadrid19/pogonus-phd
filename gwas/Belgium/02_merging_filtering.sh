@@ -30,4 +30,4 @@ vcftools --gzvcf merged_$POPULATION.vcf.gz --max-missing 0.9 --minQ 30 --maf 0.0
 # Exclude indels, keeping only SNPs
 
 # Index VCF file
-tabix -p vcf gwas_filtered_$POPULATION.vcf.gz
+bcftools index -t vcf gwas_filtered_$POPULATION.vcf.gz
