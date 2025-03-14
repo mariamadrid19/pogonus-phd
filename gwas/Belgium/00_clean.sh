@@ -12,6 +12,10 @@ module load tabix/0.2.6-GCCcore-6.4.0
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 VCF=file_name
 
+# This is not 100% necessary to do, but it does avoid a lot of headaches downstream
+# Sample names should be as simple as possible, with any underscores ("_") or complicated suffixes
+# Should EXACTLY match the phenotype data, same sample names and in the same order
+
 # Extract the header, modify sample names by removing suffix and underscores
 bcftools view -h $VCF.vcf.gz | awk '
 BEGIN {OFS="\t"}
