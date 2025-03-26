@@ -6,7 +6,7 @@
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o barbate_map.%j.out
-#SBATCH --array=1-21
+#SBATCH --array=1-7
 
 cd /scratch/leuven/357/vsc35707/BAR_mapping
 
@@ -27,9 +27,8 @@ conda activate vcftools
 
 echo "================="
 
-# Sample IDs (20 samples)
-samples=(Bar2_01 Bar2_02 Bar2_03 Bar2_04 Bar2_05 Bar2_06 Bar2_07 Bar2_08 Bar2_09 Bar2_10\
-	Bar4_01 Bar4_02 Bar4_03 Bar4_04 Bar4_05 Bar4_06 Bar4_07 Bar4_08 Bar4_09 Bar4_10)
+# Sample IDs (6 samples)
+samples=(Bar2_01 Bar2_03 Bar2_04 Bar4_01 Bar4_04 Bar4_06)
 
 echo "${samples[ID]}"
 
@@ -37,8 +36,8 @@ echo "${samples[ID]}"
 REF=/scratch/leuven/357/vsc35707/BAR_mapping/sorted_prim_dud.fasta
 REFNAME=dudPrim
 BWAout=/scratch/leuven/357/vsc35707/BAR_mapping/bams
-FILE1=/scratch/leuven/357/vsc35707/BAR_mapping/$(echo "${samples[ID]}")_R1.fastq.gz
-FILE2=/scratch/leuven/357/vsc35707/BAR_mapping/$(echo "${samples[ID]}")_R2.fastq.gz
+FILE1=/scratch/leuven/357/vsc35707/BAR_mapping/$(echo "${samples[ID]}")_R1.fq.gz
+FILE2=/scratch/leuven/357/vsc35707/BAR_mapping/$(echo "${samples[ID]}")_R2.fq.gz
 
 # Map reads using bwa mem
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
