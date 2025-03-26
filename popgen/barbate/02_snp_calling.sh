@@ -1,11 +1,11 @@
 #!/bin/bash -l 
 #SBATCH --cluster=genius 
-#SBATCH --job-name barbate 
+#SBATCH --job-name barbate_snps
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=20 
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
-#SBATCH -o barbate.%j.out
+#SBATCH -o barbate_snps.%j.out
 #SBATCH --array=1-11
 
 cd /scratch/leuven/357/vsc35707/BAR_mapping
