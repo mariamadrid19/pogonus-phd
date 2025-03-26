@@ -15,15 +15,8 @@ ID=$((SLURM_ARRAY_TASK_ID -1))
 
 # Load the programs we will use
 module load BWA/0.7.17-foss-2018a
-module load SAMtools/1.18-GCC-12.3.0
+module load SAMtools/1.9-GCC-6.4.0-2.28
 module load picard/2.18.23-Java-1.8.0_171
-module load minimap2/2.26-GCCcore-12.3.0
-module load Python/3.7.0-foss-2018a
-module load tabix/0.2.6-GCCcore-6.4.0
-export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
-
-source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
-conda activate vcftools
 
 echo "================="
 
