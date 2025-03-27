@@ -6,7 +6,7 @@
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o barbate_snps.%j.out
-#SBATCH --array=1-11
+#SBATCH --array=1-10
 
 cd /scratch/leuven/357/vsc35707/BAR_mapping
 
@@ -30,6 +30,8 @@ names=(1 10 2 3 4 5 6 7 8 9)
 
 # Sample IDs (20 samples)
 samples=(Bar2_01 Bar2_02 Bar2_03 Bar2_04 Bar2_05 Bar2_06 Bar2_07 Bar2_08 Bar2_09 Bar2_10 Bar4_01 Bar4_02 Bar4_03 Bar4_04 Bar4_05 Bar4_06 Bar4_07 Bar4_08 Bar4_09 Bar4_10)
+
+REFNAME=dudPrim
 
 echo "${samples[ID]}"
 
