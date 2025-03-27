@@ -60,7 +60,7 @@ if [[ -z "$command" ]]; then
 fi
 
 # run mpileup
-bcftools mpileup -Oz --threads 20 -f $REF $(echo $command) -r $(echo "${chrom[ID]}") | \
+bcftools mpileup -Oz --threads 20 -f $REF /scratch/leuven/357/vsc35707/BAR_mapping/bams/$(echo $command) -r $(echo "${chrom[ID]}") | \
 bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/BAR_mapping/Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
 
 vcftools --gzvcf Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout | bgzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
