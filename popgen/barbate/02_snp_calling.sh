@@ -8,7 +8,7 @@
 #SBATCH -o barbate_snps.%j.out
 #SBATCH --array=1-10
 
-cd /scratch/leuven/357/vsc35707/BAR_mapping
+cd /scratch/leuven/357/vsc35707/BAR_mapping/bams
 
 # This variable will store the job array number minus 1, so we can use it to get a sample from the samples list (index starts at 0)
 ID=$((SLURM_ARRAY_TASK_ID -1))
@@ -32,6 +32,7 @@ names=(1 10 2 3 4 5 6 7 8 9)
 samples=(Bar2_01 Bar2_02 Bar2_03 Bar2_04 Bar2_05 Bar2_06 Bar2_07 Bar2_08 Bar2_09 Bar2_10 Bar4_01 Bar4_02 Bar4_03 Bar4_04 Bar4_05 Bar4_06 Bar4_07 Bar4_08 Bar4_09 Bar4_10)
 
 REFNAME=dudPrim
+REF=/scratch/leuven/357/vsc35707/BAR_mapping/sorted_prim_dud.fasta
 
 echo "${samples[ID]}"
 
@@ -60,16 +61,12 @@ if [[ -z "$command" ]]; then
 fi
 
 # run mpileup
-bcftools mpileup -Oz --threads 20 -f $REF /scratch/leuven/357/vsc35707/BAR_mapping/bams/$(echo $command) -r $(echo "${chrom[ID]}") | \
-bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/BAR_mapping/Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
+bcftools mpileup -Oz --threads 20 -f $REF $(echo $command) -r $(echo "${chrom[ID]}") | bcftools call -m -Oz -o Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
 
 vcftools --gzvcf Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout | bgzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
 
 bgzip Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
 
-python parseVCF.py \
---minQual 30 \
---skipIndels \
--i Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz  | gzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz
+python parseVCF.py --minQual 30 --skipIndels -i Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz  | gzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz
 
 zcat Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz | sed 's/.dudPrim.filtered.sorted.nd.bam//g' | bgzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").H.calls.gz
