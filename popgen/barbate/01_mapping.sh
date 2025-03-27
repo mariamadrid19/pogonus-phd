@@ -20,8 +20,8 @@ module load picard/2.18.23-Java-1.8.0_171
 
 echo "================="
 
-# Sample IDs (6 samples)
-samples=(Bar2_01 Bar2_03 Bar2_04 Bar4_01 Bar4_04 Bar4_06)
+# Sample IDs (20 samples)
+samples=(Bar2_01 Bar2_02 Bar2_03 Bar2_04 Bar2_05 Bar2_06 Bar2_07 Bar2_08 Bar2_09 Bar2_10 Bar4_01 Bar4_02 Bar4_03 Bar4_04 Bar4_05 Bar4_06 Bar4_07 Bar4_08 Bar4_09 Bar4_10)
 
 echo "${samples[ID]}"
 
