@@ -42,12 +42,7 @@ samtools view -f 0x02 -q 20 -b $BWAout/$(echo "${samples[ID]}").$REFNAME.bam > $
 samtools sort $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam -o $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam
 
 # Remove PCR duplicates
-java -jar $EBROOTPICARD/picard.jar MarkDuplicates \
--INPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam \
--OUTPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.nd.bam \
--REMOVE_DUPLICATES true \
--METRICS_FILE $BWAout/$(echo "${samples[ID]}").$REFNAME.dup_metrics.txt \
--ASSUME_SORTED true
+java -jar $EBROOTPICARD/picard.jar MarkDuplicates -INPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam -OUTPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.nd.bam -REMOVE_DUPLICATES true -METRICS_FILE $BWAout/$(echo "${samples[ID]}").$REFNAME.dup_metrics.txt -ASSUME_SORTED true
 
 # Remove intermediate files
 rm $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
