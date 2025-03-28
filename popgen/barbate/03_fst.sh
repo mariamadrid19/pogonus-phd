@@ -13,6 +13,7 @@ cd /scratch/leuven/357/vsc35707/BAR_mapping/bams/
 # Load the programs we will use
 module load Python/3.7.0-foss-2018a
 # pip install egglib
+# popgenWindows only works with numpy==1.24
 
 REFNAME=dudPrim
 chrom=$SLURM_ARRAY_TASK_ID  # Assign chromosome number based on job array ID
