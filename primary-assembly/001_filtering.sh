@@ -10,5 +10,6 @@
 
 # filter ONT long reads based on a minimum length of 5kb and the best 90% (based on quality) of those reads
 filtlong --min_length 2000 --keep_percent 90 GC157812.fastq.gz | gzip >  GC157812_filtered.fastq
+# ended up with 5,227,471 reads
 
 filtlong --min_length 2000 --keep_percent 90 GC157813.fastq.gz | gzip >  GC157813_filtered.fastq
