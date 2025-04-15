@@ -22,3 +22,7 @@ zcat GC157813.fastq.gz | echo $((`wc -l` / 4))
 
 zcat GC157812.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
 zcat GC157813.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
+
+module load FastQC/0.12.1-Java-11
+fastqc GC157812.fastq.gz -t 32
+fastqc GC157813.fastq.gz -t 32
