@@ -8,6 +8,7 @@
 #SBATCH -A lp_svbelleghem
 #SBATCH -o ont_filter.%j.out
 
-filtlong --min_length 1000 --min_mean_q 10 GC157812.fastq.gz | gzip >  GC157812_filtered.fastq
+# filter ONT long reads based on a minimum length of 5kb and the best 90% (based on quality) of those reads
+filtlong --min_length 5000 --keep_percent 90 GC157812.fastq.gz | gzip >  GC157812_filtered.fastq
 
-filtlong --min_length 1000 --min_mean_q 10 GC157813.fastq.gz | gzip >  GC157813_filtered.fastq
+filtlong --min_length 5000 --keep_percent 90 GC157813.fastq.gz | gzip >  GC157813_filtered.fastq
