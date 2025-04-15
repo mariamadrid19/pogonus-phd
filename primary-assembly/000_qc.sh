@@ -2,9 +2,9 @@
 #SBATCH --cluster=genius 
 #SBATCH --job-name=ont_cat
 #SBATCH --nodes=1 
-#SBATCH --ntasks-per-node=12
+#SBATCH --ntasks-per-node=32
 #SBATCH --mem-per-cpu=8G 
-#SBATCH --time=6:00:00 
+#SBATCH --time=12:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o ont_cat.%j.out
 
@@ -24,5 +24,6 @@ zcat GC157812.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
 zcat GC157813.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
 
 module load FastQC/0.12.1-Java-11
+# check quality of reads with fastqc
 fastqc GC157812.fastq.gz -t 32
 fastqc GC157813.fastq.gz -t 32
