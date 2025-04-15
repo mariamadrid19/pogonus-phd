@@ -37,3 +37,8 @@ fastqc GC157813.fastq.gz -t 32
 module load NanoPlot/1.42.0-foss-2022a
 NanoPlot --fastq GC157812.fastq.gz -o nanoplot_SW
 NanoPlot --fastq GC157813.fastq.gz -o nanoplot_GILV
+
+# can also try with pycoQC
+conda activate pycoQC
+pycoQC -f sequencing_summary_PAW02052_066d7b83_dd7ec26e.txt -o pycoqc_report_dd7ec26e.html
+pycoQC -f sequencing_summary_PAW02052_a0329603_c7340ae4.txt -o pycoqc_report_c7340ae4.html
