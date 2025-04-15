@@ -12,6 +12,9 @@
 zcat fastq_pass/barcode31/*.fastq.gz | pigz -p 12 > GC157812.fastq.gz
 zcat fastq_pass/barcode39/*.fastq.gz | pigz -p 12 > GC157813.fastq.gz
 
+# GC157812 (barcode 31) = 58 Gb
+# GC157813 (barcode 39) = 20 Gb 
+
 # Count reads in original files
 zcat fastq_pass/barcode31/*.fastq.gz | echo $((`wc -l` / 4))
 zcat fastq_pass/barcode39/*.fastq.gz | echo $((`wc -l` / 4))
@@ -21,7 +24,9 @@ zcat GC157812.fastq.gz | echo $((`wc -l` / 4))
 zcat GC157813.fastq.gz | echo $((`wc -l` / 4))
 
 zcat GC157812.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
+# total of 13533617 reads, 54134468 lines
 zcat GC157813.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
+# 5913014 reads, 23652056 lines
 
 module load FastQC/0.12.1-Java-11
 # check quality of reads with fastqc
