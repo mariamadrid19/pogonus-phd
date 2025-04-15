@@ -11,3 +11,14 @@
 # concatenate and compress all the fastq files that "pass" quality checks, ONT reads
 zcat fastq_pass/barcode31/*.fastq.gz | pigz -p 12 > GC157812.fastq.gz
 zcat fastq_pass/barcode39/*.fastq.gz | pigz -p 12 > GC157813.fastq.gz
+
+# Count reads in original files
+zcat fastq_pass/barcode31/*.fastq.gz | echo $((`wc -l` / 4))
+zcat fastq_pass/barcode39/*.fastq.gz | echo $((`wc -l` / 4))
+
+# Count reads in merged file
+zcat GC157812.fastq.gz | echo $((`wc -l` / 4))
+zcat GC157813.fastq.gz | echo $((`wc -l` / 4))
+
+zcat GC157812.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
+zcat GC157813.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
