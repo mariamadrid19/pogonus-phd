@@ -24,9 +24,9 @@ zcat GC157812.fastq.gz | echo $((`wc -l` / 4))
 zcat GC157813.fastq.gz | echo $((`wc -l` / 4))
 
 zcat GC157812.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
-# total of 13533617 reads, 54134468 lines
+# total of 13,533,617 reads, 54134468 lines
 zcat GC157813.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
-# 5913014 reads, 23652056 lines
+# 5,913,014 reads, 23652056 lines
 
 module load FastQC/0.12.1-Java-11
 # check quality of reads with fastqc, not the most realiable since fastqc is made for short reads
