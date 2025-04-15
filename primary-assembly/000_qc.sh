@@ -12,8 +12,8 @@
 zcat fastq_pass/barcode31/*.fastq.gz | pigz -p 12 > GC157812.fastq.gz
 zcat fastq_pass/barcode39/*.fastq.gz | pigz -p 12 > GC157813.fastq.gz
 
-# GC157812 (barcode 31) = 58 Gb
-# GC157813 (barcode 39) = 20 Gb 
+# GC157812 (barcode 31) = 58 Gb (short-winged, SW)
+# GC157813 (barcode 39) = 20 Gb (long-winged, LW -> probably P. gilvipes instead of P. chalceus like we expected) 
 
 # Count reads in original files
 zcat fastq_pass/barcode31/*.fastq.gz | echo $((`wc -l` / 4))
@@ -29,6 +29,11 @@ zcat GC157813.fastq.gz | awk '{c++} END{print "Total lines:", c, "Reads:", c/4}'
 # 5913014 reads, 23652056 lines
 
 module load FastQC/0.12.1-Java-11
-# check quality of reads with fastqc
+# check quality of reads with fastqc, not the most realiable since fastqc is made for short reads
 fastqc GC157812.fastq.gz -t 32
 fastqc GC157813.fastq.gz -t 32
+
+# try with a qc designed for ONT reads
+module load NanoPlot/1.42.0-foss-2022a
+NanoPlot --fastq GC157812.fastq.gz -o nanoplot_SW
+NanoPlot --fastq GC157813.fastq.gz -o nanoplot_GILV
