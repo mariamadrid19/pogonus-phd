@@ -13,3 +13,4 @@ filtlong --min_length 2000 --keep_percent 90 GC157812.fastq.gz | gzip >  GC15781
 # ended up with 5,227,471 reads
 
 filtlong --min_length 2000 --keep_percent 90 GC157813.fastq.gz | gzip >  GC157813_filtered.fastq
+# ended up with 2,631,168 reads
