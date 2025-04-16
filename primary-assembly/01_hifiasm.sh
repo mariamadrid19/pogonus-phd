@@ -13,8 +13,8 @@
 # For the SW individual, hom-cov = 88 and purge-max = 120
 hifiasm -o Pogonus_tidal.asm --primary --n-hap 2 --hom-cov 88 --purge-max 120 -l 2 -t 32 --ul nanopore/GC157812_filtered.fasta --h1 omnic/TTCCAAGG-CCTTGTAG_S10_L001_R1.fastq.gz --h2 omnic/TTCCAAGG-CCTTGTAG_S10_L001_R2.fastq.gz pacbio/bc2041.fastq.gz
 
-# For the LW individual, hom-cov =
-hifiasm -o Pogonus_gilv.asm --n-hap 2 --hom-cov 55 --purge-max 100 -l 2 -t 32 --ul nanopore/GC157813_filtered.fasta --h1 omnic/CTTGTCGA-GAACATCG_S9_L001_R1.fastq.gz --h2 omnic/CTTGTCGA-GAACATCG_S9_L001_R2.fastq.gz pacbio/bc2042.fastq.gz
+# For the LW individual (Pogonus gilvipes), hom-cov = 148
+hifiasm -o Pogonus_gilv.asm --primary --n-hap 2 --hom-cov 148 -l 1 -t 32 --ul nanopore/GC157813_filtered.fasta --h1 omnic/CTTGTCGA-GAACATCG_R1.fastq.gz --h2 omnic/CTTGTCGA-GAACATCG_R2.fastq.gz pacbio/bc2042.fastq.gz
 
 #gfa_to_fasta
 awk '/^S/{print ">"$2;print $3}' abc.hic.p_ctg.gfa > abc.hic.p_ctg.fa
