@@ -67,6 +67,8 @@ vcftools --gzvcf Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").vcf.gz --re
 
 bgzip Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
 
-python parseVCF.py --minQual 30 --skipIndels -i Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz  | gzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz
+#python parseVCF.py --minQual 30 --skipIndels -i Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz  | gzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz
+
+python parseVCF.py --gtf flag=GQ min=30 gtTypes=Het --gtf flag=GQ min=30 gtTypes=HomAlt --gtf flag=DP min=10 --skipIndels -i Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz | gzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz
 
 zcat Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz | sed 's/.dudPrim.filtered.sorted.nd.bam//g' | bgzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").H.calls.gz
