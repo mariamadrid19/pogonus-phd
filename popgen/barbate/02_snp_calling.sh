@@ -72,6 +72,6 @@ bgzip Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
 python parseVCF.py --gtf flag=GQ min=30 gtTypes=Het --gtf flag=GQ min=30 gtTypes=HomAlt --gtf flag=DP min=10 --skipIndels -i Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz | gzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz
 #--gtf flag=GQ min=30 gtTypes=Het > Applies a filter (>30) on the genotype quality field only to heterozygous genotypes (e.g., 0/1).
 #--gtf flag=GQ min=30 gtTypes=HomAlt > Same as above, but for homozygous alternate genotypes (e.g., 1/1).
-#--gtf flag=DP min=10 > Filtes  based on DP (read depth) in the FORMAT column, keeps genotypes only if DP ≥ 10, regardless of genotype type.
+#--gtf flag=DP min=10 > Filters based on DP (read depth), keeps genotypes only if DP ≥ 10, regardless of genotype type.
 
 zcat Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").calls.gz | sed 's/.dudPrim.filtered.sorted.nd.bam//g' | bgzip > Pogonus_Barbate_$REFNAME.chr_$(echo "${names[ID]}").H.calls.gz
