@@ -21,7 +21,11 @@ awk '/^>/ { if (count++ >= 50) exit } { print }' P_littoralis_sorted.fa > P_litt
 conda deactivate
 conda activate ragtag
 
+
+#obtain the first 20 scaffolds (20 largest ones) of the old reference genome
+awk '/^>/ { if (count++ >= 20) exit } { print }'  old_ref.fa  > old_ref_20.fa 
+
 # scaffold the contigs based on the old assembly (linkage groups)
-ragtag.py scaffold -f -w 1000 -q 60 old_ref.fa P_littoralis_sorted_50.fa
+ragtag.py scaffold -f -w 1000 -q 60 old_ref_20.fa P_littoralis_sorted_50.fa
 
 compleasm.py run -a P_littoralis_sorted_50.fa -o results_scaffolds/ -l coleoptera -t 72
