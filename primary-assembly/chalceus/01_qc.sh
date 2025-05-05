@@ -26,3 +26,8 @@ jellyfish count -m 21 -s 100M -t 32 -C GC157810.fasta
 
 #this makes the k-mer histogram (can be seen on the .out file, DO NOT DELETE IT)
 jellyfish histo -t 32 mer_counts.jf > mer_counts.histo
+
+module purge
+module load NanoPlot/1.42.0-foss-2022a
+
+NanoPlot --fastq bc2041.fastq.gz -o P_chalceus_Nanoplot
