@@ -14,4 +14,4 @@
 hifiasm -o Pogonus_tidal.asm --primary --n-hap 2 --hom-cov 88 --purge-max 120 -l 3 -t 32 --ul nanopore/GC157812_filtered.fasta --h1 omnic/TTCCAAGG-CCTTGTAG_S10_L001_R1.fastq.gz --h2 omnic/TTCCAAGG-CCTTGTAG_S10_L001_R2.fastq.gz pacbio/bc2041.fastq.gz
 
 # Only with HiFi reads
-hifiasm -o Pogonus_tidal.asm --primary --n-hap 2 --hom-cov 88 -l 3 pacbio/bc2041.fastq.gz
+hifiasm -o Pogonus_tidal_HiFi.asm --primary --n-hap 2 --hom-cov 88 -l 3 pacbio/bc2041.fastq.gz
