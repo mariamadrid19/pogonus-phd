@@ -15,3 +15,5 @@ hifiasm -o Pogonus_tidal.asm --primary --n-hap 2 --hom-cov 88 --purge-max 120 -l
 
 # Only with HiFi reads
 hifiasm -o Pogonus_tidal_HiFi.asm --primary --n-hap 2 --hom-cov 88 -l 3 pacbio/bc2041.fastq.gz
+
+awk '/^S/{print ">"$2;print $3}' Pogonus_tidal_HiFi.asm.hic.p_ctg.gfa > Pogonus_tidal_HiFi.asm.hic.p_ctg.fa
