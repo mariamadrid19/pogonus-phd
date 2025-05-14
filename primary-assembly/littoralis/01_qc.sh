@@ -7,6 +7,13 @@
 #SBATCH -o Plit_jf.%j.out
 #SBATCH -A lp_svbelleghem
 
+module purge
+module load NanoPlot/1.42.0-foss-2022a
+
+# quality check of the reads
+NanoPlot --fastq bc2042.fastq.gz -o P_littoralis_Nanoplot
+
+module purge
 module load Jellyfish/2.2.10-intel-2018a
 
 #this will count kmers on the fasta file, takes a long time
