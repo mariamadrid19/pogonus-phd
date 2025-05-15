@@ -18,4 +18,4 @@ paste <(ls $PWD/*_R1.fastq) <(ls $PWD/*_R2.fastq) > paired_mixed.txt
 cd ../
 
 # run EviAnn with the proteins and the RNA sequences
-eviann.sh -t 24 -g sorted_prim_dud.fasta -r paired_mixed.txt -p insecta_proteins.fasta -m 500000
+eviann.sh -t 24 -g sorted_prim_dud.fasta -r paired_mixed.txt -p insecta_proteins.fasta -m 500000 --lncrnamintpm 1
