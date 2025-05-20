@@ -4,7 +4,7 @@
 #SBATCH --job-name Pog_hifiasm
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
-#SBATCH --mem-per-cpu=28000M
+#SBATCH --mem=1200G
 #SBATCH --time=168:00:00
 #SBATCH -o Pog_hifiasm.%j.out
 #SBATCH -A lp_svbelleghem
