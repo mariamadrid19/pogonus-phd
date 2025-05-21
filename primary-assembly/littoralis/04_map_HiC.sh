@@ -2,7 +2,7 @@
 #SBATCH --cluster=genius
 #SBATCH --job-name map_contigs
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=36
 #SBATCH --time=48:00:00
 #SBATCH -o map_contigs.%j.out
 #SBATCH -A lp_svbelleghem
@@ -38,7 +38,7 @@ REP_DIR='/scratch/leuven/357/vsc35707/littoralis/final_assembly/deduplicated_fil
 REP_LABEL=${LABEL}_r
 MERGE_DIR='/scratch/leuven/357/vsc35707/littoralis/final_assembly/final_merged_alignments'
 MAPQ_FILTER=10
-CPU=32
+CPU=36
 
 # Important to first activate the conda environment where bwa and samtools are installed
 # /data/leuven/357/vsc35707/miniconda3/envs/thesis/bin/
