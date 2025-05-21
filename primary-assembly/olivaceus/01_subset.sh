@@ -14,3 +14,5 @@ seqkit sort --by-length --reverse P_olivaceus_HiFi_reads.fasta > sorted_hifi.fas
 
 # Take only 30% of the longest reads
 seqkit head -n 1800000 sorted_hifi.fasta -o P_olivaceus_HiFi_top30.fasta
+
+# went from 78G to 36G
