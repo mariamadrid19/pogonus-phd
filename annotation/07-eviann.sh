@@ -11,6 +11,8 @@ mamba activate entrez
 # use esearch and efetch to download all the proteins for insects available in NCBI
 module purge
 module load Perl/5.38.2-GCCcore-13.3.0 # Need it to load Time/HiRes.pm
+
+esearch -db protein -query "txid50557[Organism:exp]" | xtract -pattern ENTREZ_DIRECT -element Count # there are a total of 17198085 records
 esearch -db protein -query "txid50557[Organism:exp]" | efetch -format fasta > insecta_proteins.fasta
 
 # generate a txt file with all the names of the RNAseq reads needed (they should all be in a directory called rnaseq)
