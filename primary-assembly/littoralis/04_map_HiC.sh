@@ -2,7 +2,7 @@
 #SBATCH --cluster=genius
 #SBATCH --job-name map_contigs
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=36
+#SBATCH --cpus-per-task=36
 #SBATCH --time=48:00:00
 #SBATCH -o map_contigs.%j.out
 #SBATCH -A lp_svbelleghem
