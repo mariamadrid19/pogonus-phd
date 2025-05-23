@@ -60,10 +60,10 @@ if [ ! -e "${PREFIX}.bwt" ]; then
 fi
 
 echo "### Step 1.A: FASTQ to BAM (1st)"
-bwa mem -5SP -t $CPU $REF ${SRA}_R1.fastq.gz | samtools view -bS - > $RAW_DIR/${SRA}_1.bam
+bwa mem -5SP -t $CPU $REF ${SRA}_R1.fastq | samtools view -bS - > $RAW_DIR/${SRA}_1.bam
 
 echo "### Step 1.B: FASTQ to BAM (2nd)"
-bwa mem -5SP -t $CPU $REF ${SRA}_R2.fastq.gz | samtools view -bS - > $RAW_DIR/${SRA}_2.bam
+bwa mem -5SP -t $CPU $REF ${SRA}_R2.fastq | samtools view -bS - > $RAW_DIR/${SRA}_2.bam
 
 echo "### Step 2.A: Sort BAMs by read name (1st)"
 samtools sort -n -@ $CPU -o $RAW_DIR/${SRA}_1.qsort.bam $RAW_DIR/${SRA}_1.bam
