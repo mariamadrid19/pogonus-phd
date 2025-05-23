@@ -65,62 +65,20 @@ bwa mem -5SP -t $CPU $REF ${SRA}_R1.fastq | samtools view -bS - > $RAW_DIR/${SRA
 echo "### Step 1.B: FASTQ to BAM (2nd)"
 bwa mem -5SP -t $CPU $REF ${SRA}_R2.fastq | samtools view -bS - > $RAW_DIR/${SRA}_2.bam
 
-echo "### Step 2.A: Sort BAMs by read name (1st)"
-samtools sort -n -@ $CPU -o $RAW_DIR/${SRA}_1.qsort.bam $RAW_DIR/${SRA}_1.bam
+echo "### Step 2.A: Filter 5' end (1st)"
+samtools view -h $RAW_DIR/${SRA}_1.bam | perl $FILTER | samtools view -Sb - > $FILT_DIR/${SRA}_1.bam
 
-echo "### Step 2.A: Sort BAMs by read name (2nd)"
-samtools sort -n -@ $CPU -o $RAW_DIR/${SRA}_2.qsort.bam $RAW_DIR/${SRA}_2.bam
+echo "### Step 2.B: Filter 5' end (2nd)"
+samtools view -h $RAW_DIR/${SRA}_2.bam | perl $FILTER | samtools view -Sb - > $FILT_DIR/${SRA}_2.bam
 
-echo "### Step 3: Merge mates and extract pairs"
-pairtools parse \
-    --no-flip \
-    --min-mapq 0 \
-    --nproc-in $CPU \
-    --nproc-out $CPU \
-    --drop-sam \
-    --output $PAIR_DIR/${SRA}.pairs \
-    --output-stats $PAIR_DIR/${SRA}.parse_stats.txt \
-    $RAW_DIR/${SRA}_1.qsort.bam $RAW_DIR/${SRA}_2.qsort.bam
+echo "### Step 3A: Pair reads & mapping quality filter"
+perl $COMBINER $FILT_DIR/${SRA}_1.bam $FILT_DIR/${SRA}_2.bam samtools $MAPQ_FILTER | samtools view -bS -t $FAIDX - | samtools sort -@ $CPU -o $TMP_DIR/$SRA.bam -
 
-echo "### Step 4: Sort and deduplicate pairs"
-pairtools sort -p $PAIR_DIR/${SRA}.pairs --output $PAIR_DIR/${SRA}.sorted.pairs
-pairtools dedup --output-stats $PAIR_DIR/${SRA}.dedup_stats.txt $PAIR_DIR/${SRA}.sorted.pairs > $PAIR_DIR/${SRA}.dedup.pairs
+echo "### Step 3.B: Add read group"
+java -Xmx4G -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar AddOrReplaceReadGroups INPUT=$TMP_DIR/$SRA.bam OUTPUT=$PAIR_DIR/$SRA.bam ID=$SRA LB=$SRA SM=$LABEL PL=PACBIO PU=none
 
-echo "### Step 5: Filter for species-specific high-quality pairs"
-awk -F'\t' '{
-    if ($1 ~ /^#/) {print; next}
-    if ($8 == "UU" && $12 >= 20 && $13 >= 20 &&
-        $0 ~ /NM:i:([0-2])\t.*\t.*\t.*\t.*\t.*NM:i:([0-2])/) {
-        print
-    }
-}' $PAIR_DIR/${SRA}.dedup.pairs > $FILT_DIR/${SRA}.filtered.pairs
-
-
-# Convert pairs to BAM
-pairtools split --output-pairs $FILT_DIR/${SRA}.split.pairs \
-                --output-pairs-sam $FILT_DIR/${SRA}.filtered.sam \
-                $FILT_DIR/${SRA}.filtered.pairs
-
-# Convert to BAM, sort, and index
-samtools view -Sb $FILT_DIR/${SRA}.filtered.sam | \
-samtools sort -@ $CPU -o $PAIR_DIR/${SRA}.bam
-samtools index $PAIR_DIR/${SRA}.bam
-
-# Step 6: Add read group
-java -Xmx4G -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar AddOrReplaceReadGroups \
-    INPUT=$PAIR_DIR/${SRA}.bam \
-    OUTPUT=$PAIR_DIR/${SRA}.rg.bam \
-    ID=$SRA LB=$SRA SM=$LABEL PL=PACBIO PU=none
-
-# Step 7: Mark duplicates
-java -Xmx30G -XX:-UseGCOverheadLimit -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar MarkDuplicates \
-    INPUT=$PAIR_DIR/${SRA}.rg.bam \
-    OUTPUT=$REP_DIR/$REP_LABEL.bam \
-    METRICS_FILE=$REP_DIR/metrics.$REP_LABEL.txt \
-    TMP_DIR=$TMP_DIR \
-    ASSUME_SORTED=TRUE \
-    VALIDATION_STRINGENCY=LENIENT \
-    REMOVE_DUPLICATES=TRUE
+echo "### Step 4: Mark duplicates"
+java -Xmx30G -XX:-UseGCOverheadLimit -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar MarkDuplicates INPUT=$PAIR_DIR/$SRA.bam OUTPUT=$REP_DIR/$REP_LABEL.bam METRICS_FILE=$REP_DIR/metrics.$REP_LABEL.txt TMP_DIR=$TMP_DIR ASSUME_SORTED=TRUE VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=TRUE
 
 samtools index $REP_DIR/$REP_LABEL.bam
 
