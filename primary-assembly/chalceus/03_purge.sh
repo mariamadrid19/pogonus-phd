@@ -2,33 +2,83 @@
 #SBATCH --cluster=genius
 #SBATCH --job-name purge_dups
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=36
+#SBATCH --mem=150G
 #SBATCH --time=72:00:00
 #SBATCH -o purgedups.%j.out
 #SBATCH -A lp_svbelleghem
 
 conda activate thesis
-
 module load matplotlib/3.7.0-gfbf-2022b
 
-#assembly and reads
-PRIMASSEMBLY=/scratch/leuven/357/vsc35707/chalceus/Pogonus_tidal.asm.hic.p_ctg.fa
-FASTQ=/scratch/leuven/357/vsc35707/chalceus/bc2041.fastq.gz
+# Working directory: /scratch/leuven/357/vsc35707/chalceus/
+set -euo pipefail # will exit the script if something goes wrong
 
-#Run minimap2 to align pacbio data and generate paf files, then calculate read depth histogram and base-level read depth
-minimap2 -t 32 -xmap-hifi $PRIMASSEMBLY $FASTQ | gzip -c - > $PRIMASSEMBLY.paf.gz
-pbcstat $PRIMASSEMBLY.paf.gz
-calcuts PB.stat > cutoffs 2>calcults.log
-hist_plot.py -c cutoffs PB.stat hist.png
+# ---------- INPUT ----------
+PRI_ASM="Pogonus_T2T.asm.hic.p_ctg.fa"
+ALT_ASM="Pogonus_T2T.asm.hic.a_ctg.fa"
+PB_READS="pacbio/GC157810.fasta"
+BIN_DIR="bin"  # path to purge_dups binaries
+CPUs=36
 
-#Split an assembly and do a self-self alignment
-split_fa $PRIMASSEMBLY > $PRIMASSEMBLY.split
-minimap2 -t 32 -xasm5 -DP $PRIMASSEMBLY.split $PRIMASSEMBLY.split | pigz > $PRIMASSEMBLY.split.self.paf.gz
+# ---------- STAGE 1: Purge from primary assembly ----------
+echo "### STAGE 1: Purge_dups on primary assembly ###"
 
-#Purge haplotigs and overlaps
-purge_dups -2 -T cutoffs_min15 -c PB.base.cov $PRIMASSEMBLY.split.self.paf.gz > dups.bed 2> purge_dups.log
+# Step 1a: Align PacBio reads to primary assembly
+minimap2 -t $CPUs -xasm20 $PRI_ASM $PB_READS | gzip -c - > primary.paf.gz
 
-#Get purged primary and haplotig sequences from draft assembly
-get_seqs -e dups.bed $PRIMASSEMBLY
+# Step 1b: Compute coverage stats
+$BIN_DIR/pbcstat primary.paf.gz
 
-#output is called purged.fa
+# Step 1c: Calculate cutoffs
+$BIN_DIR/calcuts PB.stat > cutoffs_primary 2> calcuts_primary.log
+
+# Step 1d: Split primary assembly
+$BIN_DIR/split_fa $PRI_ASM > ${PRI_ASM}.split
+
+# Step 1e: Self-alignment
+minimap2 -t $CPUs -xasm5 -DP ${PRI_ASM}.split ${PRI_ASM}.split | gzip -c - > ${PRI_ASM}.split.self.paf.gz
+
+# Step 2: Purge
+$BIN_DIR/purge_dups -2 -T cutoffs_primary -c PB.base.cov ${PRI_ASM}.split.self.paf.gz > dups_primary.bed 2> purge_dups_primary.log
+
+# Step 3: Extract sequences
+$BIN_DIR/get_seqs -e dups_primary.bed $PRI_ASM
+
+# This creates:
+# - purged.fa (purged primary contigs)
+# - hap.fa (candidate haplotigs from primary)
+
+# Step 4: Merge hap.fa with alternative assembly
+cat hap.fa $ALT_ASM > merged_hap.fa
+
+# ---------- STAGE 2: Refine merged haplotigs ----------
+echo "### STAGE 2: Purge_dups on merged haplotigs ###"
+
+# Step 1a: Align PacBio reads
+minimap2 -t $CPUs -xasm20 merged_hap.fa $PB_READS | gzip -c - > merged_hap.paf.gz
+
+# Step 1b: Compute stats
+$BIN_DIR/pbcstat merged_hap.paf.gz
+
+# Step 1c: Calculate cutoffs
+$BIN_DIR/calcuts PB.stat > cutoffs_merged 2> calcuts_merged.log
+
+# Step 1d: Split merged hap assembly
+$BIN_DIR/split_fa merged_hap.fa > merged_hap.fa.split
+
+# Step 1e: Self-alignment
+minimap2 -t $CPUs -xasm5 -DP merged_hap.fa.split merged_hap.fa.split | gzip -c - > merged_hap.fa.split.self.paf.gz
+
+# Step 2: Purge again
+$BIN_DIR/purge_dups -2 -T cutoffs_merged -c PB.base.cov merged_hap.fa.split.self.paf.gz > dups_merged.bed 2> purge_dups_merged.log
+
+# Step 3: Extract final haplotigs
+$BIN_DIR/get_seqs -e dups_merged.bed merged_hap.fa
+
+# Rename output for clarity
+mv purged.fa purged_merged.fa
+mv hap.fa hap_merged.fa
+
+echo "### DONE: Final haplotig assembly is in purged_merged.fa ###"
