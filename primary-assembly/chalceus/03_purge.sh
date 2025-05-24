@@ -6,7 +6,8 @@
 #SBATCH --cpus-per-task=36
 #SBATCH --mem=150G
 #SBATCH --time=72:00:00
-#SBATCH -o purgedups.%j.out
+#SBATCH --output=logs/purgedups.%j.out
+#SBATCH --error=logs/purgedups.%j.err
 #SBATCH -A lp_svbelleghem
 
 conda activate thesis
