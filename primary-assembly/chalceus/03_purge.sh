@@ -22,6 +22,9 @@ PB_READS="pacbio/GC157810.fasta"
 BIN_DIR="bin"  # path to purge_dups binaries
 CPUs=36
 
+# Check if bin directory exists
+[ -d $BIN_DIR ] || mkdir -p $BIN_DIR
+
 # ---------- STAGE 1: Purge from primary assembly ----------
 echo "### STAGE 1: Purge_dups on primary assembly ###"
 
