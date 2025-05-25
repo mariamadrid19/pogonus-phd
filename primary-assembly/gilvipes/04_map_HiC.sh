@@ -53,6 +53,8 @@ echo "### Step 0: Check output directories' existence & create them as needed"
 [ -d $REP_DIR ] || mkdir -p $REP_DIR
 [ -d $MERGE_DIR ] || mkdir -p $MERGE_DIR
 
+set -euo pipefail # will kill the job if something goes wrong
+
 echo "### Step 0: Index reference" # Run only once! Skip this step if you have already generated BWA index files
 if [ ! -e "${PREFIX}.bwt" ]; then
     bwa index -a bwtsw -p $PREFIX $REF
