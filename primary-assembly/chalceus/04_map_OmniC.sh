@@ -67,7 +67,7 @@ samtools sort -@ $CORES -o $BAM
 
 samtools index $BAM
 
- # Step 2: Mark duplicates in the BAM file using Picard (for tools expecting BAM flags)
+# STEP 2: Mark duplicates in the BAM file using Picard
 
 module load picard/2.18.23-Java-1.8.0_171
 
