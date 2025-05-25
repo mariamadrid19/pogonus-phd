@@ -15,8 +15,7 @@
 ##############################################
 
 # Below find the commands used to map HiC data to the contigs (output from hifiasm)
-# This bash script will map one paired end HiC dataset (R1 & R2) to the contigs produced by hifiasm and purged by purge_dups (
-purged.fa)
+# This bash script will map one paired end HiC dataset (R1 & R2) to the contigs produced by hifiasm and purged by purge_dups (purged.fa)
 
 ##########################################
 # Commands #
@@ -24,20 +23,20 @@ purged.fa)
 
 SRA='CTTGTCGA-GAACATCG'
 LABEL='Pogonus_gilvipes'
-IN_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly'
-REF='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/purged.fa'
+IN_DIR='/scratch/leuven/357/vsc35707/gilvipes/'
+REF='/scratch/leuven/357/vsc35707/gilvipes/purged.fa'
 FAIDX="${REF}.fai"
 PREFIX='Pogonus_gilvipes'
-RAW_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/bams'
-FILT_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/filtered_bams'
-FILTER='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/filter_five_end.pl'
-COMBINER='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/two_read_bam_combiner.pl'
-STATS='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/get_stats.pl'
-TMP_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/temporary_files'
-PAIR_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/paired_bams'
-REP_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/deduplicated_files'
+RAW_DIR='/scratch/leuven/357/vsc35707/gilvipes/bams'
+FILT_DIR='/scratch/leuven/357/vsc35707/gilvipes/filtered_bams'
+FILTER='/scratch/leuven/357/vsc35707/gilvipes/filter_five_end.pl'
+COMBINER='/scratch/leuven/357/vsc35707/gilvipes/two_read_bam_combiner.pl'
+STATS='/scratch/leuven/357/vsc35707/gilvipes/get_stats.pl'
+TMP_DIR='/scratch/leuven/357/vsc35707/gilvipes/temporary_files'
+PAIR_DIR='/scratch/leuven/357/vsc35707/gilvipes/paired_bams'
+REP_DIR='/scratch/leuven/357/vsc35707/gilvipes/deduplicated_files'
 REP_LABEL=${LABEL}_r
-MERGE_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_assembly/final_merged_alignments'
+MERGE_DIR='/scratch/leuven/357/vsc35707/gilvipes/final_merged_alignments'
 MAPQ_FILTER=10
 CPU=36
 
@@ -45,7 +44,6 @@ CPU=36
 module load picard/2.18.23-Java-1.8.0_171 #to run picard, use java -jar $EBROOTPICARD/picard.jar
 module load SAMtools/0.1.20-GCC-12.3.0
 module load BWA/0.7.17-GCC-10.3.0
-mamba activate pairtools
 
 echo "### Step 0: Check output directories' existence & create them as needed"
 [ -d $RAW_DIR ] || mkdir -p $RAW_DIR
@@ -61,10 +59,10 @@ if [ ! -e "${PREFIX}.bwt" ]; then
 fi
 
 echo "### Step 1.A: FASTQ to BAM (1st)"
-#bwa mem -5SP -t $CPU $REF ${SRA}_R1.fastq | samtools view -bS - > $RAW_DIR/${SRA}_1.bam
+bwa mem -5SP -t $CPU $REF ${SRA}_R1.fastq | samtools view -bS - > $RAW_DIR/${SRA}_1.bam
 
 echo "### Step 1.B: FASTQ to BAM (2nd)"
-#bwa mem -5SP -t $CPU $REF ${SRA}_R2.fastq | samtools view -bS - > $RAW_DIR/${SRA}_2.bam
+bwa mem -5SP -t $CPU $REF ${SRA}_R2.fastq | samtools view -bS - > $RAW_DIR/${SRA}_2.bam
 
 echo "### Step 2.A: Filter 5' end (1st)"
 samtools view -h $RAW_DIR/${SRA}_1.bam | perl $FILTER | samtools view -Sb - > $FILT_DIR/${SRA}_1.bam
@@ -73,17 +71,16 @@ echo "### Step 2.B: Filter 5' end (2nd)"
 samtools view -h $RAW_DIR/${SRA}_2.bam | perl $FILTER | samtools view -Sb - > $FILT_DIR/${SRA}_2.bam
 
 echo "### Step 3A: Pair reads & mapping quality filter"
-perl $COMBINER $FILT_DIR/${SRA}_1.bam $FILT_DIR/${SRA}_2.bam samtools $MAPQ_FILTER | samtools view -bS -t $FAIDX - | samtools 
-sort -@ $CPU -o $TMP_DIR/$SRA.bam -
+perl $COMBINER $FILT_DIR/${SRA}_1.bam $FILT_DIR/${SRA}_2.bam samtools $MAPQ_FILTER | samtools view -bS -t $FAIDX - | samtools sort -@ $CPU -o $TMP_DIR/$SRA.bam -
 
 echo "### Step 3.B: Add read group"
-java -Xmx4G -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar AddOrReplaceReadGroups INPUT=$TMP_DIR/$SRA.bam OUTPUT=$PAIR_D
-IR/$SRA.bam ID=$SRA LB=$SRA SM=$LABEL PL=PACBIO PU=none
+java -Xmx4G -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar AddOrReplaceReadGroups \
+INPUT=$TMP_DIR/$SRA.bam OUTPUT=$PAIR_DIR/$SRA.bam ID=$SRA LB=$SRA SM=$LABEL PL=PACBIO PU=none
 
 echo "### Step 4: Mark duplicates"
-java -Xmx30G -XX:-UseGCOverheadLimit -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar MarkDuplicates INPUT=$PAIR_DIR/$SRA.
-bam OUTPUT=$REP_DIR/$REP_LABEL.bam METRICS_FILE=$REP_DIR/metrics.$REP_LABEL.txt TMP_DIR=$TMP_DIR ASSUME_SORTED=TRUE VALIDATION
-_STRINGENCY=LENIENT REMOVE_DUPLICATES=TRUE
+java -Xmx30G -XX:-UseGCOverheadLimit -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar MarkDuplicates \
+INPUT=$PAIR_DIR/$SRA.bam OUTPUT=$REP_DIR/$REP_LABEL.bam METRICS_FILE=$REP_DIR/metrics.$REP_LABEL.txt \
+TMP_DIR=$TMP_DIR ASSUME_SORTED=TRUE VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=TRUE
 
 samtools index $REP_DIR/$REP_LABEL.bam
 
