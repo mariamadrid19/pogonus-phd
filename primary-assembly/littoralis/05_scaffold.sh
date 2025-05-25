@@ -17,7 +17,7 @@ samtools view ./deduplicated_files/Pogonus_littoralis_r.bam | awk '{print $5}' |
 awk '/^>/ {if (seqlen){print seqlen}; seqlen=0; next;} {seqlen += length($0)} END {print seqlen}' purged.fa | sort -nr
 
 #YaHs will take the contig sequences (.fa) and the HiC aligned to the contigs (.bam produced in step 4) and scaffold them 
-yahs purged.fa ./deduplicated_files/Pogonus_littoralis_r.bam -q 30 -l 10000 -r 0
+yahs purged.fa ./deduplicated_files/Pogonus_littoralis_r.bam -q 30 -l 20000 -r 10000
 
 #final scaffolds (.fa) are used to run the ARIMA pipeline again, the mapping will be using the scaffolds as the reference (instead of the contigs)
 
