@@ -14,9 +14,9 @@ conda activate thesis
 yahs ./purged_merged.fa deduplicated_files/Pogonus_chalceus_r.bam -q 30 -l 20000 -r 10000
 
 #final scaffolds (.fa) are used to run the ARIMA pipeline again, the mapping will be using the scaffolds as the reference (instead of the contigs)
-mv yahs.out_scaffolds_final.fa P_chalceus.REF1.fasta
+mv yahs.out_scaffolds_final.fa P_chalceus_REF1.fa
 
 module load SAMtools/1.13-GCC-10.3.0
 
 #finally, the newly re-named assembly is also indexed in order to run the ARIMA pipeline once more, this time mapping to this scaffolding assembly
-samtools faidx yahs.out_scaffolds_final.fa && cut -f1,2 yahs.out_scaffolds_final.fa.fai > yahs.out_scaffolds_final.fa.genome
+samtools faidx P_chalceus_REF1.fa && cut -f1,2 P_chalceus_REF1.fa.fai > P_chalceus_REF1.fa.genome
