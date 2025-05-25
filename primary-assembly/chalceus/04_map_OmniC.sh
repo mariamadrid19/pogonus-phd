@@ -86,3 +86,4 @@ java -Xmx32G -Djava.io.tmpdir=$TMPDIR -jar $EBROOTPICARD/picard.jar MarkDuplicat
 samtools index $PICARD_OUT
 
 echo "### Omni-C Mapping pipeline completed successfully"
+# The mapped.marked.bam file will be the final BAM file used for the YaHS scaffolding step
