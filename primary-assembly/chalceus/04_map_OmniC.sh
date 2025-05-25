@@ -67,4 +67,22 @@ samtools sort -@ $CORES -o $BAM
 
 samtools index $BAM
 
+ # Step 2: Mark duplicates in the BAM file using Picard (for tools expecting BAM flags)
+
+module load picard/2.18.23-Java-1.8.0_171
+
+PICARD_OUT='mapped.marked.bam'
+METRICS='mapped.dup_metrics.txt'
+
+java -Xmx32G -Djava.io.tmpdir=$TMPDIR -jar $EBROOTPICARD/picard.jar MarkDuplicates \
+  I=$BAM \
+  O=$PICARD_OUT \
+  M=$METRICS \
+  TMP_DIR=$TMPDIR \
+  ASSUME_SORTED=true \
+  VALIDATION_STRINGENCY=LENIENT \
+  REMOVE_DUPLICATES=false
+
+samtools index $PICARD_OUT
+
 echo "### Omni-C Mapping pipeline completed successfully"
