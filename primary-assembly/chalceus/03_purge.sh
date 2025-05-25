@@ -18,7 +18,6 @@ set -euo pipefail # will exit the script if something goes wrong
 
 # ---------- INPUT ----------
 PRI_ASM="Pogonus_T2T.asm.hic.p_ctg.fa"
-ALT_ASM="Pogonus_T2T.asm.hic.a_ctg.fa"
 PB_READS="pacbio/GC157810.fasta"
 CPUs=36
 
@@ -49,36 +48,5 @@ get_seqs -e dups_primary.bed $PRI_ASM
 # This creates:
 # - purged.fa (purged primary contigs)
 # - hap.fa (candidate haplotigs from primary)
-
-# Step 4: Merge hap.fa with alternative assembly
-cat hap.fa $ALT_ASM > merged_hap.fa
-
-# ---------- STAGE 2: Refine merged haplotigs ----------
-echo "### STAGE 2: Purge_dups on merged haplotigs ###"
-
-# Step 1a: Align PacBio reads
-minimap2 -t $CPUs -xasm20 merged_hap.fa $PB_READS | gzip -c - > merged_hap.paf.gz
-
-# Step 1b: Compute stats
-pbcstat merged_hap.paf.gz
-
-# Step 1c: Calculate cutoffs
-calcuts PB.stat > cutoffs_merged 2> calcuts_merged.log
-
-# Step 1d: Split merged hap assembly
-split_fa merged_hap.fa > merged_hap.fa.split
-
-# Step 1e: Self-alignment
-minimap2 -t $CPUs -xasm5 -DP merged_hap.fa.split merged_hap.fa.split | gzip -c - > merged_hap.fa.split.self.paf.gz
-
-# Step 2: Purge again
-purge_dups -2 -T cutoffs_merged -c PB.base.cov merged_hap.fa.split.self.paf.gz > dups_merged.bed 2> purge_dups_merged.log
-
-# Step 3: Extract final haplotigs
-get_seqs -e dups_merged.bed merged_hap.fa
-
-# Rename output for clarity
-mv purged.fa purged_merged.fa
-mv hap.fa hap_merged.fa
 
 echo "### DONE: Final haplotig assembly is in purged_merged.fa ###"
