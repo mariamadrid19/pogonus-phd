@@ -19,8 +19,8 @@ conda activate omnic
 
 # VARIABLES
 CORES=36
-REF='./purged_merged.fa'
-GENOME_FILE='./purged_merged.fa.genome'
+REF='./purged.fa'
+GENOME_FILE='./purged.fa.genome'
 FAI_FILE="${REF}.fai"
 TMPDIR='./tmpdir'
 R1='./omnic/TTCCAAGG-CCTTGTAG_R1.fastq.gz'
