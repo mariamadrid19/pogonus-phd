@@ -47,5 +47,8 @@ purge_dups -2 -T cutoffs_primary -c PB.base.cov ${PRI_ASM}.split.self.paf.gz > d
 get_seqs -e dups_primary.bed $PRI_ASM
 
 # ---------- STAGE 2: Check completeness ----------
+echo "### STAGE 2: Check completeness ###"
+
+# Step 1: Run minibusco (compleasm) on primary and purged assemblies
 compleasm.py run -a $PRI_ASM -o busco-results/ -l coleoptera -t 32
 compleasm.py run -a purged.fa -o busco-results-purged/ -l coleoptera -t 32
