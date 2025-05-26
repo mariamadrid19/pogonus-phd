@@ -3,7 +3,7 @@
 #SBATCH --job-name map_contigs
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=36
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH -o map_contigs.%j.out
 #SBATCH -A lp_svbelleghem
 
@@ -42,8 +42,7 @@ CPU=36
 
 #load modules
 module load picard/2.18.23-Java-1.8.0_171 #to run picard, use java -jar $EBROOTPICARD/picard.jar
-module load SAMtools/0.1.20-GCC-12.3.0
-module load BWA/0.7.17-GCC-10.3.0
+conda activate thesis
 
 echo "### Step 0: Check output directories' existence & create them as needed"
 [ -d $RAW_DIR ] || mkdir -p $RAW_DIR
@@ -52,8 +51,6 @@ echo "### Step 0: Check output directories' existence & create them as needed"
 [ -d $PAIR_DIR ] || mkdir -p $PAIR_DIR
 [ -d $REP_DIR ] || mkdir -p $REP_DIR
 [ -d $MERGE_DIR ] || mkdir -p $MERGE_DIR
-
-set -euo pipefail # will kill the job if something goes wrong
 
 echo "### Step 0: Index reference" # Run only once! Skip this step if you have already generated BWA index files
 if [ ! -e "${PREFIX}.bwt" ]; then
