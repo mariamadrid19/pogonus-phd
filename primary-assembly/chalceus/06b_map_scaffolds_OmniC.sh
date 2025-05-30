@@ -31,9 +31,30 @@ BAM='mapped.PT.bam'
 
 # STEP 0: Index reference and prepare genome file
 echo "### Step 0: Indexing reference"
-samtools faidx $REF
-cut -f1,2 $FAI_FILE > $GENOME_FILE
-bwa index $REF
+
+# Check and create FASTA index (.fai)
+if [ -f "$FAI_FILE" ]; then
+    echo "FASTA index $FAI_FILE already exists. Skipping samtools faidx."
+else
+    echo "Creating FASTA index with samtools faidx..."
+    samtools faidx "$REF"
+fi
+
+# Check and create genome file
+if [ -f "$GENOME_FILE" ]; then
+    echo "Genome file $GENOME_FILE already exists. Skipping cut."
+else
+    echo "Generating genome file..."
+    cut -f1,2 "$FAI_FILE" > "$GENOME_FILE"
+fi
+
+# Check if BWA index exists (BWA creates several index files with various extensions)
+if [ -f "${REF}.bwt" ]; then
+    echo "BWA index files already exist. Skipping bwa index."
+else
+    echo "Creating BWA index..."
+    bwa index "$REF"
+fi
 
 # Create temp directory if needed
 [ -d $TMPDIR ] || mkdir -p $TMPDIR
