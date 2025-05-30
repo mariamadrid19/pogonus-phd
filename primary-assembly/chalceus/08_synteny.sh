@@ -17,9 +17,9 @@ ntSynt 11_old_ref.fa 20_P_chalceus_REF1.fa  -p P_chal_SW -t 36 -d 30
 
 python denovo_synteny_block_stats.py --tsv P_chal_SW.synteny_blocks.tsv --fai 11_old_ref.fa.fai 20_P_chalceus_REF1.fa.fai
 
-python sort_ntsynt_blocks.py --synteny_blocks P_chal_SW.synteny_blocks.tsv --sort_order 11_old_ref.fasta.fai 20_P_chalceus_REF1.fa.fai --fais > P_chal_SW.synteny_blocks.sorted.tsv
+python sort_ntsynt_blocks.py --synteny_blocks P_chal_SW.synteny_blocks.tsv --sort_order 11_old_ref.fa.fai 20_P_chalceus_REF1.fa.fai --fais > P_chal_SW.synteny_blocks.sorted.tsv
 
-python format_blocks_gggenomes.py --fai 11_old_ref.fasta.fai 20_P_chalceus_REF1.fa.fai --prefix P_chal_SW --blocks P_chal_SW.synteny_blocks.sorted.tsv --length 100 --colour 11_old_ref.fa
+python format_blocks_gggenomes.py --fai 11_old_ref.fa.fai 20_P_chalceus_REF1.fa.fai --prefix P_chal_SW --blocks P_chal_SW.synteny_blocks.sorted.tsv --length 100 --colour 11_old_ref.fa
 
 cp P_chal_SW.links.tsv $VSC_DATA
 cp P_chal_SW.sequence_lengths.tsv $VSC_DATA
