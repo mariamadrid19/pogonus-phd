@@ -10,19 +10,41 @@
 
 awk '/^>/ { if (count++ >= 20) exit } { print }' P_chalceus_REF1_sorted.fa  > 20_P_chalceus_REF1.fa 
 
-#We can then study the synteny between them 
+# variables
+REFERENCE=20_P_chalceus_REF1.fa
+SCAFFOLDS=11_ragtag.scaffold.sorted.fa
+PREFIX=P_chal_SW_RagTag
+
+# index files
+REFERENCE_FAI=${REFERENCE}.fai
+SCAFFOLDS_FAI=${SCAFFOLDS}.fai
+
+# Activate environment
 conda activate ntsynt
 
-ntSynt 11_old_ref.fa 20_P_chalceus_REF1.fa  -p P_chal_SW -t 36 -d 30
+# Step 1: Run ntSynt
+ntSynt $REFERENCE $SCAFFOLDS -p $PREFIX -t 36 -d 30
 
-python denovo_synteny_block_stats.py --tsv P_chal_SW.synteny_blocks.tsv --fai 11_old_ref.fa.fai 20_P_chalceus_REF1.fa.fai
+# Step 2: Block statistics
+python denovo_synteny_block_stats.py --tsv $PREFIX.synteny_blocks.tsv --fai $REFERENCE_FAI $SCAFFOLDS_FAI
 
-python sort_ntsynt_blocks.py --synteny_blocks P_chal_SW.synteny_blocks.tsv --sort_order 11_old_ref.fa.fai 20_P_chalceus_REF1.fa.fai --fais > P_chal_SW.synteny_blocks.sorted.tsv
+# Step 3: Sort blocks
+python sort_ntsynt_blocks.py \
+  --synteny_blocks $PREFIX.synteny_blocks.tsv \
+  --sort_order $REFERENCE_FAI $SCAFFOLDS_FAI --fais > $PREFIX.synteny_blocks.sorted.tsv
 
-python format_blocks_gggenomes.py --fai 11_old_ref.fa.fai 20_P_chalceus_REF1.fa.fai --prefix P_chal_SW --blocks P_chal_SW.synteny_blocks.sorted.tsv --length 100 --colour 11_old_ref.fa
+# Step 4: Format for gggenomes
+python format_blocks_gggenomes.py \
+  --fai $REFERENCE_FAI $SCAFFOLDS_FAI \
+  --prefix $PREFIX \
+  --blocks $PREFIX.synteny_blocks.sorted.tsv \
+  --length 100 \
+  --colour $REFERENCE
 
-cp P_chal_SW.links.tsv $VSC_DATA
-cp P_chal_SW.sequence_lengths.tsv $VSC_DATA
+# Step 5: Copy results to VSC
+cp $PREFIX.links.tsv $VSC_DATA
+cp $PREFIX.sequence_lengths.tsv $VSC_DATA
 
-# to run it locally 
+
+# to run locally 
 # Rscript plot_synteny_blocks_gggenomes.R -s P_chal_SW.sequence_lengths.tsv -l P_chal_SW.links.tsv --scale 25000000 --p P_chal_SW
