@@ -57,16 +57,11 @@ echo "### Step 0: Check output directories' existence & create them as needed"
 [ -d $REP_DIR ] || mkdir -p $REP_DIR
 [ -d $MERGE_DIR ] || mkdir -p $MERGE_DIR
 
-echo "### Step 0: Index reference" # Run only once! Skip this step if you have already generated BWA index files
-bwa index -a bwtsw -p $PREFIX $REF
-
-#debugged using strace bwa mem -t $CPU $REF $IN_DIR/${SRA}_R1.fastq
-#error was coming from a wrongly named file (was .bwt should've been .fa.bwt)
 echo "### Step 1.A: FASTQ to BAM (1st)"
-bwa mem -t $CPU $REF $IN_DIR/${SRA}_R1.fastq | samtools view -@ $CPU -Sb - > $RAW_DIR/${SRA}_1.bam
+bwa mem -5SP -t $CPU $REF ${SRA}_R1.fastq | samtools view -bS - > $RAW_DIR/${SRA}_1.bam
 
 echo "### Step 1.B: FASTQ to BAM (2nd)"
-bwa mem -t $CPU $REF $IN_DIR/${SRA}_R2.fastq | samtools view -@ $CPU -Sb - > $RAW_DIR/${SRA}_2.bam
+bwa mem -5SP -t $CPU $REF ${SRA}_R2.fastq | samtools view -bS - > $RAW_DIR/${SRA}_2.bam
 
 echo "### Step 2.A: Filter 5' end (1st)"
 samtools view -h $RAW_DIR/${SRA}_1.bam | perl $FILTER | samtools view -Sb - > $FILT_DIR/${SRA}_1.bam
@@ -81,7 +76,9 @@ echo "### Step 3.B: Add read group"
 java -Xmx4G -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar AddOrReplaceReadGroups INPUT=$TMP_DIR/$SRA.bam OUTPUT=$PAIR_DIR/$SRA.bam ID=$SRA LB=$SRA SM=$LABEL PL=PACBIO PU=none
 
 echo "### Step 4: Mark duplicates"
-java -Xmx30G -XX:-UseGCOverheadLimit -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar MarkDuplicates INPUT=$PAIR_DIR/$SRA.bam OUTPUT=$REP_DIR/$REP_LABEL.bam METRICS_FILE=$REP_DIR/metrics.$REP_LABEL.txt TMP_DIR=$TMP_DIR ASSUME_SORTED=TRUE VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=TRUE
+java -Xmx30G -XX:-UseGCOverheadLimit -Djava.io.tmpdir=temp/ -jar $EBROOTPICARD/picard.jar MarkDuplicates \
+INPUT=$PAIR_DIR/$SRA.bam OUTPUT=$REP_DIR/$REP_LABEL.bam METRICS_FILE=$REP_DIR/metrics.$REP_LABEL.txt \
+TMP_DIR=$TMP_DIR ASSUME_SORTED=TRUE VALIDATION_STRINGENCY=LENIENT REMOVE_DUPLICATES=TRUE
 
 samtools index $REP_DIR/$REP_LABEL.bam
 
