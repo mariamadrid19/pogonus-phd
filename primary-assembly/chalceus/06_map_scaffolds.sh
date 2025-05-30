@@ -23,8 +23,7 @@
 ##########################################
 
 SRA='TTCCAAGG-CCTTGTAG'
-LABEL='Pogonus_chalceus_map_scaffolds'
-IN_DIR='/scratch/leuven/357/vsc35707/chalceus/OmniC-mapping'
+LABEL='P_chalceus_map_scaffolds'
 REF='/scratch/leuven/357/vsc35707/chalceus/OmniC-mapping/P_chalceus_REF1.fa'
 FAIDX='P_chalceus_REF1.fa.fai'
 PREFIX='P_chalceus_REF1.fa'
