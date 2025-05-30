@@ -18,8 +18,8 @@ ragtag.py scaffold old_ref.fa P_chalceus_REF1_sorted.fa -t 32 -o REF1_scaffolds
 
 samtools faidx ragtag.scaffold.fasta
 # Count how many of the scaffolds were placed as scaffolds based on the old reference genome (RagTag scaffolds)
-awk '$1 ~ /^CM00/ {sum += $2} END {print sum}' REF1_scaffolds/ragtag.scaffold.fasta.fai
-awk '$1 ~ /_RagTag$/ {sum += $2} END {print sum}' REF1_scaffolds/ragtag.scaffold.fasta.fai
+awk '$1 ~ /^CM00/ {sum += $2} END {print sum}' REF1_scaffolds/ragtag.scaffold.fasta.fai # 357,042,250 bp placed as the main chromosomes
+awk '$1 ~ /_RagTag$/ {sum += $2} END {print sum}' REF1_scaffolds/ragtag.scaffold.fasta.fai # 421,067,932 bp placed in total
 
 # Check completeness with minibusco
 compleasm.py run -a REF1_scaffolds/ragtag.scaffold.fasta -o results_scaffolds/ -l coleoptera -t 72
