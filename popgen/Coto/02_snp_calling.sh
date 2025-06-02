@@ -20,7 +20,7 @@ source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate vcftools
 
 # Reference and index
-REFNAME=P_chalceus_REF1
+REFNAME=REF1
 REF=/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa
 FAI=${REF}.fai
 
