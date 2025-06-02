@@ -33,6 +33,9 @@ BWAout=/scratch/leuven/357/vsc35707/popgen/bams
 FILE1=/scratch/leuven/357/vsc35707/popgen/$(echo "${samples[ID]}")_R1.fq.gz
 FILE2=/scratch/leuven/357/vsc35707/popgen/$(echo "${samples[ID]}")_R2.fq.gz
 
+# Check the directory exists
+mkdir -p $BWAout
+
 # Map reads using bwa mem
 bwa mem -t 20 -M $REF $FILE1 $FILE2 | samtools view -bS - > $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
 
