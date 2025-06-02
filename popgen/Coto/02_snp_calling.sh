@@ -55,7 +55,7 @@ bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$CHR" | bcftools call 
 vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout | bgzip > "${VCF_CALL}.filt.bi.vcf.gz"
 
 # Parsing VCF with filtering rules
-python parseVCF.py \
+/data/leuven/357/vsc35707/miniconda3/bin/python3.11 parseVCF.py \
   --gtf flag=GQ   min=30   gtTypes=Het \
   --gtf flag=GQ   min=30   gtTypes=HomAlt \
   --gtf flag=DP   min=10 \
