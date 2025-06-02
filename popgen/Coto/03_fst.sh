@@ -8,7 +8,7 @@
 #SBATCH -o Spain_fst.%j.out
 #SBATCH --array=1-263
 
-REFNAME=P_chalceus_REF1
+REFNAME=REF1
 chrom=$SLURM_ARRAY_TASK_ID  # Assign chromosome number based on job array ID
 
 echo "================="
