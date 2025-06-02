@@ -30,8 +30,8 @@ echo "${samples[ID]}"
 REF=/scratch/leuven/357/vsc35707/popgen/P_chalceus_REF1.fa
 REFNAME=P_chalceus_REF1
 BWAout=/scratch/leuven/357/vsc35707/popgen/bams
-FILE1=/scratch/leuven/357/vsc35707/popgen/$(echo "${samples[ID]}")_R1.fq.gz
-FILE2=/scratch/leuven/357/vsc35707/popgen/$(echo "${samples[ID]}")_R2.fq.gz
+FILE1=/scratch/leuven/357/vsc35707/popgen/$(echo "${samples[ID]}")_R1.fastq.gz
+FILE2=/scratch/leuven/357/vsc35707/popgen/$(echo "${samples[ID]}")_R2.fastq.gz
 
 # Check the directory exists
 mkdir -p $BWAout
