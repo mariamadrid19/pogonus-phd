@@ -51,10 +51,10 @@ fi
 # Variant calling
 bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$CHR" | bcftools call -m -Oz -o ${OUTBASE}.vcf.gz
 
-# Filtering VCF
-vcftools --gzvcf ${OUTBASE}.vcf.gz --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout | bgzip > ${OUTBASE}.filtered.vcf.gz
+# Filtering with vcftools
+vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout | bgzip > "${VCF_CALL}.filt.bi.vcf.gz"
 
-# Parse VCF with filtering rules
+# Parsing VCF with filtering rules
 python parseVCF.py \
   --gtf flag=GQ   min=30   gtTypes=Het \
   --gtf flag=GQ   min=30   gtTypes=HomAlt \
@@ -63,7 +63,7 @@ python parseVCF.py \
   -i "${VCF_CALL}.filt.bi.vcf.gz" \
   | gzip > "${VCF_CALL}.calls.filt.bi.vcf.gz"
 
-# Strip BAM suffix from SNP IDs
+# Striping BAM suffix from SNP IDs
 CALLS_H="Pogonus_${REFNAME}_chr_${CHRNAME}.H.calls"
 zcat "${VCF_CALL}.calls.filt.bi.vcf.gz" | sed 's/\.filtered\.sorted\.nd\.bam//g' | bgzip -c > "${CALLS_H}.gz"
 
