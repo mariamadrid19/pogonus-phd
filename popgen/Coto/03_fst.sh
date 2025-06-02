@@ -16,12 +16,13 @@ echo "Processing chromosome $chrom"
 
 pop1=LW
 pop2=SW
+POPSFILE=popfile.txt
 
 /data/leuven/357/vsc35707/miniconda3/bin/python popgenWindows_egglib.py -w 50000 -s 50000 --minSites 1000 --maxMissing 0.25 \
 -T 10 --windType coordinate -f phased \
 -g Pogonus_$REFNAME.chr_$chrom.H.calls.gz \
---popsFile Pogonus_pops.txt \
--o Pogonus_$REFNAME.chr_$chrom.stats_${pop1}_${pop2}.stats \
+--popsFile $POPSFILE \
+-o Pogonus_$REFNAME.chr_$chrom.stats \
 -p $pop1 \
 -p $pop2 \
 -eggB FstWC
