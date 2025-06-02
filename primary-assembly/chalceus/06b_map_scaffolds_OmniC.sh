@@ -101,7 +101,7 @@ java -Xmx32G -Djava.io.tmpdir=$TMPDIR -jar $EBROOTPICARD/picard.jar MarkDuplicat
   TMP_DIR=$TMPDIR \
   ASSUME_SORTED=true \
   VALIDATION_STRINGENCY=LENIENT \
-  REMOVE_DUPLICATES=true
+  REMOVE_DUPLICATES=false
 
 samtools index $PICARD_OUT
 
