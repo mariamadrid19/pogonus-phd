@@ -1,11 +1,11 @@
 #!/bin/bash -l 
 #SBATCH --cluster=genius 
-#SBATCH --job-name=barbate_fst
+#SBATCH --job-name=Spain_fst
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=20 
 #SBATCH --time=12:00:00 
 #SBATCH -A lp_svbelleghem
-#SBATCH -o barbate_fst.%j.out
+#SBATCH -o Spain_fst.%j.out
 #SBATCH --array=1-263
 
 REFNAME=P_chalceus_REF1
