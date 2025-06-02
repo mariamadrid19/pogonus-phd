@@ -14,7 +14,10 @@ ID=$((SLURM_ARRAY_TASK_ID -1))
 # Load the programs we will use
 module load BWA/0.7.17-foss-2018a
 module load SAMtools/1.9-GCC-6.4.0-2.28
-module load picard/2.18.23-Java-1.8.0_171
+module load Java/21.0.2 
+# this is to run picard (.jar version)
+PICARD=/data/leuven/357/vsc35707/picard.jar
+# This is where picard is installed
 
 echo "================="
 
@@ -40,7 +43,7 @@ samtools view -f 0x02 -q 20 -b $BWAout/$(echo "${samples[ID]}").$REFNAME.bam > $
 samtools sort $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam -o $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam
 
 # Remove PCR duplicates
-java -jar $EBROOTPICARD/picard.jar MarkDuplicates -INPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam -OUTPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.dedup.bam -REMOVE_DUPLICATES true -METRICS_FILE $BWAout/$(echo "${samples[ID]}").$REFNAME.dup_metrics.txt -ASSUME_SORTED true
+java -jar $PICARD MarkDuplicates -INPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam -OUTPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.dedup.bam -REMOVE_DUPLICATES true -METRICS_FILE $BWAout/$(echo "${samples[ID]}").$REFNAME.dup_metrics.txt -ASSUME_SORTED true
 
 # Remove intermediate files
 rm $BWAout/$(echo "${samples[ID]}").$REFNAME.bam
