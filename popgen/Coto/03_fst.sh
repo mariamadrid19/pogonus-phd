@@ -9,10 +9,10 @@
 #SBATCH --array=1-263
 
 REFNAME=REF1
-chrom=$SLURM_ARRAY_TASK_ID  # Assign chromosome number based on job array ID
+scaffold=$SLURM_ARRAY_TASK_ID  # Assign scaffold number based on job array ID
 
 echo "================="
-echo "Processing chromosome $chrom"
+echo "Processing scaffold $scaffold"
 
 pop1=LW
 pop2=SW
@@ -20,9 +20,11 @@ POPSFILE=popfile.txt
 
 /data/leuven/357/vsc35707/miniconda3/bin/python popgenWindows_egglib.py -w 50000 -s 50000 --minSites 1000 --maxMissing 0.25 \
 -T 10 --windType coordinate -f phased \
--g Pogonus_$REFNAME.chr_$chrom.H.calls.gz \
+-g Pogonus_$REFNAME.chr_$scaffold.H.calls.gz \
 --popsFile $POPSFILE \
--o Pogonus_$REFNAME.chr_$chrom.stats \
+-o Pogonus_$REFNAME.chr_$scaffold.stats \
 -p $pop1 \
 -p $pop2 \
 -eggB FstWC
+
+echo "Done processing scaffold $scaffold"
