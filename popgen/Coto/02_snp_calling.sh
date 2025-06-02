@@ -19,10 +19,10 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate vcftools
 
-# Define reference
-REFNAME="P_chalceus_REF1"
-REF="/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa"
-FAI="${REF}.fai"
+# Define reference genome and index files
+REFNAME=P_chalceus_REF1
+REF=/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa
+FAI=${REF}.fai
 
 # Get scaffold name
 readarray -t scaffolds < <(cut -f1 "$FAI")
