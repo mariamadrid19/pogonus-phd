@@ -10,6 +10,6 @@
 conda activate thesis
 
 # this uses the final bam file produced by the second mapping (to the scaffolded assembly) to produce a PRETEXT map that will be visualized in PretextView
-samtools view -h mapped.marked.bam | PretextMap -o P_chalceus_REF1.pretext --sortby length --mapq 10 --highRes
+samtools view -h mapped.PT.bam | PretextMap -o P_chalceus_REF1.pretext --sortby length --mapq 10 --highRes
 
 cp P_chalceus_REF1.pretext $VSC_DATA
