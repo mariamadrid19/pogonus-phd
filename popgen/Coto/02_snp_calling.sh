@@ -8,7 +8,7 @@
 #SBATCH -o spain_snps.%j.out
 #SBATCH --array=1-263
 
-# Index starts at 0
+# Index starts at 0 for array
 ID=$((SLURM_ARRAY_TASK_ID - 1))
 
 # Load required modules
@@ -19,35 +19,36 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate vcftools
 
-# Define reference genome and index files
+# Reference and index
 REFNAME=P_chalceus_REF1
 REF=/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa
 FAI=${REF}.fai
 
-# Get scaffold name
+# Get scaffold name and numeric identifier
 readarray -t scaffolds < <(cut -f1 "$FAI")
-CHRNAME="${scaffolds[$ID]}"
+SCAFNAME="${scaffolds[$ID]}"
+CHRNAME=$SLURM_ARRAY_TASK_ID
+
+# Safety check
+if [[ -z "$SCAFNAME" ]]; then
+    echo "Error: empty scaffold name at index $ID"
+    exit 1
+fi
 
 # Sample IDs
 samples=(GC136107 GC136108 GC136109 GC136110 GC136111 GC136112 GC136113 GC136114 GC136115 GC136116)
 
-# Build BAM file list
+# Build BAM list
 ALL_LIST=""
 for SAMPLE in "${samples[@]}"; do
-    ALL_LIST+=" $SAMPLE.${REFNAME}.filtered.sorted.nd.bam"
+    ALL_LIST+=" $SAMPLE.${REFNAME}.filtered.sorted.dedup.bam"
 done
 
 # Output VCF stem
 VCF_CALL="Pogonus_${REFNAME}.${CHRNAME}"
 
-# Safety check
-if [[ -z "$CHRNAME" ]]; then
-    echo "Error: empty scaffold name at index $ID"
-    exit 1
-fi
-
-# Call variants with bcftools mpileup
-bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$CHRNAME" \
+# Call variants with bcftools
+bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$SCAFNAME" \
     | bcftools call -m -Oz -o "${VCF_CALL}.vcf.gz"
 
 # Filter with vcftools
@@ -69,4 +70,4 @@ zcat "${VCF_CALL}.calls.filt.bi.vcf.gz" \
     | sed 's/\.filtered\.sorted\.nd\.bam//g' \
     | bgzip -c > "${CALLS_H}.gz"
 
-echo "Done chr ${CHRNAME}."
+echo "Done chr ${CHRNAME} (${SCAFNAME})."
