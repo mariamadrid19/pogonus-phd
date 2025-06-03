@@ -11,7 +11,7 @@ mkdir -p nr
 cd nr/
 
 # Download files from nr.000.tar.gz to nr.118.tar.gz along with their .md5 files
-for i in $(seq -w 0 118); do
+for i in $(seq -w 0 120); do
     wget "https://ftp.ncbi.nlm.nih.gov/blast/db/nr.$i.tar.gz"
     wget "https://ftp.ncbi.nlm.nih.gov/blast/db/nr.$i.tar.gz.md5"
 done
