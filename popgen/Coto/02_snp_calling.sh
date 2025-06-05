@@ -62,9 +62,9 @@ vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --stdout | bgzip 
 
 # Step 3: Parse VCF with custom script
 python parseVCF.py \
-  --gtf flag=GQ   min=30   gtTypes=Het \
-  --gtf flag=GQ   min=30   gtTypes=HomAlt \
-  --gtf flag=DP   min=10 \
+  --gtf flag=GQ   min=10   gtTypes=Het \
+  --gtf flag=GQ   min=10   gtTypes=HomAlt \
+  --gtf flag=DP   min=5 \
   --skipIndels \
   -i "${VCF_CALL}.filt.bi.vcf.gz" \
   | gzip > "${VCF_CALL}.calls.filt.bi.vcf.gz"
