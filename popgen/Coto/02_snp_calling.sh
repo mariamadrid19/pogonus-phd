@@ -26,7 +26,8 @@ FAI="${REF}.fai"
 
 # Output directories
 CALLS_DIR="calls_H"
-mkdir -p "$CALLS_DIR"
+VCF_DIR="vcfs_H"
+mkdir -p "$CALLS_DIR" "$VCF_DIR"
 
 # Get scaffold name from .fai
 readarray -t scaffolds < <(cut -f1 "$FAI")
@@ -42,7 +43,7 @@ for SAMPLE in "${samples[@]}"; do
 done
 
 # Output VCF stem
-VCF_CALL="Pogonus_${REFNAME}.${CHRNAME}"
+VCF_CALL="${VCF_DIR}/Pogonus_${REFNAME}.${CHRNAME}"
 
 # Exit early if scaffold name is empty
 if [[ -z "$CHRNAME" ]]; then
@@ -50,9 +51,12 @@ if [[ -z "$CHRNAME" ]]; then
     exit 1
 fi
 
-# Step 1: Call variants
+# Step 1: Call variants with FORMAT annotations
 bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$CHRNAME" \
-    | bcftools call -m -Oz -o "${VCF_CALL}.vcf.gz"
+  | bcftools call -m -Oz --annotate FORMAT/DP,FORMAT/GQ -o "${VCF_CALL}.vcf.gz"
+
+# Index VCF
+bcftools index "${VCF_CALL}.vcf.gz"
 
 # Step 2: Filter with vcftools
 vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout \
@@ -60,8 +64,8 @@ vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --minQ 30 --max-m
 
 # Step 3: Parse VCF with custom script
 python parseVCF.py \
-  --gtf flag=GQ   min=30   gtTypes=Het \
-  --gtf flag=GQ   min=30   gtTypes=HomAlt \
+  --gtf flag=GQ   min=10   gtTypes=Het \
+  --gtf flag=GQ   min=10   gtTypes=HomAlt \
   --gtf flag=DP   min=10 \
   --skipIndels \
   -i "${VCF_CALL}.filt.bi.vcf.gz" \
