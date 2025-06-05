@@ -25,6 +25,6 @@ POPSFILE=popfile.txt
 -o Pogonus_$REFNAME.chr_$scaffold.stats \
 -p $pop1 \
 -p $pop2 \
--eggB FstWC
+-eggB FstWC,Dxy -eggW Pi,D
 
 echo "Done processing scaffold $scaffold"
