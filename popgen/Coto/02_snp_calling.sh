@@ -55,15 +55,15 @@ fi
 bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions "$CHRNAME" $ALL_LIST --annotate FORMAT/DP | bcftools call --multiallelic-caller -Oz -f GQ -o "${VCF_CALL}.vcf.gz"
 
 # Step 2: Convert multiallelic SNPs into biallelic
-bcftools norm -m -any -o "$VCF_CALL.bi.vcf.gz" -Oz "$VCF_CALL.vcf.gz" --threads 20
+bcftools norm -m -any -o "$VCF_CALL.bi.vcf.gz" -Oz "$VCF_CALL.vcf.gz" --threads 36
 
 # Step 3: Filter with vcftools
 vcftools --gzvcf "$VCF_CALL.bi.vcf.gz" --recode --remove-indels --stdout | bgzip > "${VCF_CALL}.filtered.vcf.gz"
 
 # Step 4: Parse VCF with custom script
 python parseVCF.py \
-  --gtf flag=GQ   min=20   gtTypes=Het \
-  --gtf flag=GQ   min=20   gtTypes=HomAlt \
+  --gtf flag=GQ   min=30   gtTypes=Het \
+  --gtf flag=GQ   min=30   gtTypes=HomAlt \
   --gtf flag=DP   min=10 \
   --skipIndels \
   -i "${VCF_CALL}.filtered.vcf.gz" \
@@ -71,8 +71,15 @@ python parseVCF.py \
 
 # Step 5: Strip BAM suffix from SNP IDs and save in calls_H/
 CALLS_H="${CALLS_DIR}/${VCF_CALL}.H.calls.gz"
-zcat "${VCF_CALL}.calls.gz" \
-    | sed 's/\.filtered\.sorted\.dedup\.bam//g' \
-    | bgzip -c > "$CALLS_H"
+zcat  "${VCF_CALL}.calls.gz" \
+| awk 'BEGIN{OFS="\t"} 
+       NR==1 {
+         for (i=3; i<=NF; i++) {
+           sub(/^.*\//, "", $i);
+           sub(/\.P_chalceus_REF1\.filtered\.sorted\.dedup\.bam$/, "", $i);
+         }
+       } 
+       { print }' \
+| bgzip -c > "$CALLS_H"
 
 echo "Done chr ${CHRNAME}."
