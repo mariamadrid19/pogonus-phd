@@ -67,11 +67,11 @@ python parseVCF.py \
   --gtf flag=DP   min=10 \
   --skipIndels \
   -i "${VCF_CALL}.filt.bi.vcf.gz" \
-  | gzip > "${VCF_CALL}.calls.filt.bi.vcf.gz"
+  | gzip > "${VCF_CALL}.calls.gz"
 
 # Step 4: Strip BAM suffix from SNP IDs and save in calls_H/
 CALLS_H="${CALLS_DIR}/Pogonus_${REFNAME}_chr_${CHRNAME}.H.calls.gz"
-zcat "${VCF_CALL}.calls.filt.bi.vcf.gz" \
+zcat "${VCF_CALL}.calls.gz" \
     | sed 's/\.filtered\.sorted\.dedup\.bam//g' \
     | bgzip -c > "$CALLS_H"
 
