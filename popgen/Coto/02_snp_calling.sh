@@ -52,35 +52,27 @@ if [[ -z "$CHRNAME" ]]; then
 fi
 
 # Step 1: Call variants with FORMAT annotations
-bcftools mpileup -Oz --threads 36 -f "$REF" $ALL_LIST -r "$CHRNAME" -a FORMAT/DP | bcftools call --multiallelic-caller -Oz -f GQ -o "${VCF_CALL}.vcf.gz"
+bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions "$CHRNAME" $ALL_LIST --annotate FORMAT/DP | bcftools call --multiallelic-caller -Oz -f GQ -o "${VCF_CALL}.vcf.gz"
 
-# Index VCF
-bcftools index "${VCF_CALL}.vcf.gz"
+# Step 2: Convert multiallelic SNPs into biallelic
+bcftools norm -m -any -o "$VCF_CALL.bi.vcf.gz" -Oz "$VCF_CALL.vcf.gz" --threads 20
 
-# Step 2: Filter with vcftools
-vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --stdout | bgzip > "${VCF_CALL}.filt.bi.vcf.gz"
+# Step 3: Filter with vcftools
+vcftools --gzvcf "$VCF_CALL.bi.vcf.gz" --recode --remove-indels --stdout | bgzip > "${VCF_CALL}.filtered.vcf.gz"
 
-# Step 3: Parse VCF with custom script
+# Step 4: Parse VCF with custom script
 python parseVCF.py \
   --gtf flag=GQ   min=20   gtTypes=Het \
   --gtf flag=GQ   min=20   gtTypes=HomAlt \
   --gtf flag=DP   min=10 \
   --skipIndels \
-  -i "${VCF_CALL}.filt.bi.vcf.gz" \
+  -i "${VCF_CALL}.filtered.vcf.gz" \
   | gzip > "${VCF_CALL}.calls.gz"
 
-# Step 4: Strip BAM suffix from SNP IDs and save in calls_H/
-CALLS_H="${CALLS_DIR}/Pogonus_${REFNAME}_chr_${CHRNAME}.H.calls.gz"
+# Step 5: Strip BAM suffix from SNP IDs and save in calls_H/
+CALLS_H="${CALLS_DIR}/${VCF_CALL}.H.calls.gz"
 zcat "${VCF_CALL}.calls.gz" \
     | sed 's/\.filtered\.sorted\.dedup\.bam//g' \
     | bgzip -c > "$CALLS_H"
-
-# Step 5: Cleanup only if H.calls file is non-empty
-if [[ -s "$CALLS_H" ]]; then
-    echo "Successfully created $CALLS_H - removing intermediate files..."
-    rm -f "${VCF_CALL}.vcf.gz" "${VCF_CALL}.vcf.gz.csi"
-else
-    echo "H.calls file is empty or missing! Skipping cleanup."
-fi
 
 echo "Done chr ${CHRNAME}."
