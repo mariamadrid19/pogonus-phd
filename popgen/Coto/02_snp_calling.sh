@@ -6,56 +6,59 @@
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o spain_snps.%j.out
-#SBATCH --array=1-263
+#SBATCH --array=1-131
 
-# Index starts at 0 for array
+# Index starts at 0
 ID=$((SLURM_ARRAY_TASK_ID - 1))
 
 # Load required modules
-module load SAMtools/0.1.20-GCC-12.3.0
+module load SAMtools/1.16.1-GCC-11.3.0
 module load Python/3.12.3-GCCcore-13.3.0
 module load tabixpp/1.1.0-GCC-10.3.0
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate vcftools
 
-# Reference and index
-REFNAME=REF1
-REF=/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa
-FAI=${REF}.fai
+# Reference files
+REFNAME="P_chalceus_REF1"
+REF="/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa"
+FAI="${REF}.fai"
 
-# Get scaffold name and numeric identifier
+# Output directories
+CALLS_DIR="calls_H"
+mkdir -p "$CALLS_DIR"
+
+# Get scaffold name from .fai
 readarray -t scaffolds < <(cut -f1 "$FAI")
-SCAFNAME="${scaffolds[$ID]}"
-CHRNAME=$SLURM_ARRAY_TASK_ID
-
-# Safety check
-if [[ -z "$SCAFNAME" ]]; then
-    echo "Error: empty scaffold name at index $ID"
-    exit 1
-fi
+CHRNAME="${scaffolds[$ID]}"
 
 # Sample IDs
 samples=(GC136107 GC136108 GC136109 GC136110 GC136111 GC136112 GC136113 GC136114 GC136115 GC136116)
 
-# Build BAM list
+# Build BAM file list from 'bams/' directory
 ALL_LIST=""
 for SAMPLE in "${samples[@]}"; do
-    ALL_LIST+=" $SAMPLE.${REFNAME}.filtered.sorted.dedup.bam"
+    ALL_LIST+=" bams/${SAMPLE}.${REFNAME}.filtered.sorted.dedup.bam"
 done
 
 # Output VCF stem
 VCF_CALL="Pogonus_${REFNAME}.${CHRNAME}"
 
-# Call variants with bcftools
-bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$SCAFNAME" \
+# Exit early if scaffold name is empty
+if [[ -z "$CHRNAME" ]]; then
+    echo "Error: empty scaffold name at index $ID"
+    exit 1
+fi
+
+# Step 1: Call variants
+bcftools mpileup -Oz --threads 20 -f "$REF" $ALL_LIST -r "$CHRNAME" \
     | bcftools call -m -Oz -o "${VCF_CALL}.vcf.gz"
 
-# Filter with vcftools
+# Step 2: Filter with vcftools
 vcftools --gzvcf "${VCF_CALL}.vcf.gz" --recode --remove-indels --minQ 30 --max-missing 0.25 --stdout \
     | bgzip > "${VCF_CALL}.filt.bi.vcf.gz"
 
-# Parse VCF with custom script
+# Step 3: Parse VCF with custom script
 python parseVCF.py \
   --gtf flag=GQ   min=30   gtTypes=Het \
   --gtf flag=GQ   min=30   gtTypes=HomAlt \
@@ -64,10 +67,18 @@ python parseVCF.py \
   -i "${VCF_CALL}.filt.bi.vcf.gz" \
   | gzip > "${VCF_CALL}.calls.filt.bi.vcf.gz"
 
-# Strip BAM suffix from SNP IDs
-CALLS_H="Pogonus_${REFNAME}_chr_${CHRNAME}.H.calls"
+# Step 4: Strip BAM suffix from SNP IDs and save in calls_H/
+CALLS_H="${CALLS_DIR}/Pogonus_${REFNAME}_chr_${CHRNAME}.H.calls.gz"
 zcat "${VCF_CALL}.calls.filt.bi.vcf.gz" \
     | sed 's/\.filtered\.sorted\.nd\.bam//g' \
-    | bgzip -c > "${CALLS_H}.gz"
+    | bgzip -c > "$CALLS_H"
 
-echo "Done chr ${CHRNAME} (${SCAFNAME})."
+# Step 5: Cleanup only if H.calls file is non-empty
+if [[ -s "$CALLS_H" ]]; then
+    echo "Successfully created $CALLS_H — removing intermediate files..."
+    rm -f "${VCF_CALL}.vcf.gz" "${VCF_CALL}.vcf.gz.csi"
+else
+    echo "H.calls file is empty or missing! Skipping cleanup."
+fi
+
+echo "Done chr ${CHRNAME}."
