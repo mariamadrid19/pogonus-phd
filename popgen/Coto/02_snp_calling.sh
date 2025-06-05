@@ -52,7 +52,7 @@ if [[ -z "$CHRNAME" ]]; then
 fi
 
 # Step 1: Call variants with FORMAT annotations
-bcftools mpileup -Oz --threads 36 -f "$REF" $ALL_LIST -r "$CHRNAME" --annotate FORMAT/DP,FORMAT/GQ | bcftools call --multiallelic-caller -Oz -f GQ -o "${VCF_CALL}.vcf.gz"
+bcftools mpileup -Oz --threads 36 -f "$REF" $ALL_LIST -r "$CHRNAME" -a FORMAT/DP | bcftools call --multiallelic-caller -Oz -f GQ -o "${VCF_CALL}.vcf.gz"
 
 # Index VCF
 bcftools index "${VCF_CALL}.vcf.gz"
