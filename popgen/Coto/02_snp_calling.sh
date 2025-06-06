@@ -25,7 +25,7 @@ REF="/scratch/leuven/357/vsc35707/popgen/${REFNAME}.fa"
 FAI="${REF}.fai"
 
 # Output directories
-CALLS_DIR="calls_H"
+CALLS_DIR="final-calls"
 VCF_DIR="vcfs_H"
 mkdir -p "$CALLS_DIR" "$VCF_DIR"
 
@@ -60,6 +60,7 @@ bcftools norm -m -any -o "$VCF_CALL.bi.vcf.gz" -Oz "$VCF_CALL.vcf.gz" --threads 
 # Step 3: Filter with vcftools
 vcftools --gzvcf "$VCF_CALL.bi.vcf.gz" --recode --remove-indels --stdout | bgzip > "${VCF_CALL}.filtered.vcf.gz"
 
+CALLS_FILE="${VCF_CALL}.calls.gz"
 # Step 4: Parse VCF with custom script
 python parseVCF.py \
   --gtf flag=GQ   min=30   gtTypes=Het \
@@ -67,19 +68,21 @@ python parseVCF.py \
   --gtf flag=DP   min=10 \
   --skipIndels \
   -i "${VCF_CALL}.filtered.vcf.gz" \
-  | gzip > "${VCF_CALL}.calls.gz"
+  | gzip > "$CALLS_FILE"
 
-# Step 5: Strip BAM suffix from SNP IDs and save in calls_H/
+# Step 5: Strip BAM suffix from SNP IDs and save in final-calls/
 CALLS_H="${CALLS_DIR}/${VCF_CALL}.H.calls.gz"
-zcat  "${VCF_CALL}.calls.gz" \
-| awk 'BEGIN{OFS="\t"} 
-       NR==1 {
-         for (i=3; i<=NF; i++) {
-           sub(/^.*\//, "", $i);
-           sub(/\.P_chalceus_REF1\.filtered\.sorted\.dedup\.bam$/, "", $i);
-         }
-       } 
-       { print }' \
-| bgzip -c > "$CALLS_H"
+# Fix header and write new H.calls.gz file
+zcat "$CALLS_FILE" | awk -v OFS="\t" '
+NR==1 {
+    for (i = 1; i <= NF; i++) {
+        gsub(/^bams\//, "", $i);
+        gsub(/\.P_chalceus_REF1\.filtered\.sorted\.dedup\.bam$/, "", $i);
+    }
+}
+{ print }
+' | gzip -c > "$CALLS_H"
+
+echo "Header fixed and saved: $OUTPUT_FILE"
 
 echo "Done chr ${CHRNAME}."
