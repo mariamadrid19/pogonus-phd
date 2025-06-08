@@ -15,13 +15,13 @@ cd /scratch/leuven/357/vsc35707/linkage-mapping/lepmap
 # Define directories
 LEPANCHOR="/data/leuven/357/vsc35707/LepAnchor"
 LEPMAP="/data/leuven/357/vsc35707/LepMap3"
-SCAFFOLDS="/scratch/leuven/357/vsc35707/linkage-mapping/genome/P_chalceus_broken.fa"
+GENOME="/scratch/leuven/357/vsc35707/linkage-mapping/genome/P_chalceus_broken.fa"
 
 # Clean map file
 java -cp $LEPANCHOR/bin/ CleanMap map=cleanMap.input > map.clean
 
 # Filter and process map.clean
-awk '($5>=1.0)' map.clean | awk -f $LEPANCHOR/cleanmap.awk | awk -f $LEPANCHOR/joinIntervals.awk P_chalceus_broken.fa.sizes - > map.bed
+awk '($5>=1.0)' map.clean | awk -f $LEPANCHOR/cleanmap.awk | awk -f $LEPANCHOR/joinIntervals.awk $GENOME.sizes - > map.bed
 
 # Create .bed files for each chromosome 
 awk '{fn="chr" $4 ".bed"; print $1"\t"$2"\t"$3 > fn}' map.bed
@@ -48,4 +48,4 @@ for f in chr*.la; do
 done
 
 # Create the final fasta file
-awk -f $LEPANCHOR/makefasta.awk $SCAFFOLDS chr*.agp > final.fasta
+awk -f $LEPANCHOR/makefasta.awk $GENOME chr*.agp > final.fasta
