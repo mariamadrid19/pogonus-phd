@@ -7,7 +7,7 @@
 #SBATCH --mem=16G
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
-#SBATCH -o Spain_map.%j.out
+#SBATCH -o bwa_map.%j.out
 #SBATCH --array=1-80
 
 # Load modules
