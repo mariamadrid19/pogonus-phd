@@ -15,7 +15,7 @@ cd /scratch/leuven/357/vsc35707/linkage-mapping/lepmap
 # Define directories
 LEPANCHOR="/data/leuven/357/vsc35707/LepAnchor"
 LEPMAP="/data/leuven/357/vsc35707/LepMap3"
-SCAFFOLDS="/scratch/leuven/357/vsc35707/linkage-mapping/genome/P_chalceus_broken.f"
+SCAFFOLDS="/scratch/leuven/357/vsc35707/linkage-mapping/genome/P_chalceus_broken.fa"
 
 # Clean map file
 java -cp $LEPANCHOR/bin/ CleanMap map=cleanMap.input > map.clean
