@@ -29,4 +29,4 @@ zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2 data=- lodLi
 paste snps.txt map5.txt|awk '(NR>1)' > cleanMap.input
 
 # Run OrderMakers2 (per chromosome, as assigned by SeparateChromosomes2)
-java -cp /data/leuven/357/vsc35707/LepMap3/bin/ OrderMarkers2 map=map5.txt data=data_f.call chromosome=1 recombination1=0 > order1.txt
+java -cp $LEPMAP/bin OrderMarkers2 map=map5.txt data=data_f.call chromosome=1 recombination1=0 > order1.txt
