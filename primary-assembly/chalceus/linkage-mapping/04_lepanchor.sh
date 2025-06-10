@@ -50,5 +50,13 @@ for f in chr*.la; do
   awk -vlg=$chrnum -f $LEPANCHOR/makeagp_full2.awk $f > chr$chrnum.agp
 done
 
+# Create the final AGP file
+cat chr*.agp > final.agp
+
 # Create the final fasta file
 awk -f $LEPANCHOR/makefasta.awk $GENOME chr*.agp > final.fasta
+
+module load SAMtools/1.16.1-GCC-11.3.0
+
+# Index the fasta file
+samtools faidx final.fasta
