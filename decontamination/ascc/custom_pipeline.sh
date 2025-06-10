@@ -14,6 +14,7 @@
 conda activate decon_env
 module load BLAST+/2.13.0-gompi-2022a
 module load SAMtools/1.16.1-GCC-11.3.0
+module load BEDTools/2.27.1-intel-2018a
 
 cd /scratch/leuven/357/vsc35707/decontamination/
 
