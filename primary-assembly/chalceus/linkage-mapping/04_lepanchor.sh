@@ -9,6 +9,9 @@
 #SBATCH -A lp_svbelleghem
 #SBATCH -o lepanchor.%j.out
 
+# Load Java (needed to run LEPMAP and LEPANCHOR)
+module load Java/21.0.2
+
 # Change to the working directory
 cd /scratch/leuven/357/vsc35707/linkage-mapping/lepmap
 
