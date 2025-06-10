@@ -3,7 +3,7 @@
 #SBATCH --job-name bwa_map
 #SBATCH --nodes=1
 #SBATCH --tasks=1
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=36
 #SBATCH --mem=16G
 #SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
@@ -31,5 +31,5 @@ BAM_OUT="./bam/${SAMPLE}.bam"
 mkdir -p ./bam
 
 # Run BWA MEM, convert to BAM and sort
-bwa mem -t 20 $GENOME $READ1 $READ2 | samtools view -bS | samtools sort -o $BAM_OUT
+bwa mem -t 36 $GENOME $READ1 $READ2 | samtools view -bS | samtools sort -o $BAM_OUT
 samtools index $BAM_OUT
