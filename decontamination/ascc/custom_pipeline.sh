@@ -21,7 +21,7 @@ cd /scratch/leuven/357/vsc35707/decontamination/
 THREADS=36
 ASSEMBLY=purged.fa
 KRAKEN_DB=./kraken2db
-NR_DB=./nr_dmnd
+NR_DB=./nr/nr.dmnd
 TAXDUMP=./taxdump
 OUTPUT=decontam_output_regions
 TARGET_TAXID=235516  # Pogonus chalceus
