@@ -38,8 +38,8 @@ for X in {1..11}; do
 done
 
 # Prepare input for PlaceAndOrientContigs
-for x in {1..11}; do
-  awk -vn=$x '(NR==FNR){map[NR-1]=$0} (NR!=FNR && /^[^#]/){print map[$1],n,$2,$3}' snps.txt order$x.txt > order$x.m.input
+for X in {1..11}; do
+  awk -vn=$X '(NR==FNR){map[NR-1]=$0} (NR!=FNR && /^[^#]/){print map[$1],n,$2,$3}' snps.txt order$X.txt > order$X.m.input
 done
 
 # Run PlaceAndOrientContigs
@@ -48,9 +48,8 @@ for X in {1..11}; do
 done
 
 # Generate .agp files
-for f in chr*.la; do
-  chrnum=$(echo $f | sed 's/[^0-9]//g')
-  awk -vlg=$chrnum -f $LEPANCHOR/makeagp_full2.awk $f > chr$chrnum.agp
+for X in {13,15,1,17,21,22,25,2,28,31,3,4,5,8,9}; do
+  awk -vlg=$X -f $LEPANCHOR/makeagp_full2.awk chr$X.la > chr$X.agp
 done
 
 # Create the final AGP file
