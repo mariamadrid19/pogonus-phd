@@ -28,5 +28,7 @@ zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2 data=- lodLi
 # Run JoinSingles2All
 zcat data_f_t01.call.gz | java -cp $LEPMAP/bin JoinSingles2All map=map6.txt data=- lodLimit=5 iterate=2 >map6js.txt
 
+gzip -d -c data_f_t01.call.gz > data_f_t01.call
+
 # Create the input for CleanMap (for LepAnchor)
 paste snps.txt map6js.txt|awk '(NR>1)' > cleanMap.input
