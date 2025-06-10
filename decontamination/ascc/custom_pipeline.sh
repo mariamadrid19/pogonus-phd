@@ -85,7 +85,7 @@ bedtools maskfasta -fi $ASSEMBLY -bed $OUTPUT/merged_contaminant_regions.bed -fo
 
 # === Step 9: Split masked contigs and remove tiny fragments ===
 seqkit seq -w 0 $OUTPUT/assembly.masked.fasta > $OUTPUT/flat_masked.fasta
-seqkit sliding -s 1 -W 10000 $OUTPUT/flat_masked.fasta | seqkit seq -m 500 > $OUTPUT/assembly.cleaned.fasta
+seqkit sliding -s 1 -W 10000 $OUTPUT/flat_masked.fasta | seqkit seq -m 500 > $OUTPUT/purged.decont.fasta
 
 # === Step 10: Combine all contaminant contig names ===
 cat $OUTPUT/kraken_contaminants.txt $OUTPUT/tiara_contaminants.txt <(cut -f1 $OUTPUT/diamond_contaminants.tsv) | sort | uniq > $OUTPUT/all_contaminant_contigs.txt
@@ -93,7 +93,7 @@ cat $OUTPUT/kraken_contaminants.txt $OUTPUT/tiara_contaminants.txt <(cut -f1 $OU
 # === Step 11: BUSCO with available lineages ===
 LINEAGES=(archaea_odb12 bacteria_odb12 coleoptera_odb12 eukaryota_odb12 fungi_odb12 mammalia_odb12)
 for lineage in "${LINEAGES[@]}"; do
-  compleasm.py run -a $OUTPUT/assembly.cleaned.fasta -o $OUTPUT/busco_${lineage} -l $lineage -t $THREADS
+  compleasm.py run -a $OUTPUT/purged.decont.fasta -o $OUTPUT/busco_${lineage} -l $lineage -t $THREADS
 done
 
 echo "=== Decontamination complete. Cleaned assembly: $OUTPUT/assembly.cleaned.fasta ==="
