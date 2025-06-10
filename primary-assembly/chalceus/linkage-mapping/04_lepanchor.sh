@@ -20,6 +20,9 @@ LEPANCHOR="/data/leuven/357/vsc35707/LepAnchor"
 LEPMAP="/data/leuven/357/vsc35707/LepMap3"
 GENOME="/scratch/leuven/357/vsc35707/linkage-mapping/genome/P_chalceus_broken.fa"
 
+# How many markers per LG?
+cut -f 1 map5.txt|sort -n|uniq -c
+
 # Clean map file
 java -cp $LEPANCHOR/bin/ CleanMap map=cleanMap.input > map.clean
 
