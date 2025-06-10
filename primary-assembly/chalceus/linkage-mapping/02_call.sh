@@ -20,5 +20,5 @@ cd /scratch/leuven/357/vsc35707/linkage-mapping/lepmap
 LEPMAP="/data/leuven/357/vsc35707/LepMap3"
 
 # Run samtools mpileup and calculate posterior genotypes
-samtools mpileup -q 60 -Q 10 -s $(cat sorted_bams.txt) \
+samtools mpileup -q 20 -Q 10 -s $(cat sorted_bams.txt) \
 | java -cp $LEPMAP/bin/ Pileup2Likelihoods mappingFile=mapping.txt minCoverage=10 numLowerCoverage=5 | gzip > post.gz
