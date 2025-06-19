@@ -55,7 +55,7 @@ samtools view -f 0x02 -q 20 -b $BWAout/$(echo "${samples[ID]}").$REFNAME.bam > $
 # Sort using samtools
 samtools sort $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam -o $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam
 
-# Remove PCR duplicates
+# Remove PCR duplicates (only done for WGS or RADseq data, not suitable for ddRAD data)
 java -jar $EBROOTPICARD/picard.jar MarkDuplicates \
 -INPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam \
 -OUTPUT $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.nd.bam \
