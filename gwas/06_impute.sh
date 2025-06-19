@@ -7,6 +7,8 @@
 #SBATCH -A lp_svbelleghem
 #SBATCH -o impute.%j.out
 
+# Imputation is only done when the coverage of your data is not good enough. If our data is good, we try to avoid this step. It introduces a lot of guessing :)
+
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 module load tabix/0.2.6-GCCcore-6.4.0
 # tabix is loaded to use bgzip
