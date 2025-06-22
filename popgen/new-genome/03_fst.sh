@@ -8,9 +8,6 @@
 #SBATCH -o Spain_fst.%A_%a.out
 #SBATCH --array=0-19
 
-# ========== SETUP ==========
-REFNAME=Pchal
-
 # Array ID breakdown
 CHR_INDEX=$((SLURM_ARRAY_TASK_ID / 2 + 1))  # Chromosome 1–10
 PAIR_INDEX=$((SLURM_ARRAY_TASK_ID % 2))     # 0 or 1 for pair 1 or 2
