@@ -28,8 +28,8 @@ CALLS_DIR="final-calls"
 OUTDIR="final-stats"
 mkdir -p "$OUTDIR"
 
-CALLS_FILE="${CALLS_DIR}/Pogonus_${REFNAME}.CHR${CHR_INDEX}.H.calls.gz"
-OUTFILE="${OUTDIR}/Pogonus_${REFNAME}.CHR${CHR_INDEX}.pop${PAIR_INDEX}.stats"
+CALLS_FILE="${CALLS_DIR}/Pchal.chr_${CHR_INDEX}.H.calls.gz"
+OUTFILE="${OUTDIR}/Pchal.chr_${CHR_INDEX}.pop${PAIR_INDEX}.stats"
 
 # Run popgen analysis
 /data/leuven/357/vsc35707/miniconda3/bin/python popgenWindows_egglib.py \
