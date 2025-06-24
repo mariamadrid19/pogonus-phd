@@ -49,16 +49,13 @@ done
 bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions $(echo "${CHR[ID]}") $ALL_LIST --annotate FORMAT/DP \
 | bcftools call --multiallelic-caller -Oz -f GQ -o $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").vcf.gz
 
-# Step 2: Convert multiallelic SNPs into biallelic
-bcftools norm -m -any -o $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").bi.vcf.gz -Oz $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").vcf.gz --threads 36
-
-# Step 3: Filter with vcftools
-vcftools --gzvcf $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").bi.vcf.gz --recode --remove-indels --stdout | bgzip > $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
+# Step 2: Filter with vcftools
+vcftools --gzvcf $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").vcf.gz --recode --remove-indels --stdout | bgzip > $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz
 
 # Step 4: Parse VCF with custom script
 /data/leuven/357/vsc35707/miniconda3/bin/python3.11 parseVCF.py \
-  --gtf flag=GQ min=30 gtTypes=Het \
-  --gtf flag=GQ min=30 gtTypes=HomAlt \
+  --gtf flag=GQ min=10 gtTypes=Het \
+  --gtf flag=GQ min=10 gtTypes=HomAlt \
   --gtf flag=DP min=10 \
   --skipIndels \
   -i $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz \
