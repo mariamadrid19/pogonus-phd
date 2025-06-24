@@ -1,11 +1,11 @@
 #!/bin/bash -l
 #SBATCH --cluster=genius
-#SBATCH --job-name=Spain_fst
+#SBATCH --job-name=fst
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=20
 #SBATCH --time=12:00:00
 #SBATCH -A lp_svbelleghem
-#SBATCH -o Spain_fst.%A_%a.out
+#SBATCH -o fst.%A_%a.out
 #SBATCH --array=0-19
 
 # Array ID breakdown
