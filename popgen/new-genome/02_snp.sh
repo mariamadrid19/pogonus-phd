@@ -13,7 +13,7 @@ ID=$((SLURM_ARRAY_TASK_ID - 1))
 
 # Load required modules
 module load SAMtools/1.16.1-GCC-11.3.0
-module load tabixpp/1.1.0-GCC-10.3.0
+module load HTSlib/1.18-GCC-12.3.0
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate vcftools
