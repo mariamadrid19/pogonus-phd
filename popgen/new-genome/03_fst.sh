@@ -30,7 +30,7 @@ OUTFILE="${OUTDIR}/Pchal.chr_${CHR_INDEX}.pop${PAIR_INDEX}.stats"
 
 # Run popgen analysis
 /data/leuven/357/vsc35707/miniconda3/bin/python popgenWindows_egglib.py \
-    -w 50000 -s 50000 --minSites 1000 --maxMissing 0.25 \
+    -w 25000 -s 12500 --minSites 250 --maxMissing 0.5 --calcMissing \
     -T 10 --windType coordinate -f phased \
     -g "$CALLS_FILE" \
     --popsFile "$POPSFILE" \
