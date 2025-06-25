@@ -176,3 +176,38 @@ ggplot(summary_stats, aes(x = chr3_type, y = mean_relMRWS, group = chr2_type, co
   geom_errorbar(aes(ymin = mean_relMRWS - se, ymax = mean_relMRWS + se), width = 0.2) +
   labs(x = "Chr3 Genotype", y = "Mean Relative MRWS", color = "Chr2 Genotype") +
   theme_minimal()
+
+library(plotly)
+
+plot_ly(
+  data = plot_data,
+  x = ~PC1,
+  y = ~PC2,
+  z = ~PC3,
+  color = ~karyotype,
+  colors = "Set1",  # or another palette
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 4)
+) %>%
+  layout(
+    title = "3D PCA Plot by Karyotype",
+    scene = list(
+      xaxis = list(title = "PC1"),
+      yaxis = list(title = "PC2"),
+      zaxis = list(title = "PC3")
+    )
+  )
+
+
+
+ggplot(plot_data, aes(x = PC1, y = PC2)) +
+  geom_point(color = "black", size = 2) + 
+  stat_ellipse(aes(color = karyotype), type = "norm", level = 0.95, linetype = "dashed", size = 1) +  # colored ellipses
+  labs(
+    title = "PCA with Colored Ellipses by Karyotype",
+    x = "Principal Component 1 (PC1)",
+    y = "Principal Component 2 (PC2)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
