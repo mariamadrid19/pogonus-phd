@@ -15,6 +15,9 @@ cd /scratch/leuven/357/vsc35707/linkage-mapping/lepmap
 # Define directories
 LEPMAP="/data/leuven/357/vsc35707/LepMap3"
 
+# Load Java (needed to run LEPMAP and LEPANCHOR)
+module load Java/21.0.2
+
 # Run ParentCall2
 zcat post.gz|java -cp $LEPMAP/bin ParentCall2 data=pedigree.txt posteriorFile=- removeNonInformative=1 | gzip > data.call.gz
 
