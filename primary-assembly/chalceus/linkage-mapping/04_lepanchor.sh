@@ -35,23 +35,23 @@ for i in {1..12}; do
 done
 
 # Run OrderMarkers2 on chromosomes 1 to 11
-for X in {1..11}; do
+for X in {1..12}; do
   java -cp $LEPMAP/bin OrderMarkers2 map=map5.txt data=data_f.call chromosome=$X recombination1=0 > order${X}.txt
 done
 
 # Prepare input for PlaceAndOrientContigs
-for X in {1..11}; do
+for X in {1..12}; do
   awk -vn=$X '(NR==FNR){map[NR-1]=$0} (NR!=FNR && /^[^#]/){print map[$1],n,$2,$3}' snps.txt order$X.txt > order$X.m.input
 done
 
 # Run PlaceAndOrientContigs
-for X in {1..11}; do
+for X in {1..12}; do
   java -cp $LEPANCHOR/bin/ PlaceAndOrientContigs map=order$X.m.input bed=chr$X.bed noIntervals=1 > M_chr$X.la 2> M_chr$X.la.err
 done
 
 # Generate .agp files
-for X in {13,15,1,17,21,22,25,2,28,31,3,4,5,8,9}; do
-  awk -vlg=$X -f $LEPANCHOR/makeagp_full2.awk chr$X.la > chr$X.agp
+for i in {1..12}; do
+  awk -vlg=$i -f $LEPANCHOR/makeagp_full2 chr$i.la >chr$i.agp
 done
 
 # Create the final fasta file
