@@ -26,11 +26,13 @@ cut -f 1 map5.txt|sort -n|uniq -c
 # Clean map file
 java -cp $LEPANCHOR/bin/ CleanMap map=cleanMap.input > map.clean
 
-# Filter and process map.clean
-awk '($5>=1.0)' map.clean | awk -f $LEPANCHOR/cleanmap.awk | awk -f $LEPANCHOR/joinIntervals.awk $GENOME.sizes - > map.bed
+# Generate .bed file for the entire genome
+java -cp $LEPANCHOR/bin Map2Bed map=map.clean contigLength=$GENOME.sizes > map.bed
 
 # Create .bed files for each chromosome 
-awk '{fn="chr" $4 ".bed"; print $1"\t"$2"\t"$3 > fn}' map.bed
+for i in {1..12}; do
+  awk -v chr=$i '$5 == chr {print $1 "\t" $2 "\t" $3}' map.bed > chr${i}.bed
+done
 
 # Run OrderMarkers2 on chromosomes 1 to 11
 for X in {1..11}; do
@@ -44,16 +46,13 @@ done
 
 # Run PlaceAndOrientContigs
 for X in {1..11}; do
-  java -cp $LEPANCHOR/bin/ PlaceAndOrientContigs map=order$X.m.input bed=chr$X.bed noIntervals=1 > chr$X.la 2> chr$X.la.err
+  java -cp $LEPANCHOR/bin/ PlaceAndOrientContigs map=order$X.m.input bed=chr$X.bed noIntervals=1 > M_chr$X.la 2> M_chr$X.la.err
 done
 
 # Generate .agp files
 for X in {13,15,1,17,21,22,25,2,28,31,3,4,5,8,9}; do
   awk -vlg=$X -f $LEPANCHOR/makeagp_full2.awk chr$X.la > chr$X.agp
 done
-
-# Create the final AGP file
-cat chr*.agp > final.agp
 
 # Create the final fasta file
 awk -f $LEPANCHOR/makefasta.awk $GENOME chr*.agp > final.fasta
