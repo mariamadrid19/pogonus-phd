@@ -54,8 +54,8 @@ vcftools --gzvcf $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").vcf.gz --recode --
 
 # Step 4: Parse VCF with custom script
 /data/leuven/357/vsc35707/miniconda3/bin/python3.11 parseVCF.py \
-  --gtf flag=GQ min=10 gtTypes=Het \
-  --gtf flag=GQ min=10 gtTypes=HomAlt \
+  --gtf flag=GQ min=30 gtTypes=Het \
+  --gtf flag=GQ min=30 gtTypes=HomAlt \
   --gtf flag=DP min=10 \
   --skipIndels \
   -i $VCF_DIR/$REFNAME.chr_$(echo "${names[ID]}").filtered.vcf.gz \
