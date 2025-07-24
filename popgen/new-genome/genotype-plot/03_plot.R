@@ -1,6 +1,6 @@
 #install.packages("remotes")
 #remotes::install_github("JimWhiting91/genotype_plot")
-library("GenotypePlot")
+library("GenotypePlot") # requires a local installation of bcftools
 setwd("/scratch/leuven/357/vsc35707/popgen/new-genome-july-2025/filtered-thinned")
 
 # List of individuals
