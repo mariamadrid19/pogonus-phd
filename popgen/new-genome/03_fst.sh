@@ -15,8 +15,8 @@ echo "==================="
 echo "Processing CHR${CHR_INDEX}, POPULATION COMPARISON ${PAIR_INDEX}"
 
 # Define population pairs
-pop1=("B_NIE_T" "F_GUE_T" "P_AVE_T" "S_HUE_T" "E_SEV_T")
-pop2=("B_DUD_S" "F_GUE_S" "P_AVE_S" "S_COT_S" "F_CAM_S")
+pop1=("B_NIE_T" "F_GUE_T" "P_AVE_T" "S_HUE_T" "HEIST_2000")
+pop2=("B_DUD_S" "F_GUE_S" "P_AVE_S" "S_COT_S" "HEIST_2018")
 POPSFILE=popfileALL.txt
 
 # Paths
