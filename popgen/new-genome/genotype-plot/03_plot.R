@@ -1,7 +1,7 @@
 #install.packages("remotes")
 #remotes::install_github("JimWhiting91/genotype_plot")
 library("GenotypePlot")
-setwd("/scratch/leuven/357/vsc35707/popgen/new-genome-july-2025/vcfs")
+setwd("/scratch/leuven/357/vsc35707/popgen/new-genome-july-2025/filtered-thinned")
 
 # List of individuals
 individuals <- c(
@@ -148,7 +148,7 @@ chromosomes <- list(
 # Loop through chromosomes
 for (chr_num in names(chromosomes)) {
   chr_id <- paste0("CHR", chr_num)
-  vcf_file <- paste0("Pchal_Bar_SW.chr_", chr_num, ".filtered.nomissing.vcf.gz")
+  vcf_file <- paste0("Pchal_Bar_SW.chr_", chr_num, ".filtered.nomissing.thin500.vcf.gz")
   out_file <- paste0("genotype_plot_CHR", chr_num, ".png")
   
   cat("Processing", chr_id, "->", vcf_file, "\n")
