@@ -6,7 +6,7 @@
 #SBATCH --time=60:00:00
 #SBATCH -A lp_svbelleghem
 #SBATCH -o map_all.%j.out
-#SBATCH --array=1-103
+#SBATCH --array=1-192
 
 # This variable will store the job array number minus 1, so we can use it to get a sample from the samples list (index starts at 0)
 ID=$((SLURM_ARRAY_TASK_ID -1))
@@ -29,7 +29,7 @@ REF=/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/Pchalceus_SW.sorted.fasta
 REFNAME=Pchal_Bar_SW
 BWAout=/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/bams
 FILE1=/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/reads/$(echo "${samples[ID]}")_R1.fq.gz
-FILE2=/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/$(echo "${samples[ID]}")_R2.fq.gz
+FILE2=/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/reads/$(echo "${samples[ID]}")_R2.fq.gz
 
 echo "Mapping reads: ${samples[ID]}"
 # Map reads using bwa mem
