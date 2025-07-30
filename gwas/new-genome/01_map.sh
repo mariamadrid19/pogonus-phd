@@ -48,6 +48,11 @@ echo "Sorting reads: ${samples[ID]}"
 # Sort using samtools
 samtools sort $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam -o $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam
 
+# Remove .filtered.bam if .filtered.sorted.bam is larger than 500 KB
+if [ $(stat -c %s "$BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam") -gt 512000 ]; then
+    rm "$BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.bam"
+fi
+
 samtools index $BWAout/$(echo "${samples[ID]}").$REFNAME.filtered.sorted.bam
 
 echo "Finished with ${samples[ID]}"
