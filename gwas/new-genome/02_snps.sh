@@ -1,58 +1,84 @@
-#!/bin/bash -l 
-#SBATCH --cluster=genius 
-#SBATCH --job-name snps 
-#SBATCH --nodes=1 
+#!/bin/bash -l
+#SBATCH --cluster=wice
+#SBATCH --job-name=call_snps
 #SBATCH --cpus-per-task=36
-#SBATCH --time=24:00:00 
+#SBATCH --time=72:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o call_snps.%j.out
-#SBATCH --array=1-192
+#SBATCH --array=1-11
 
-# This variable will store the job array number minus 1, so we can use it to get a sample from the samples list (index  starts at 0)
-ID=$((SLURM_ARRAY_TASK_ID -1))
+# Array index (0-based)
+ID=$((SLURM_ARRAY_TASK_ID - 1))
 
+# Load tools
+module load BCFtools/1.12-GCC-10.3.0
+export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
+source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate variant_tools
 
-echo "================="
+# Reference and directories
+REFNAME="Pchal_Bar_SW"
+REF="/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/Pchalceus_SW.sorted.fasta"
+FAI="${REF}.fai"
 
-chrom=(CHR1 CHR2 CHR3 CHR4 CHR5 CHR6 CHR7 CHR8 CHR9 CHR10 CHR11)
-names=(01 02 03 04 05 06 07 08 09 10 11)
+VCF_DIR="vcfs"
+OUT_DIR="final-vcfs"
+mkdir -p "$VCF_DIR" "$OUT_DIR"
 
-# Sample IDs (all samples, 192)
+# Sample names
 samples=()
 for i in $(seq -w 1 192); do
   samples+=("Pc25Np${i}")
 done
 
-REF=/scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/Pchalceus_SW.sorted.fasta
-REFNAME=Pchal_Bar_SW
+# Chromosomes
+CHR=(CHR1 CHR2 CHR3 CHR4 CHR5 CHR6 CHR7 CHR8 CHR9 CHR10 CHR11)
+names=(1 2 3 4 5 6 7 8 9 10 11)
 
-cd /scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/bams
+chr="${CHR[$ID]}"
+name="${names[$ID]}"
 
-# make a single list of all the samples that can be used in the samtools command
-ALL_LIST=""
-for FILE in "${samples[@]}"; do
-    ALL_LIST+=" ${FILE}.${REFNAME}.filtered.sorted.bam"
-done
- 
-command="$ALL_LIST"
+# Make list of BAMs
+ALL_LIST=$(printf " bams/%s.${REFNAME}.filtered.sorted.bam" "${samples[@]}")
 
-echo "Reference: $REF"
-echo "Chromosome: ${chrom[ID]}"
-echo "Command: $command"
+echo "====================================="
+echo "Chromosome: $chr ($name)"
+echo "Output prefix: $REFNAME.chr_$name"
+echo "Calling variants..."
+echo "====================================="
 
-# Ensure chromosome ID is not empty
-if [[ -z "${chrom[ID]}" ]]; then
-    echo "Error: chrom[ID] is empty!"
-    exit 1
-fi
+# Step 1: Call variants
+bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions "$chr" $ALL_LIST --annotate FORMAT/DP | bcftools call -m -Oz -f GQ -o "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
 
-# Ensure BAM files exist
-if [[ -z "$command" ]]; then
-    echo "Error: No BAM files specified!"
-    exit 1
-fi
+bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
 
-# run mpileup
-bcftools mpileup -Oz --threads 36 -f $REF $command -r ${chrom[ID]} | \
-bcftools call -m -Oz -o /scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/vcfs/P_chalceus_NP25_$REFNAME.chr_${names[ID]}.vcf.gz
+# Step 2: Filter
+vcftools --gzvcf "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz" \
+  --max-missing 0.8 \
+  --minQ 30 \
+  --maf 0.05 \
+  --remove-indels \
+  --recode \
+  --stdout \
+| bgzip > "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz"
+
+bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz"
+
+# Step 3: Thin
+vcftools --gzvcf "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz" \
+  --thin 5000 \
+  --recode \
+  --stdout \
+| bgzip > "$VCF_DIR/$REFNAME.chr_${name}.filtered.thinned.vcf.gz"
+
+bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.filtered.thinned.vcf.gz"
+
+# Step 4: Normalize (split multiallelics)
+bcftools norm -m -any \
+  -Oz \
+  -o "$OUT_DIR/$REFNAME.chr_${name}.filtered.thinned.multiSplit.vcf.gz" \
+  "$VCF_DIR/$REFNAME.chr_${name}.filtered.thinned.vcf.gz"
+
+bcftools index --csi "$OUT_DIR/$REFNAME.chr_${name}.filtered.thinned.multiSplit.vcf.gz"
+
+echo "Finished chromosome $chr → final output: $OUT_DIR/$REFNAME.chr_${name}.filtered.thinned.multiSplit.vcf.gz"
