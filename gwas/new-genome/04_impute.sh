@@ -2,8 +2,8 @@
 #SBATCH --cluster=genius 
 #SBATCH --job-name impute 
 #SBATCH --nodes=1 
-#SBATCH --ntasks-per-node=20
-#SBATCH --time=72:00:00 
+#SBATCH --cpus-per-task=20
+#SBATCH --time=12:00:00 
 #SBATCH -A lp_svbelleghem
 #SBATCH -o impute.%j.out
 
