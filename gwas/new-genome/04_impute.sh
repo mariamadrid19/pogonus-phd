@@ -14,19 +14,16 @@ module load Python/3.7.0-foss-2018a
 # python is loaded to use bcftools
 export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
-# Split the multiallelic SNPs into multiple biallelic ones
-bcftools norm -m -any -o split_variants.vcf.gz -Oz gwas_filtered.vcf.gz
-
 echo
 echo "*** Imputing missing genotypes with BEAGLE 5.5 ***"
 echo
 
 # Java is needed to run BEAGLE (load the appropriate module)
 module load Java/11.0.20
-java -Xmx20480m -jar /data/leuven/357/vsc35707/beagle.27Feb25.75f.jar gt=split_variants.vcf.gz out=gwas_imputed
+java -Xmx20480m -jar /data/leuven/357/vsc35707/beagle.27Feb25.75f.jar gt=Pchal_Bar_SW.filtered.thinned.multiSplit.vcf.gz out=Pchal_Bar_SW.gwas_imputed
 
 # Index the imputed vcf file 
-bcftools index -t gwas_imputed.vcf.gz
+bcftools index -t Pchal_Bar_SW.gwas_imputed.vcf.gz
 
 # Gives a brief summary of stats, imputed genotypes 
-bcftools stats gwas_imputed.vcf.gz | grep -E "SN|TSTV"
+bcftools stats Pchal_Bar_SW.gwas_imputed.vcf.gz | grep -E "SN|TSTV"
