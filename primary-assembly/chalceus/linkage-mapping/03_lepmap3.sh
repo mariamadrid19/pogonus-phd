@@ -23,10 +23,15 @@ zcat post.gz|java -cp $LEPMAP/bin ParentCall2 data=pedigree.txt posteriorFile=- 
 
 # Run Filtering2
 zcat data.call.gz | java -cp $LEPMAP/bin Filtering2 data=- dataTolerance=0.01 | gzip > data_f_t01.call.gz
+
+# Get the snp names to a file
 zcat data_f_t01.call.gz | awk 'NR>=7' | cut -f 1,2 > snps.txt
 
 # Run SeparateChromosomes2 
 zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2 data=- lodLimit=6 > map6.txt
+
+# Get the genomic coordinates of markers in each linkage group
+paste snps.txt map6.txt|awk '($3>0)'
 
 # Run JoinSingles2All
 zcat data_f_t01.call.gz | java -cp $LEPMAP/bin JoinSingles2All map=map6.txt data=- lodLimit=5 iterate=2 >map6js.txt
