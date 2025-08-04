@@ -31,7 +31,7 @@ zcat data_f_t01.call.gz | awk 'NR>=7' | cut -f 1,2 > snps.txt
 zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2 data=- lodLimit=6 > map6.txt
 
 # Get the genomic coordinates of markers in each linkage group
-paste snps.txt map6.txt|awk '($3>0)' > map6_ann.txt
+paste snps.txt map6.txt|awk '($3>0)' > positions.txt
 
 # Run JoinSingles2All
 zcat data_f_t01.call.gz | java -cp $LEPMAP/bin JoinSingles2All map=map6.txt data=- lodLimit=5 iterate=2 >map6js.txt
