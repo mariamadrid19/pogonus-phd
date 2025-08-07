@@ -438,7 +438,8 @@ coverage_plot <- ggplot() +
   theme(
     axis.text.x = element_text(angle = 0, hjust = 0.5),
     axis.ticks.x = element_blank(),
-    legend.position = "top",
+    legend.position = c(0.09, 0.91),
+    legend.direction = "horizontal",
     plot.title = element_text(size = 16, face = "bold"),
     axis.title = element_text(size = 16)
   )
@@ -875,4 +876,3 @@ Fst_plot
 combined_plot_3 <- linkage_map_clean  / scaffold_plot / coverage_plot_clean / exon_density_plot / Fst_plot +
   plot_layout(heights = c(0.8, 0.1, 0.6, 1, 1))
 combined_plot_3
-
