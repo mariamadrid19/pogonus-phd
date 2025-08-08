@@ -725,7 +725,7 @@ exon_density_plot <- ggplot() +
       group = chrom
     ),
     method = "loess",
-    span = 0.2,
+    span = 0.1,
     se = FALSE,
     size = 1,
     color = "darkgreen"
@@ -952,6 +952,8 @@ merged_result$perc <- pmin(merged_result$perc, 1)
 merged_result <- merged_result %>%
   mutate(genomic_position = mid + chromStarts)
 
+merged_result$perc <- pmin(merged_result$perc, 1) * 100
+
 repeat_plot <- ggplot() +
   geom_rect(
     data = genome_data,
@@ -959,11 +961,11 @@ repeat_plot <- ggplot() +
       xmin = chromStarts,
       xmax = chromEnds,
       ymin = 0,
-      ymax = 1,
+      ymax = 100,
       fill = color
     ),
     alpha = 0.2,
-    color = "white",   # add white border between rectangles
+    color = "white",
     linewidth = 0.2
   ) +
   scale_fill_identity() +
@@ -981,8 +983,8 @@ repeat_plot <- ggplot() +
   ) +
   scale_y_continuous(
     name = "Repeat %",
-    limits = c(0, 1),
-    breaks = c(0, 0.5, 1)
+    limits = c(0, 100),
+    breaks = c(0, 50, 100)
   ) +
   theme_minimal() +
   theme(
@@ -1002,5 +1004,7 @@ repeat_plot_clean
 
 
 combined_plot_4 <- linkage_map_clean  / scaffold_plot / coverage_plot_clean / repeat_plot_clean / exon_density_plot / Fst_plot +
-  plot_layout(heights = c(0.8, 0.1, 0.6, 0.4, 1, 1))
+  plot_layout(heights = c(0.8, 0.1, 0.6, 0.4, 0.4, 1))
 combined_plot_4
+
+#write.table(merged_result, file = "repeat_content.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
