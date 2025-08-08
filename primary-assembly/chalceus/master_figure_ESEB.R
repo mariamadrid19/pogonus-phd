@@ -9,6 +9,9 @@ library(ggfortify)
 library(gridExtra)
 library(ggpubr) 
 library(scales)
+library(GenomicRanges)
+library(rtracklayer)
+library(tidyverse)
 
 setwd("~/Documents/phd-pogonus/master-figure")
 
@@ -364,7 +367,7 @@ for (chr in chromosomes) {
     labs(
       title = paste("Chromosome", chr),
       x = "Genomic position (Mbp)",
-      y = "Normalized coverage"
+      y = "Coverage"
     ) +
     theme(
       legend.position = "none",
@@ -443,8 +446,6 @@ coverage_plot <- ggplot() +
     plot.title = element_text(size = 16, face = "bold"),
     axis.title = element_text(size = 16)
   )
-coverage_plot
-
 
 coverage_plot_clean <- coverage_plot +
   theme(
@@ -876,3 +877,130 @@ Fst_plot
 combined_plot_3 <- linkage_map_clean  / scaffold_plot / coverage_plot_clean / exon_density_plot / Fst_plot +
   plot_layout(heights = c(0.8, 0.1, 0.6, 1, 1))
 combined_plot_3
+
+setwd("~/Documents/phd-pogonus/master-figure")
+
+# Read the GFF file into a data frame
+gff_file <- "Pchalceus_SW.sorted.fasta.out.gff"
+
+gff_data <- read.table(gff_file, sep="\t", header=FALSE, stringsAsFactors=FALSE)
+colnames(gff_data) <- c("seqname", "source", "feature", "start", "end", "score", "strand", "frame", "attribute")
+gff_data <- gff_data %>%
+  filter(grepl("CHR", seqname))
+
+
+# Create GRanges object
+gr <- GRanges(seqnames = gff_data$seqname,
+              ranges = IRanges(start = gff_data$start, end = gff_data$end),
+              strand = gff_data$strand)
+
+# Get unique scaffolds
+scaffolds <- unique(seqnames(gr))
+scaffolds <- unique(scaffolds[grep("CHR", scaffolds)])[c(1:11)]
+
+result_list <- lapply(scaffolds, function(scaffold) {
+  # Subset the GRanges object for the current scaffold
+  gr_scaffold <- gr[seqnames(gr) == scaffold]
+  
+  # Determine the length of the scaffold
+  scaffold_length <- max(end(gr_scaffold))
+  
+  # Create sliding windows for the scaffold
+  windows <- slidingWindows(GRanges(seqnames = scaffold, ranges = IRanges(start = 1, end = scaffold_length)), 
+                            width = 100000, step = 100000)[[1]]
+  
+  # Calculate the amount covered by features in each window
+  coverage <- sapply(seq_along(windows), function(i) {
+    window <- windows[i]
+    overlaps <- pintersect(rep(window, length(gr_scaffold)), gr_scaffold)
+    sum(width(overlaps))
+  })
+  
+  # Create a data frame for the results
+  data.frame(
+    seqnames = scaffold,
+    start = start(windows),
+    end = end(windows),
+    coverage = coverage
+  )
+})
+
+# Combine the results for all scaffolds
+result <- do.call(rbind, result_list)
+
+# Print the result
+print(result)
+
+result$mid <- (result$start+result$end)/2
+result$perc <- result$coverage/100000
+
+scaffolds <- c("CHR1", "CHR2", "CHR3", "CHR4", "CHR5", "CHR6", "CHR7", "CHR8","CHR9","CHR10","CHR11")
+
+for (scaffold in scaffolds) {
+  result_scaffolds <- subset(result, result$seqnames == scaffold)
+  
+  plot(result_scaffolds$start, result_scaffolds$perc, pch=19, cex = 0.3, col="#CD9600",main = scaffold, xlab = "Chromosome Position",ylab="Repeat Content")
+}
+
+
+#add to combined plot
+merged_result <- result %>%
+  left_join(genome_data, by = c("seqnames" = "chrom"))
+
+merged_result$perc <- pmin(merged_result$perc, 1)
+
+merged_result <- merged_result %>%
+  mutate(genomic_position = mid + chromStarts)
+
+repeat_plot <- ggplot() +
+  geom_rect(
+    data = genome_data,
+    aes(
+      xmin = chromStarts,
+      xmax = chromEnds,
+      ymin = 0,
+      ymax = 1,
+      fill = color
+    ),
+    alpha = 0.2,
+    color = "white",   # add white border between rectangles
+    linewidth = 0.2
+  ) +
+  scale_fill_identity() +
+  geom_point(
+    data = merged_result,
+    aes(x = genomic_position, y = perc),
+    color = "#CD9600",
+    size = 0.5
+  ) +
+  scale_x_continuous(
+    name = "Chromosome",
+    breaks = genome_data$chromMid,
+    labels = genome_data$chromosome,
+    limits = c(min(genome_data$chromStarts), max(genome_data$chromEnds))
+  ) +
+  scale_y_continuous(
+    name = "Repeat %",
+    limits = c(0, 1),
+    breaks = c(0, 0.5, 1)
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    axis.ticks.x = element_blank(),
+    legend.position = "none",
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 16)
+  )
+repeat_plot_clean <- repeat_plot +
+  theme(
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+repeat_plot_clean
+
+
+combined_plot_4 <- linkage_map_clean  / scaffold_plot / coverage_plot_clean / repeat_plot_clean / exon_density_plot / Fst_plot +
+  plot_layout(heights = c(0.8, 0.1, 0.6, 0.4, 1, 1))
+combined_plot_4
