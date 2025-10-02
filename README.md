@@ -7,3 +7,4 @@ _Pogonus chalceus_ (Marsham, 1802) is a carabid beetle frequently found living i
 To fully understand the role of putative inversions hinted at in the genomes of _P. chalceus_ (Van Belleghem et al 2018), genomic analyses that rely on advanced sequencing technologies and assembly techniques are necessary. Creating a new, high-quality reference genome would provide a foundation for researching chromosomal inversions and other SVs across the genomes of these beetles.
 
 ![sampling_map](https://github.com/user-attachments/assets/4c366fd6-6c4b-4a2b-8f33-b50659f3fe96)
+<img width="1698" height="986" alt="chr2_GP" src="https://github.com/user-attachments/assets/3bf4e757-76d5-4c1b-b713-6becb44e0c97" />
