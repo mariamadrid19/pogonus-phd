@@ -17,6 +17,7 @@ cd /scratch/leuven/357/vsc35707/winpca/
 # Activate conda if needed
 source /data/leuven/357/vsc35707/miniconda3/etc/profile.d/conda.sh
 conda activate winpca
+export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
 # Input / output directories
 VCF_DIR="vcfs"
@@ -43,7 +44,7 @@ for in_vcf in ${VCF_DIR}/Pchal_Bar_SW.chr_*.split.biallelic.vcf.gz; do
     bcftools view -S "$SAMPLES" --force-samples -Oz -o "$out_vcf" "$in_vcf"
 
     # Index the new file
-    tabix -f -p vcf "$out_vcf"
+    bcftools index -f "$out_vcf"
 
     # Report number of samples kept
     count=$(bcftools query -l "$out_vcf" | wc -l)
