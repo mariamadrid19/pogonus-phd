@@ -9,7 +9,7 @@
 
 # ============================================================
 # Subset each chromosome VCF to include only samples listed in samples.txt
-# Creates a new directory 'new-vcfs' with 11 filtered VCFs (CHR1–CHR11)
+# Creates a new directory 'new-vcfs' with 11 filtered VCFs (CHR1-CHR11)
 # ============================================================
 
 cd /scratch/leuven/357/vsc35707/winpca/
@@ -36,7 +36,7 @@ for in_vcf in ${VCF_DIR}/Pchal_Bar_SW.chr_*.split.biallelic.vcf.gz; do
     base=$(basename "$in_vcf")
     out_vcf="${OUT_DIR}/${base/.split.biallelic.vcf.gz/.subset.vcf.gz}"
 
-    echo "→ Processing: $base"
+    echo "  Processing: $base"
     echo "  Output:     $(basename "$out_vcf")"
 
     # Keep only listed samples (ignore missing ones)
