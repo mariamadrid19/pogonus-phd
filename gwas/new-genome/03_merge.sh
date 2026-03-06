@@ -12,4 +12,4 @@ export BCFTOOLS_PLUGINS=/data/leuven/357/vsc35707/bcftools/plugins
 
 cd /scratch/leuven/357/vsc35707/GWAS/Nieuwpoort/final-vcfs
 
-bcftools concat -Oz -o Pchal_Bar_SW.filtered.thinned.multiSplit.vcf.gz *.vcf.gz
+bcftools concat -Oz -o Pchal_Bar_SW.filtered.multiSplit.vcf.gz *.vcf.gz
