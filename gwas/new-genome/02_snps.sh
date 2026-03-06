@@ -64,21 +64,12 @@ vcftools --gzvcf "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz" \
 
 bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz"
 
-# Step 3: Thin
-vcftools --gzvcf "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz" \
-  --thin 5000 \
-  --recode \
-  --stdout \
-| bgzip > "$VCF_DIR/$REFNAME.chr_${name}.filtered.thinned.vcf.gz"
-
-bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.filtered.thinned.vcf.gz"
-
-# Step 4: Normalize (split multiallelics)
+# Step 3: Normalize (split multiallelics)
 bcftools norm -m -any \
   -Oz \
-  -o "$OUT_DIR/$REFNAME.chr_${name}.filtered.thinned.multiSplit.vcf.gz" \
-  "$VCF_DIR/$REFNAME.chr_${name}.filtered.thinned.vcf.gz"
+  -o "$OUT_DIR/$REFNAME.chr_${name}.filtered.multiSplit.vcf.gz" \
+  "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz"
 
-bcftools index --csi "$OUT_DIR/$REFNAME.chr_${name}.filtered.thinned.multiSplit.vcf.gz"
+bcftools index --csi "$OUT_DIR/$REFNAME.chr_${name}.filtered.multiSplit.vcf.gz"
 
-echo "Finished chromosome $chr → final output: $OUT_DIR/$REFNAME.chr_${name}.filtered.thinned.multiSplit.vcf.gz"
+echo "Finished chromosome $chr → final output: $OUT_DIR/$REFNAME.chr_${name}.filtered.multiSplit.vcf.gz"
