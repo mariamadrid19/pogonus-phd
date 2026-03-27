@@ -3,7 +3,7 @@
 #SBATCH --job-name isoform_extraction
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=12
-#SBATCH --time=12:00:00
+#SBATCH --time=2:00:00
 #SBATCH -o /scratch/leuven/357/vsc35707/annotation/func-annotation/logs/isoform_extraction.%j.out
 #SBATCH --error=/scratch/leuven/357/vsc35707/annotation/func-annotation/logs/isoform_extraction.%j.err
 #SBATCH -A lp_svbelleghem
