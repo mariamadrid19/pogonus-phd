@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH --job-name=interpro
-#SBATCH --cluster=genius
+#SBATCH --cluster=wice
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
