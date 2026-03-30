@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --cluster=genius
+#SBATCH --cluster=wice
 #SBATCH --job-name merge_annotations
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=12
