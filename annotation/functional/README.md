@@ -1,6 +1,6 @@
-# Functional annotation pipeline for BRAKER gene predictions
+# Functional annotation pipeline for BRAKER3 gene predictions
 
-This repository contains a step-by-step workflow to functionally annotate a genome starting from **BRAKER** output files.
+This repository contains a step-by-step workflow to functionally annotate a genome starting from **BRAKER3** output files.
 
 The goal is to go from raw structural predictions such as:
 
