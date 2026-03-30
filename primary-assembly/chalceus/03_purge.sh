@@ -49,4 +49,4 @@ get_seqs -e dups_primary.bed $PRI_ASM
 # - purged.fa (purged primary contigs)
 # - hap.fa (candidate haplotigs from primary)
 
-echo "### DONE: Final haplotig assembly is in purged_merged.fa ###"
+echo "### DONE: Final haplotig assembly is in purged.fa ###"
