@@ -1,4 +1,4 @@
-# BRAKER genome annotation pipeline
+# BRAKER3 genome annotation pipeline
 
 This repository contains a step-by-step workflow to generate a **structural genome annotation** using repeat masking, RNA-seq evidence, Iso-Seq evidence, and **BRAKER**.
 
