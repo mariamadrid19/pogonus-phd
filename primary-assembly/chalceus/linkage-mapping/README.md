@@ -1,4 +1,4 @@
-# Linkage mapping pipeline for *Pogonus chalceus*
+# Linkage mapping pipeline
 
 This repository contains the scripts used to build a linkage map and anchor scaffolds using **Lep-MAP3** and **Lep-Anchor** for *Pogonus chalceus*.
 
