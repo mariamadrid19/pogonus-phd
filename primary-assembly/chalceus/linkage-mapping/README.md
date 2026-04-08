@@ -45,17 +45,11 @@ This version was run assuming:
 The pipeline expects the following main inputs:
 
 - reference genome FASTA  
-  e.g. `./genome/P_chalceus_broken.fa`
 - paired-end read files  
-  e.g. `./reads/SAMPLE.1.fil.fq_1.gz` and `./reads/SAMPLE.2.fil.fq_2.gz`
 - sample list  
-  `./samples/samples.txt`
 - pedigree file for Lep-MAP3  
-  `pedigree.txt`
 - mapping file for `Pileup2Likelihoods`  
-  `mapping.txt`
 - a text file listing sorted BAM files  
-  `sorted_bams.txt`
 
 ---
 
@@ -116,13 +110,13 @@ This step performs marker filtering, linkage group assignment, singleton joining
 #### 3.1 ParentCall2
 
 ```bash
-zcat post.gz | java -cp $LEPMAP/bin ParentCall2     data=pedigree.txt     XLimit=2     posteriorFile=-     removeNonInformative=1 | gzip > data.call.gz
+zcat post.gz | java -cp $LEPMAP/bin ParentCall2 data=pedigree.txt XLimit=2 posteriorFile=- removeNonInformative=1 | gzip > data.call.gz
 ```
 
 #### 3.2 Filtering2
 
 ```bash
-zcat data.call.gz | java -cp $LEPMAP/bin Filtering2     data=-     dataTolerance=0.01 | gzip > data_f_t01.call.gz
+zcat data.call.gz | java -cp $LEPMAP/bin Filtering2 data=- dataTolerance=0.01 | gzip > data_f_t01.call.gz
 ```
 
 #### 3.3 Extract SNP names
@@ -134,8 +128,8 @@ zcat data_f_t01.call.gz | awk 'NR>=7' | cut -f 1,2 > snps.txt
 #### 3.4 Test multiple `lodLimit` values with `SeparateChromosomes2`
 
 ```bash
-for lod in 4 5 6 7 8 9 10 11 12 15 20 25 30; do
-    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2         data=-         lodLimit=$lod > map${lod}.txt
+for lod in 4 5 6 7 8 9 10 11 12 15; do
+    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2 data=- lodLimit=$lod > map${lod}.txt
 done
 ```
 
@@ -145,7 +139,7 @@ This was used to evaluate linkage group fragmentation and identify a suitable `l
 
 ```bash
 for lod in 4 5 6 7 8; do
-    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin JoinSingles2All         map=map12.txt         data=-         lodLimit=$lod         iterate=2         > map12_js${lod}.txt
+    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin JoinSingles2All map=map12.txt data=- lodLimit=$lod iterate=2 > map12_js${lod}.txt
 done
 ```
 
@@ -155,7 +149,7 @@ Markers were ordered for each chromosome with the achiasmatic male model:
 
 ```bash
 for chr in {1..11}; do
-    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin OrderMarkers2         map=map12.txt         data=-         recombination1=0         chromosome=$chr         > map12_chr${chr}_mrecom0.txt
+    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin OrderMarkers2 map=map12.txt data=- recombination1=0 chromosome=$chr > map12_chr${chr}_mrecom0.txt
 done
 ```
 
@@ -238,7 +232,7 @@ done
 
 ```bash
 for X in $(seq 1 "$NCHR"); do
-  java -cp "$LEPANCHOR/bin/" PlaceAndOrientContigs     map="${MAP_PREFIX}_chr${X}${MINPUT_SUFFIX}.input"     bed="$MAP_BED"     chromosome="$X"     noIntervals=1     > "${MAP_PREFIX}_chr${X}.la" 2> "${MAP_PREFIX}_chr${X}.la.err"
+  java -cp "$LEPANCHOR/bin/" PlaceAndOrientContigs map="${MAP_PREFIX}_chr${X}${MINPUT_SUFFIX}.input" bed="$MAP_BED" chromosome="$X" noIntervals=1 > "${MAP_PREFIX}_chr${X}.la" 2> "${MAP_PREFIX}_chr${X}.la.err"
 done
 ```
 
@@ -246,7 +240,7 @@ done
 
 ```bash
 for X in $(seq 1 "$NCHR"); do
-  awk -vlg="$X" -f "$LEPANCHOR/makeagp_full2.awk"     "${MAP_PREFIX}_chr${X}.la" > "${MAP_PREFIX}_chr${X}.agp"
+  awk -vlg="$X" -f "$LEPANCHOR/makeagp_full2.awk" "${MAP_PREFIX}_chr${X}.la" > "${MAP_PREFIX}_chr${X}.agp"
 done
 ```
 
@@ -266,7 +260,7 @@ done
 After generating AGP files, a chromosome-scale FASTA can be created with:
 
 ```bash
-awk -f /data/leuven/357/vsc35707/LepAnchor/makefasta.awk     /scratch/leuven/357/vsc35707/linkage-mapping/genome/Pchalceus_LW.fa     chr*.agp > final.fasta
+awk -f /data/leuven/357/vsc35707/LepAnchor/makefasta.awk /scratch/leuven/357/vsc35707/linkage-mapping/genome/Pchalceus_LW.fa chr*.agp > final.fasta
 ```
 
 If desired, unanchored scaffolds can then be appended to produce a final assembly containing both chromosomes and extra scaffolds.
