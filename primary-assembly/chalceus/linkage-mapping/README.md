@@ -13,7 +13,7 @@ The pipeline consists of four main steps:
 
 ## Overview
 
-This workflow starts from paired-end reads for mapping populations, aligns them to a fragmented reference genome, calculates posterior genotype likelihoods, constructs linkage groups with Lep-MAP3, orders markers within linkage groups, and finally uses Lep-Anchor to anchor scaffolds into chromosome-scale pseudomolecules.
+This workflow starts from paired-end reads for mapping populations, aligns them to a scaffold-level genome assembly, calculates posterior genotype likelihoods, constructs linkage groups with Lep-MAP3, orders markers within linkage groups, and finally uses Lep-Anchor to anchor scaffolds into chromosome-scale pseudomolecules.
 
 This version assumes:
 
