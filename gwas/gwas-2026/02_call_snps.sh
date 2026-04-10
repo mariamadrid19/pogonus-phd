@@ -52,8 +52,8 @@ echo "Number of samples: ${#samples[@]}"
 echo "====================================="
 
 # Step 1: Call variants
-#bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions "$chr" $ALL_LIST --annotate FORMAT/DP \
-#  | bcftools call -m -Oz -f GQ -o "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
+bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions "$chr" $ALL_LIST --annotate FORMAT/DP \
+  | bcftools call -m -Oz -f GQ -o "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
 
 #bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
 
