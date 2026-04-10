@@ -69,7 +69,7 @@ vcftools --gzvcf "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz" \
 
 bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.filtered.vcf.gz"
 
-# Step 4: Normalize (split multiallelics)
+# Step 3: Normalize (split multiallelics)
 bcftools norm -m -any \
   -Oz \
   -o "$OUT_DIR/$REFNAME.chr_${name}.filtered.multiSplit.vcf.gz" \
