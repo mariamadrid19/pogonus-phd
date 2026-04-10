@@ -55,7 +55,7 @@ echo "====================================="
 bcftools mpileup -Oz --threads 36 --fasta-ref "$REF" --regions "$chr" $ALL_LIST --annotate FORMAT/DP \
   | bcftools call -m -Oz -f GQ -o "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
 
-#bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
+bcftools index --csi "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz"
 
 # Step 2: Filter
 vcftools --gzvcf "$VCF_DIR/$REFNAME.chr_${name}.vcf.gz" \
