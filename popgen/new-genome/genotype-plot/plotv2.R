@@ -1,12 +1,10 @@
 library(GenotypePlot)
 library(vcfR)
-setwd("~/Downloads")
 
 Sys.setenv(PATH = paste("/Users/mariamadrid/bcftools", Sys.getenv("PATH"), sep=":"))
 
 vcf_file <- "Belgium_Pchal_Bar_SW.filtered.multiSplit.renamed.vcf.gz"
 
-# Read once just to get sample names
 vcf <- read.vcfR(vcf_file)
 individuals <- colnames(vcf@gt)[-1]
 
@@ -52,11 +50,19 @@ for (chr_id in names(chromosomes)) {
     popmap = pop_df,
     cluster = TRUE,
     snp_label_size = 10000,
-    colour_scheme = c("#FCD225", "#C92D59", "#300060"),
+    colour_scheme = c("#FCD225", "#C92D59", "#300060", "grey80"),
     invariant_filter = TRUE
   )
   
+  combined <- combine_genotype_plot(p)
+  
   png(out_file, width = 1600, height = 1000, res = 150)
-  combine_genotype_plot(p)
+  print(combined)
   dev.off()
+  
+  if (file.exists(out_file)) {
+    cat("Saved:", out_file, "\n")
+  } else {
+    cat("FAILED to save:", out_file, "\n")
+  }
 }
