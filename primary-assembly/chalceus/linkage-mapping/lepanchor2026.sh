@@ -32,6 +32,7 @@ CLEANMAP_INPUT="${MAP_PREFIX}.cleanMap.input"
 CLEANMAP_SORTED="${MAP_PREFIX}.cleanMap.sorted.input"
 MAP_CLEAN="${MAP_PREFIX}.clean"
 MAP_BED="${MAP_PREFIX}.bed"
+LINKAGE_TABLE="${MAP_PREFIX}.linkage_table.tsv"
 
 # Suffix for OrderMarkers2 files
 if [[ "$USE_MRECOM0" -eq 1 ]]; then
@@ -91,3 +92,28 @@ for X in $(seq 1 "$NCHR"); do
   awk -vlg="$X" -f "$LEPANCHOR/makeagp_full2.awk" \
     "${MAP_PREFIX}_chr${X}.la" > "${MAP_PREFIX}_chr${X}.agp"
 done
+
+
+# =========================
+# Create linkage table
+# =========================
+echo -e "chrom\tpos\tcM_m\tcM_f\tLG" > "$LINKAGE_TABLE"
+
+for X in $(seq 1 "$NCHR"); do
+    awk -v lg="$X" '
+        BEGIN { OFS="\t" }
+        NR==FNR {
+            chrom[FNR-1] = $1
+            pos[FNR-1]   = $2
+            next
+        }
+        !/^#/ {
+            idx = $1
+            if (idx in chrom) {
+                printf "%s\t%s\t%.3f\t%.3f\tLG%02d\n", chrom[idx], pos[idx], $2, $3, lg
+            }
+        }
+    ' "$SNPS_FILE" "${MAP_PREFIX}_chr${X}_mrecom0.txt" >> "$LINKAGE_TABLE"
+done
+
+echo "Finished successfully."
