@@ -1,0 +1,152 @@
+#!/bin/bash -l 
+#SBATCH --cluster=wice 
+#SBATCH --job-name linkage_map
+#SBATCH --nodes=1
+#SBATCH --tasks=1
+#SBATCH --cpus-per-task=20
+#SBATCH --mem=120G
+#SBATCH --time=3:00:00 
+#SBATCH -A lp_edu_eeg_2026
+#SBATCH -o linkage_map.%j.out
+
+# Run after mapping to reference genome 
+
+# Load modules
+module load SAMtools/1.22.1-GCC-14.2.0
+module load Java/21.0.8  
+conda activate variant_tools
+
+# Change to the working directory
+cd /scratch/leuven/357/vsc35707/sw-assembly/linkage-mapping/polishing
+
+# Define directories
+LEPANCHOR="/data/leuven/357/vsc35707/LepAnchor"
+LEPMAP="/data/leuven/357/vsc35707/LepMap3"
+GENOME="/scratch/leuven/357/vsc35707/sw-assembly/linkage-mapping/polishing/SW.final.with_unplaced.fasta"
+
+# Run samtools mpileup and calculate posterior genotypes
+samtools mpileup -q 20 -Q 10 -s $(cat sorted_bams.txt) \
+| java -cp $LEPMAP/bin/ Pileup2Likelihoods mappingFile=mapping.txt minCoverage=10 numLowerCoverage=5 | gzip > post.gz
+
+# # # Run ParentCall2
+zcat post.gz | java -cp $LEPMAP/bin ParentCall2 data=pedigree.txt XLimit=2 posteriorFile=- removeNonInformative=1 | gzip > data.call.gz
+
+# # # Run Filtering2
+zcat data.call.gz | java -cp $LEPMAP/bin Filtering2 data=- dataTolerance=0.01 | gzip > data_f_t01.call.gz
+
+# # # Get the snp names to a file
+zcat data_f_t01.call.gz | awk 'NR>=7' | cut -f 1,2 > snps.txt
+
+# # Try different lod limits
+for lod in 15; do
+   zcat data_f_t01.call.gz | java -cp $LEPMAP/bin SeparateChromosomes2 data=- lodLimit=$lod > map${lod}.txt
+done
+
+#Order markers LOD15, set male recombination as 0 (males are achiasmatic) 
+for chr in {1..11}; do
+    echo "Running chromosome $chr..."
+    zcat data_f_t01.call.gz | java -cp $LEPMAP/bin OrderMarkers2 \
+        map=map15.txt \
+        data=- \
+        recombination1=0 \
+        chromosome=$chr \
+        > map15_chr${chr}_mrecom0.txt
+done
+
+# =========================
+# User-defined variables
+# =========================
+MAP_PREFIX="map15"     # base name, without .txt
+NCHR=11
+USE_MRECOM0=1              # 1 = use *_mrecom0.txt files, 0 = use default OrderMarkers2 files
+
+MAP_FILE="${MAP_PREFIX}.txt"
+CLEANMAP_INPUT="${MAP_PREFIX}.cleanMap.input"
+CLEANMAP_SORTED="${MAP_PREFIX}.cleanMap.sorted.input"
+MAP_CLEAN="${MAP_PREFIX}.clean"
+MAP_BED="${MAP_PREFIX}.bed"
+LINKAGE_TABLE="${MAP_PREFIX}.linkage_table.tsv"
+
+# Suffix for OrderMarkers2 files
+if [[ "$USE_MRECOM0" -eq 1 ]]; then
+    ORDER_SUFFIX="_mrecom0"
+    MINPUT_SUFFIX="_m"
+else
+    ORDER_SUFFIX=""
+    MINPUT_SUFFIX=""
+fi
+
+echo "Using MAP_PREFIX=${MAP_PREFIX}"
+echo "Using MAP_FILE=${MAP_FILE}"
+echo "Using USE_MRECOM0=${USE_MRECOM0}"
+
+# How many markers per LG?
+cut -f1 "$MAP_FILE" | sort -n | uniq -c
+
+# Create map input for CleanMap
+paste snps.txt "$MAP_FILE" | awk '(NR>1)' > "$CLEANMAP_INPUT"
+
+# cleanMap.input should be sorted by contig and position for CleanMap
+sort -V -k1,1 -k2,2n "$CLEANMAP_INPUT" > "$CLEANMAP_SORTED"
+
+# Clean map file
+java -cp "$LEPANCHOR/bin/" CleanMap map="$CLEANMAP_SORTED" > "$MAP_CLEAN"
+
+# Generate genome sizes file if needed
+awk -f "$LEPANCHOR/contigLength.awk" "$GENOME" > "$GENOME.sizes"
+
+# Generate .bed file for the entire genome
+java -cp "$LEPANCHOR/bin/" Map2Bed map="$MAP_CLEAN" contigLength="$GENOME.sizes" > "$MAP_BED"
+
+# Prepare input for PlaceAndOrientContigs from OrderMarkers2 output
+for X in $(seq 1 "$NCHR"); do
+  awk -vn="$X" '
+    (NR==FNR){map[NR-1]=$0}
+    (NR!=FNR && /^[^#]/){print map[$1], n, $2, $3}
+  ' snps.txt "${MAP_PREFIX}_chr${X}${ORDER_SUFFIX}.txt" > "${MAP_PREFIX}_chr${X}${MINPUT_SUFFIX}.input"
+done
+
+# =========================
+# Run PlaceAndOrientContigs
+# =========================
+for X in $(seq 1 "$NCHR"); do
+  java -cp "$LEPANCHOR/bin/" PlaceAndOrientContigs \
+    map="${MAP_PREFIX}_chr${X}${MINPUT_SUFFIX}.input" \
+    bed="$MAP_BED" \
+    chromosome="$X" \
+    noIntervals=1 \
+    > "${MAP_PREFIX}_chr${X}.la" 2> "${MAP_PREFIX}_chr${X}.la.err"
+done
+
+# =========================
+# Generate .agp files
+# =========================
+for X in $(seq 1 "$NCHR"); do
+  awk -vlg="$X" -f "$LEPANCHOR/makeagp_full2.awk" \
+    "${MAP_PREFIX}_chr${X}.la" > "${MAP_PREFIX}_chr${X}.agp"
+done
+
+
+# =========================
+# Create linkage table
+# =========================
+echo -e "chrom\tpos\tcM_m\tcM_f\tLG" > "$LINKAGE_TABLE"
+
+for X in $(seq 1 "$NCHR"); do
+    awk -v lg="$X" '
+        BEGIN { OFS="\t" }
+        NR==FNR {
+            chrom[FNR-1] = $1
+            pos[FNR-1]   = $2
+            next
+        }
+        !/^#/ {
+            idx = $1
+            if (idx in chrom) {
+                printf "%s\t%s\t%.3f\t%.3f\tLG%02d\n", chrom[idx], pos[idx], $2, $3, lg
+            }
+        }
+    ' "$SNPS_FILE" "${MAP_PREFIX}_chr${X}_mrecom0.txt" >> "$LINKAGE_TABLE"
+done
+
+echo "Finished successfully."
