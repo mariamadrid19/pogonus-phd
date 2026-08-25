@@ -46,7 +46,8 @@ Typical key inputs are:
 
 - a genome FASTA file  
 - short-read RNA-seq data  
-- Iso-Seq long-read data  
+- Iso-Seq long-read data
+- a fasta protein file of the target taxonomical group (in this case, a Coleoptera file was used) 
 
 The final goal is to produce BRAKER annotation outputs including:
 
