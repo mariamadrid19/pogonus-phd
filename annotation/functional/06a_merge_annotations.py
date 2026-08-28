@@ -1,10 +1,26 @@
 #!/usr/bin/env python3
 
+import argparse
 import csv
 from pathlib import Path
 from collections import defaultdict
 
-PROJECT = Path("/scratch/leuven/357/vsc35707/annotation/func-annotation")
+
+parser = argparse.ArgumentParser(
+    description="Combine BRAKER functional-annotation results."
+)
+parser.add_argument(
+    "project_dir",
+    type=Path,
+    help="Project directory containing the results directory",
+)
+args = parser.parse_args()
+
+PROJECT = args.project_dir.expanduser().resolve()
+
+if not PROJECT.is_dir():
+    parser.error(f"Project directory does not exist: {PROJECT}")
+
 
 LONGEST_TSV = PROJECT / "results/01_longest_isoforms/braker.longest_isoforms.tsv"
 EGGNOG_TSV = PROJECT / "results/03_eggnog/braker_longest_isoforms.emapper.annotations"
