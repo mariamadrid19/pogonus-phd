@@ -12,5 +12,6 @@ set -euo pipefail
 
 module load Python/3.13.1-GCCcore-14.2.0
 
-python3 /scratch/leuven/357/vsc35707/annotation/func-annotation/scripts/merge_annotations.py \
+# use python3 to call the 06a_merge_annotations.py script and set the working directory where all the results are saved
+python3 /scratch/leuven/357/vsc35707/annotation/func-annotation/scripts/06a_merge_annotations.py \
     /scratch/leuven/357/vsc35707/annotation/func-annotation
