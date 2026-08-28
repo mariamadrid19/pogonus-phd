@@ -18,8 +18,8 @@ INPUT_RAW=$PROJECT/results/01_longest_isoforms/braker.longest_isoforms.aa
 INPUT_CLEAN=$PROJECT/results/01_longest_isoforms/braker.longest_isoforms.no_stop.aa
 OUTDIR=$PROJECT/results/04_interproscan
 TMPDIR_LOCAL=$PROJECT/tmp/interproscan_${SLURM_JOB_ID}
-INTERPRO=/scratch/leuven/357/vsc35707/my_interproscan/interproscan-5.77-108.0/interproscan.sh
-# interproscan is installed in my SCRATCH due to lack of space in my DATA directory. will be removed if not used. make sure its reinstalled if ran again. 
+INTERPRO=/scratch/leuven/357/vsc35707/my_interproscan/interproscan-5.78-109.0/interproscan.sh
+# interproscan is installed in my SCRATCH due to lack of space in my DATA directory. will be removed if not used. make sure its reinstalled if ran again, and keep up to date with the latest version. 
 
 mkdir -p "$OUTDIR"
 mkdir -p "$TMPDIR_LOCAL"
