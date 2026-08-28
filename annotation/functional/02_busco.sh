@@ -14,7 +14,8 @@ set -euo pipefail
 PROJECT=/scratch/leuven/357/vsc35707/annotation/func-annotation
 INPUT=$PROJECT/results/01_longest_isoforms/braker.longest_isoforms.aa
 OUTDIR=$PROJECT/results/02_busco
-LINEAGE=insecta_odb12
+LINEAGE=coleoptera_odb12
+# adjust lineage to your own taxonomic group of interest
 
 mkdir -p "$OUTDIR"
 
